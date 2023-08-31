@@ -109,6 +109,11 @@ namespace UnityEngine.Rendering.Universal
         DrawObjectsPass m_RenderTransparentForwardPass;
         InvokeOnRenderObjectCallbackPass m_OnRenderObjectCallbackPass;
         FinalBlitPass m_FinalBlitPass;
+        
+        //* Custom Add **********************************//
+        BlitPass m_BlitPass;
+        //***********************************************//
+        
         CapturePass m_CapturePass;
 #if ENABLE_VR && ENABLE_XR_MODULE
         XROcclusionMeshPass m_XROcclusionMeshPass;
