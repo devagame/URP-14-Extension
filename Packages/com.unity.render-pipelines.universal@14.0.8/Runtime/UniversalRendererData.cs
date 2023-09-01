@@ -27,7 +27,7 @@ namespace UnityEngine.Rendering.Universal
     /// </summary>
     [Serializable, ReloadGroup, ExcludeFromPreset]
     [URPHelpURL("urp-universal-renderer")]
-    public class UniversalRendererData : ScriptableRendererData, ISerializationCallbackReceiver
+    public partial class UniversalRendererData : ScriptableRendererData, ISerializationCallbackReceiver
     {
 #if UNITY_EDITOR
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1812")]

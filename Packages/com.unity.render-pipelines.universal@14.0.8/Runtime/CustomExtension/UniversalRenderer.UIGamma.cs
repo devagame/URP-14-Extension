@@ -2,7 +2,7 @@
 {
     public sealed partial class UniversalRenderer
     {
-        public static bool sUISplitEnable = true;
+        public static bool sUISplitEnable = false;
         public static bool sIsGammaCorrectEnable = true;
 
         public static bool sEnableUICameraUseSwapBuffer = false;

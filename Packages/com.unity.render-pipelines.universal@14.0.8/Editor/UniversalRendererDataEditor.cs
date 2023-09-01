@@ -12,6 +12,7 @@ namespace UnityEditor.Rendering.Universal
     {
         private static class Styles
         {
+            public static readonly GUIContent UICamera = EditorGUIUtility.TrTextContent("UICamera", "");
             public static readonly GUIContent RendererTitle = EditorGUIUtility.TrTextContent("Universal Renderer", "Custom Universal Renderer for Universal RP.");
             public static readonly GUIContent PostProcessIncluded = EditorGUIUtility.TrTextContent("Enabled", "Enables the use of post processing effects within the scene. If disabled, Unity excludes post processing renderer Passes, shaders and textures from the build.");
             public static readonly GUIContent PostProcessLabel = EditorGUIUtility.TrTextContent("Data", "The asset containing references to shaders and Textures that the Renderer uses for post-processing.");
@@ -37,6 +38,12 @@ namespace UnityEditor.Rendering.Universal
             public static readonly GUIContent shadowTransparentReceiveLabel = EditorGUIUtility.TrTextContent("Transparent Receive Shadows", "When disabled, none of the transparent objects will receive shadows.");
             public static readonly GUIContent invalidStencilOverride = EditorGUIUtility.TrTextContent("Error: When using the deferred rendering path, the Renderer requires the control over the 4 highest bits of the stencil buffer to store Material types. The current combination of the stencil override options prevents the Renderer from controlling the required bits. Try changing one of the options to Replace.");
             public static readonly GUIContent intermediateTextureMode = EditorGUIUtility.TrTextContent("Intermediate Texture", "Controls when URP renders via an intermediate texture.");
+            
+            //*************** Custom Add Start ****************//
+            public static readonly GUIContent UISplitEnable = EditorGUIUtility.TrTextContent("UISplitEnable", "Controls when URP renders via an intermediate texture.");
+            public static readonly GUIContent IsGammaCorrectEnable = EditorGUIUtility.TrTextContent("IsGammaCorrectEnable", "Controls when URP renders via an intermediate texture.");
+            public static readonly GUIContent EnableUICameraUseSwapBuffer = EditorGUIUtility.TrTextContent("EnableUICameraUseSwapBuffer", "Controls when URP renders via an intermediate texture.");
+            //*************** Custom Add End ****************//
         }
 
         SerializedProperty m_OpaqueLayerMask;
@@ -51,7 +58,12 @@ namespace UnityEditor.Rendering.Universal
         SerializedProperty m_Shaders;
         SerializedProperty m_ShadowTransparentReceiveProp;
         SerializedProperty m_IntermediateTextureMode;
-
+        
+        //*************** Custom Add Start ****************//
+        SerializedProperty m_sUISplitEnable;
+        SerializedProperty m_sIsGammaCorrectEnable;
+        SerializedProperty m_sEnableUICameraUseSwapBuffer;
+        //*************** Custom Add End ****************//
         private void OnEnable()
         {
             m_OpaqueLayerMask = serializedObject.FindProperty("m_OpaqueLayerMask");
@@ -66,6 +78,12 @@ namespace UnityEditor.Rendering.Universal
             m_Shaders = serializedObject.FindProperty("shaders");
             m_ShadowTransparentReceiveProp = serializedObject.FindProperty("m_ShadowTransparentReceive");
             m_IntermediateTextureMode = serializedObject.FindProperty("m_IntermediateTextureMode");
+            
+            //*************** Custom Add Start ****************//
+            m_sUISplitEnable = serializedObject.FindProperty("m_sUISplitEnable");
+            m_sIsGammaCorrectEnable = serializedObject.FindProperty("m_sIsGammaCorrectEnable");
+            m_sEnableUICameraUseSwapBuffer = serializedObject.FindProperty("m_sEnableUICameraUseSwapBuffer");
+            //*************** Custom Add End ****************//
         }
 
         /// <inheritdoc/>
@@ -74,7 +92,17 @@ namespace UnityEditor.Rendering.Universal
             serializedObject.Update();
 
             EditorGUILayout.Space();
-
+            
+            //*************** Custom Add Start ****************//
+            EditorGUILayout.LabelField(Styles.UICamera, EditorStyles.boldLabel);
+            EditorGUI.indentLevel++;
+            EditorGUILayout.PropertyField(m_sUISplitEnable, Styles.UISplitEnable);
+            EditorGUILayout.PropertyField(m_sIsGammaCorrectEnable, Styles.IsGammaCorrectEnable);
+            EditorGUILayout.PropertyField(m_sEnableUICameraUseSwapBuffer, Styles.EnableUICameraUseSwapBuffer);
+            EditorGUI.indentLevel--;
+            EditorGUILayout.Space();
+            //*************** Custom Add End ****************//
+            
             EditorGUILayout.LabelField(Styles.FilteringSectionLabel, EditorStyles.boldLabel);
             EditorGUI.indentLevel++;
             EditorGUILayout.PropertyField(m_OpaqueLayerMask, Styles.OpaqueMask);
