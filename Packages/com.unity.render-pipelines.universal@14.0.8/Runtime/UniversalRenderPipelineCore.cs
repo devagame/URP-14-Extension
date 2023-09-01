@@ -197,7 +197,7 @@ namespace UnityEngine.Rendering.Universal
     /// <summary>
     /// Struct that holds settings related to camera.
     /// </summary>
-    public struct CameraData
+    public partial struct CameraData
     {
         // Internal camera data as we are not yet sure how to expose View in stereo context.
         // We might change this API soon.
@@ -850,7 +850,7 @@ namespace UnityEngine.Rendering.Universal
         public uint layerMask;
     }
 
-    internal static class ShaderPropertyId
+    internal static partial class ShaderPropertyId
     {
         public static readonly int glossyEnvironmentColor = Shader.PropertyToID("_GlossyEnvironmentColor");
         public static readonly int subtractiveShadowColor = Shader.PropertyToID("_SubtractiveShadowColor");
@@ -950,7 +950,7 @@ namespace UnityEngine.Rendering.Universal
     /// <summary>
     /// Container class for keywords used in URP shaders.
     /// </summary>
-    public static class ShaderKeywordStrings
+    public static partial class ShaderKeywordStrings
     {
         /// <summary> Keyword used for shadows without cascades. </summary>
         public const string MainLightShadows = "_MAIN_LIGHT_SHADOWS";

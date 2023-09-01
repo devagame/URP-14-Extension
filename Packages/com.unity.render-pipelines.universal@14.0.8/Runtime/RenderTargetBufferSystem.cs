@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace UnityEngine.Rendering.Universal.Internal
 {
-    internal sealed class RenderTargetBufferSystem
+    internal sealed partial class RenderTargetBufferSystem
     {
         struct SwapBuffer
         {

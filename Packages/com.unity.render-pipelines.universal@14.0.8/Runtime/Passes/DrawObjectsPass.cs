@@ -51,7 +51,7 @@ namespace UnityEngine.Rendering.Universal.Internal
     /// You can use this pass to render objects that have a material and/or shader
     /// with the pass names UniversalForward or SRPDefaultUnlit.
     /// </summary>
-    public class DrawObjectsPass : ScriptableRenderPass
+    public partial class DrawObjectsPass : ScriptableRenderPass
     {
         FilteringSettings m_FilteringSettings;
         RenderStateBlock m_RenderStateBlock;
@@ -182,7 +182,11 @@ namespace UnityEngine.Rendering.Universal.Internal
                     ? new Vector4(flipSign, 1.0f, -1.0f, 1.0f)
                     : new Vector4(flipSign, 0.0f, 1.0f, 1.0f);
                 cmd.SetGlobalVector(ShaderPropertyId.scaleBiasRt, scaleBias);
-
+                
+                //************** CUSTOM ADD START ***************//
+                cmd.SetGlobalFloat(ShaderPropertyId.isInUICamera, 1);
+                //************** CUSTOM ADD END ***************//
+                
                 // Set a value that can be used by shaders to identify when AlphaToMask functionality may be active
                 // The material shader alpha clipping logic requires this value in order to function correctly in all cases.
                 float alphaToMaskAvailable = ((renderingData.cameraData.cameraTargetDescriptor.msaaSamples > 1) && data.m_IsOpaque) ? 1.0f : 0.0f;

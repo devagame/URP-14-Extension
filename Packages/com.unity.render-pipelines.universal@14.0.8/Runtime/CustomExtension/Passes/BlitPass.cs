@@ -70,7 +70,7 @@ namespace UnityEngine.Rendering.Universal.Internal
             // }
             var renderer = renderingData.cameraData.renderer as UniversalRenderer;
             var colorBuffer = renderer.m_ColorBufferSystem;
-            bool needChangeSize = RenderTargetBufferSystem.m_Desc.width != m_Width|| RenderTargetBufferSystem.m_Desc.height!= m_Height;
+            bool needChangeSize = RenderTargetBufferSystem.GetDesc().width != m_Width|| RenderTargetBufferSystem.GetDesc().height!= m_Height;
             if (needChangeSize)
             {
                 colorBuffer.ReSizeFrontBuffer(cmd, m_Width, m_Height);
@@ -86,19 +86,29 @@ namespace UnityEngine.Rendering.Universal.Internal
                 CoreUtils.SetKeyword(cmd, ShaderKeywordStrings.LinearToSRGBConversion,true);
                 CoreUtils.SetKeyword(cmd, ShaderKeywordStrings.SRGBToLinearConversion,false);
             }
-            RenderTargetHandle source;
-            source = colorBuffer.GetBackBuffer();
-            RenderingUtils.Blit(cmd, source.id, colorBuffer.GetFrontBuffer().id, m_BlitMaterial, 0, useDrawProceduleBlit,
+            RTHandle source;
+            source = colorBuffer.GetBackBuffer(cmd);
+            
+            var pixelRect = new Rect(
+                Vector2.zero, 
+                new Vector2(renderingData.cameraData.cameraTargetDescriptor.width, renderingData.cameraData.cameraTargetDescriptor.height));
+            //TODO Use DrawProceduleBlit
+            RenderingUtils.Blit(cmd, 
+                source,
+                pixelRect,
+                colorBuffer.GetFrontBuffer(cmd),
                 RenderBufferLoadAction.DontCare,
                 RenderBufferStoreAction.Store,
-                RenderBufferLoadAction.DontCare,
-                RenderBufferStoreAction.DontCare);
+                ClearFlag.None,
+                Color.black,
+                m_BlitMaterial, 0);
+            
             CoreUtils.SetKeyword(cmd, ShaderKeywordStrings.LinearToSRGBConversion, false);
             CoreUtils.SetKeyword(cmd, ShaderKeywordStrings.SRGBToLinearConversion,false);
             if (needChangeSize)
             {
                 colorBuffer.ReSizeBackBufferAndSave(cmd, m_Width, m_Height);
-                renderer.ResizeDepth(cmd, ref RenderTargetBufferSystem.m_Desc, m_Width, m_Height);
+                renderer.ResizeDepth(cmd, RenderTargetBufferSystem.GetDesc(), m_Width, m_Height);
             }
             renderer.SwapColorBuffer(cmd);
             //using (new ProfilingScope(cmd, ProfilingSampler.Get(URPProfileId.Bilt)))

@@ -28,7 +28,7 @@ namespace UnityEngine.Rendering.Universal
     /// <summary>
     /// Renders the post-processing effect stack.
     /// </summary>
-    internal class PostProcessPass : ScriptableRenderPass
+    internal partial class PostProcessPass : ScriptableRenderPass
     {
         RenderTextureDescriptor m_Descriptor;
         RTHandle m_Source;
@@ -185,12 +185,29 @@ namespace UnityEngine.Rendering.Universal
                     : GraphicsFormat.R8G8B8A8_UNorm;
                 m_UseRGBM = true;
             }
+            
+            //************** CUSTOM ADD START ***************//
+            if (sUseCustomPostProcess && renderPassEvent == RenderPassEvent.BeforeRenderingPostProcessing)
+            {
+                m_CustomPostProcess = new XPostProcessing.CustomPostProcess();
+            }
+            //*************** CUSTOM ADD END ****************//
         }
 
         /// <summary>
         /// Cleans up the Material Library used in the passes.
         /// </summary>
-        public void Cleanup() => m_Materials.Cleanup();
+        public void Cleanup()
+        {
+            m_Materials.Cleanup();
+            //************** CUSTOM ADD START ***************//
+            if (m_CustomPostProcess != null)
+            {
+                m_CustomPostProcess.Cleanup();
+                m_CustomPostProcess = null;
+            }
+            //*************** CUSTOM ADD END ****************//
+        }
 
         /// <summary>
         /// Disposes used resources.
@@ -391,11 +408,24 @@ namespace UnityEngine.Rendering.Universal
 
             int amountOfPassesRemaining = (useStopNan ? 1 : 0) + (useSubPixeMorpAA ? 1 : 0) + (useDepthOfField ? 1 : 0) + (useLensFlare ? 1 : 0) + (useTemporalAA ? 1 : 0) + (useMotionBlur ? 1 : 0) + (usePaniniProjection ? 1 : 0);
 
+            //************** CUSTOM ADD START ***************//
+            List<XPostProcessing.AbstractVolumeRenderer> activeVolumeRenderers = null;
+            if (m_CustomPostProcess != null)
+            {
+                activeVolumeRenderers = m_CustomPostProcess.GetAcitvePostProcessingRenderers();
+                amountOfPassesRemaining += activeVolumeRenderers.Count;
+            }
+            if (ScreenTransitionSingleFocusSoft.Instance != null && ScreenTransitionSingleFocusSoft.Instance.IsWorking())
+            {
+                amountOfPassesRemaining++;
+            }
+            //*************** CUSTOM ADD END ****************//
+            
             if (m_UseSwapBuffer && amountOfPassesRemaining > 0)
             {
                 renderer.EnableSwapBufferMSAA(false);
             }
-
+            
             // Don't use these directly unless you have a good reason to, use GetSource() and
             // GetDestination() instead
             RTHandle source = m_UseSwapBuffer ? renderer.cameraColorTargetHandle : m_Source;
@@ -1399,6 +1429,16 @@ namespace UnityEngine.Rendering.Universal
             if (m_UseSwapBuffer)
                 m_Source = cameraData.renderer.GetCameraColorBackBuffer(cmd);
 
+            //************** CUSTOM ADD START ***************//
+            /*if (m_FinalPassUseRenderColorBuff) // force use ColorBufferSystem
+            {
+                var renderer = renderingData.cameraData.renderer as UniversalRenderer;
+                var colorBuffer = renderer.m_ColorBufferSystem;
+                m_Source = colorBuffer.GetBackBuffer(cmd);
+                m_Destination = colorBuffer.GetFrontBuffer(cmd);
+            }*/
+            //*************** CUSTOM ADD END ****************//
+            
             RTHandle sourceTex = m_Source;
 
             var colorLoadAction = cameraData.isDefaultViewport ? RenderBufferLoadAction.DontCare : RenderBufferLoadAction.Load;

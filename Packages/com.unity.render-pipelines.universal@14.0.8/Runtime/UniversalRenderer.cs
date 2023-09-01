@@ -110,7 +110,7 @@ namespace UnityEngine.Rendering.Universal
         InvokeOnRenderObjectCallbackPass m_OnRenderObjectCallbackPass;
         FinalBlitPass m_FinalBlitPass;
         
-        //* Custom Add **********************************//
+        //************** CUSTOM ADD START ***************//
         BlitPass m_BlitPass;
         //***********************************************//
         
@@ -319,7 +319,11 @@ namespace UnityEngine.Rendering.Universal
 
                 m_PostProcessPasses = new PostProcessPasses(data.postProcessData, ref postProcessParams);
             }
-
+            
+            //************** CUSTOM ADD START ***************//
+            m_BlitPass = new BlitPass(RenderPassEvent.AfterRenderingPostProcessing + 1, m_BlitMaterial);
+            //***********************************************//
+            
             m_CapturePass = new CapturePass(RenderPassEvent.AfterRendering);
             m_FinalBlitPass = new FinalBlitPass(RenderPassEvent.AfterRendering + k_FinalBlitPassQueueOffset, m_BlitMaterial, m_BlitHDRMaterial);
 
@@ -547,10 +551,11 @@ namespace UnityEngine.Rendering.Universal
                 if (!needTransparencyPass)
                     return;
 #endif
+                m_RenderTransparentForwardPass.Setup(IsGammaCorrectEnable(ref cameraData));
                 EnqueuePass(m_RenderTransparentForwardPass);
                 return;
             }
-
+            
             // Assign the camera color target early in case it is needed during AddRenderPasses.
             bool isPreviewCamera = cameraData.isPreviewCamera;
             var createColorTexture = ((rendererFeatures.Count != 0 && m_IntermediateTextureMode == IntermediateTextureMode.Always) && !isPreviewCamera) ||
@@ -751,9 +756,21 @@ namespace UnityEngine.Rendering.Universal
                 // Doesn't create texture for Overlay cameras as they are already overlaying on top of created textures.
                 if (intermediateRenderTexture)
                     CreateCameraRenderTarget(context, ref cameraTargetDescriptor, useDepthPriming, cmd, ref cameraData);
-
-                m_ActiveCameraColorAttachment = createColorTexture ? m_ColorBufferSystem.PeekBackBuffer() : m_XRTargetHandleAlias;
-                m_ActiveCameraDepthAttachment = createDepthTexture ? m_CameraDepthAttachment : m_XRTargetHandleAlias;
+                
+                //************** CUSTOM ADD START ***************//
+                if (sUISplitEnable && cameraData.isUICamera &&!sEnableUICameraUseSwapBuffer)
+                {
+                    m_ActiveCameraColorAttachment = m_XRTargetHandleAlias;
+                    m_ActiveCameraDepthAttachment = m_XRTargetHandleAlias;
+                }
+                else
+                //*************** CUSTOM ADD END ****************//
+                {
+                    m_ActiveCameraColorAttachment =
+                        createColorTexture ? m_ColorBufferSystem.PeekBackBuffer() : m_XRTargetHandleAlias;
+                    m_ActiveCameraDepthAttachment =
+                        createDepthTexture ? m_CameraDepthAttachment : m_XRTargetHandleAlias;
+                }
             }
             else
             {
@@ -764,9 +781,23 @@ namespace UnityEngine.Rendering.Universal
                     m_ColorBufferSystem.Dispose();
                     m_ColorBufferSystem = baseRenderer.m_ColorBufferSystem;
                 }
-                m_ActiveCameraColorAttachment = m_ColorBufferSystem.PeekBackBuffer();
-                m_ActiveCameraDepthAttachment = baseRenderer.m_ActiveCameraDepthAttachment;
-                m_XRTargetHandleAlias = baseRenderer.m_XRTargetHandleAlias;
+                //************** CUSTOM ADD START ***************//
+                if (sUISplitEnable && cameraData.isUICamera && !sEnableUICameraUseSwapBuffer)
+                {
+                    RenderTargetIdentifier targetId = BuiltinRenderTextureType.CameraTarget;
+                    RTHandle cameraTargetHandle = RTHandles.Alloc(targetId);
+                    
+                    m_ActiveCameraColorAttachment = cameraTargetHandle;
+                    m_ActiveCameraDepthAttachment = cameraTargetHandle;
+                    m_XRTargetHandleAlias = cameraTargetHandle; //TODO: xr not used
+                }
+                else
+                //*************** CUSTOM ADD END ****************//
+                {
+                    m_ActiveCameraColorAttachment = m_ColorBufferSystem.PeekBackBuffer();
+                    m_ActiveCameraDepthAttachment = baseRenderer.m_ActiveCameraDepthAttachment;
+                    m_XRTargetHandleAlias = baseRenderer.m_XRTargetHandleAlias;
+                }
             }
 
             if (rendererFeatures.Count != 0 && !isPreviewCamera)
@@ -1146,6 +1177,7 @@ namespace UnityEngine.Rendering.Universal
 
                 m_RenderTransparentForwardPass.ConfigureColorStoreAction(transparentPassColorStoreAction);
                 m_RenderTransparentForwardPass.ConfigureDepthStoreAction(transparentPassDepthStoreAction);
+                m_RenderTransparentForwardPass.Setup(IsGammaCorrectEnable(ref cameraData));
                 EnqueuePass(m_RenderTransparentForwardPass);
             }
             EnqueuePass(m_OnRenderObjectCallbackPass);
@@ -1171,6 +1203,21 @@ namespace UnityEngine.Rendering.Universal
                  ((renderingData.cameraData.imageScalingMode == ImageScalingMode.Upscaling) && (renderingData.cameraData.upscalingFilter != ImageUpscalingFilter.Linear)) ||
                  (renderingData.cameraData.IsTemporalAAEnabled() && renderingData.cameraData.taaSettings.contrastAdaptiveSharpening > 0.0f));
 
+            //************** CUSTOM ADD START ***************//
+            if (sUISplitEnable&&cameraData.isUICamera)
+            {
+                if (sEnableUICameraUseSwapBuffer)
+                {
+                    applyFinalPostProcessing = false; // 使用UIGamma
+                }
+                else 
+                {
+                    applyPostProcessing = false;
+                    applyFinalPostProcessing = false; // 直接绘制到 framebuff
+                }
+            }
+            //*************** CUSTOM ADD END ****************//
+            
             // When post-processing is enabled we can use the stack to resolve rendering to camera target (screen or RT).
             // However when there are render passes executing after post we avoid resolving to screen so rendering continues (before sRGBConversion etc)
             bool resolvePostProcessingToCameraTarget = !hasCaptureActions && !hasPassesAfterPostProcessing && !applyFinalPostProcessing;
@@ -1247,10 +1294,76 @@ namespace UnityEngine.Rendering.Universal
 #endif
             }
             // stay in RT so we resume rendering on stack after post-processing
-            else if (applyPostProcessing)
+            //************** CUSTOM ADD START ***************//
+            else 
+            //*************** URP ****************//
+            //else if (applyPostProcessing)
+            //*************** CUSTOM ADD END ****************//
             {
-                postProcessPass.Setup(cameraTargetDescriptor, m_ActiveCameraColorAttachment, false, m_ActiveCameraDepthAttachment, colorGradingLut, m_MotionVectorColor, false, false);
-                EnqueuePass(postProcessPass);
+                if (applyPostProcessing)
+                {
+                    //************** CUSTOM ADD START ***************//
+                    if (sUISplitEnable && cameraData.nextIsUICamera)
+                    {
+                        applyFinalPostProcessing =
+                            ((renderingData.cameraData.antialiasing == AntialiasingMode.FastApproximateAntialiasing) ||
+                             ((renderingData.cameraData.imageScalingMode == ImageScalingMode.Upscaling) && (renderingData.cameraData.upscalingFilter != ImageUpscalingFilter.Linear)));
+                        var resolveToCameraTarget = !applyFinalPostProcessing;
+                        
+                        postProcessPass.Setup(cameraTargetDescriptor, m_ActiveCameraColorAttachment, resolveToCameraTarget,
+                            m_ActiveCameraDepthAttachment, colorGradingLut, m_MotionVectorColor, applyFinalPostProcessing, resolveToCameraTarget);
+                        EnqueuePass(postProcessPass);
+                        if (applyFinalPostProcessing)
+                        {
+                            var sourceForFinalPass = m_ActiveCameraColorAttachment;
+                            finalPostProcessPass.SetupFinalPass(sourceForFinalPass, true, true, false);
+                            EnqueuePass(finalPostProcessPass);
+                        }
+                        if (sEnableUICameraUseSwapBuffer) 
+                        {
+                            BlitPass.BlitColorTransform transformMode = BlitPass.BlitColorTransform.None;
+                            if (sIsGammaCorrectEnable)
+                            {
+                                transformMode = BlitPass.BlitColorTransform.Line2Gamma;
+                            }
+                            m_BlitPass.Setup(Screen.width, Screen.height, transformMode);
+                            EnqueuePass(m_BlitPass);
+                        }
+                    }
+                    else 
+                    //*************** CUSTOM ADD END ****************//
+                    //*************** URP ****************//
+                    {
+                        postProcessPass.Setup(cameraTargetDescriptor, m_ActiveCameraColorAttachment, false,
+                            m_ActiveCameraDepthAttachment, colorGradingLut, m_MotionVectorColor, false, false);
+                        EnqueuePass(postProcessPass);
+                    }
+                    //*************** URP End ****************//
+                }
+                //************** CUSTOM ADD START ***************//
+                else
+                {
+                    if (sUISplitEnable && cameraData.nextIsUICamera)
+                    {
+                        if (sEnableUICameraUseSwapBuffer)
+                        {
+                            BlitPass.BlitColorTransform transformMode = BlitPass.BlitColorTransform.None;
+                            if (sIsGammaCorrectEnable)
+                            {
+                                transformMode = BlitPass.BlitColorTransform.Line2Gamma;
+                            }
+                            m_BlitPass.Setup(Screen.width, Screen.height, transformMode);
+                            EnqueuePass(m_BlitPass);
+                        }
+                        else 
+                        {
+                            var sourceForFinalPass = m_ActiveCameraColorAttachment;
+                            m_FinalBlitPass.Setup(cameraTargetDescriptor, sourceForFinalPass);
+                            EnqueuePass(m_FinalBlitPass);
+                        }
+                    }
+                }
+                //************** CUSTOM ADD End ***************//
             }
 
 #if UNITY_EDITOR

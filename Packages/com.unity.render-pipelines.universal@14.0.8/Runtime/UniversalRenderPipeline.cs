@@ -817,6 +817,23 @@ namespace UnityEngine.Rendering.Universal
                 if (asset.useAdaptivePerformance)
                     ApplyAdaptivePerformance(ref baseCameraData);
 #endif
+                
+                //************** CUSTOM ADD START ***************//
+                bool baseCameraNextIsUICamera = false;
+                if (isStackedRendering)
+                {
+                    var nextCamera = cameraStack[0];
+                    if (nextCamera.isActiveAndEnabled)
+                    {
+                        if (nextCamera.CompareTag("UICamera"))
+                        {
+                            baseCameraNextIsUICamera = true;
+                        }
+                    }
+                }
+                baseCameraData.nextIsUICamera = baseCameraNextIsUICamera;
+                //************** CUSTOM ADD END ***************//
+                
                 // update the base camera flag so that the scene depth is stored if needed by overlay cameras later in the frame
                 baseCameraData.postProcessingRequiresDepthTexture |= cameraStackRequiresDepthForPostprocessing;
 
@@ -847,6 +864,29 @@ namespace UnityEngine.Rendering.Universal
                             overlayCameraData.camera = currCamera;
                             overlayCameraData.baseCamera = baseCamera;
 
+                            //************** CUSTOM ADD START ***************//
+                            bool nextIsUICamera = false;
+
+                            var nextIndex = i + 1;
+                            if (nextIndex < cameraStack.Count)
+                            {
+                                var nextCamera = cameraStack[nextIndex];
+                                if (nextCamera.CompareTag("UICamera"))
+                                {
+                                    nextIsUICamera = true;
+                                }
+                            }
+
+                            overlayCameraData.nextIsUICamera = nextIsUICamera;
+                            bool isUICamera = false;
+                            if (currCamera.CompareTag("UICamera"))
+                            {
+                                isUICamera = true;
+                            }
+
+                            overlayCameraData.isUICamera = isUICamera;
+                            //************** CUSTOM ADD END *****************//
+                            
                             UpdateCameraStereoMatrices(currAdditionalCameraData.camera, xrPass);
 
                             using (new ProfilingScope(null, Profiling.Pipeline.beginCameraRendering))
@@ -1045,6 +1085,10 @@ namespace UnityEngine.Rendering.Universal
             cameraData.hdrColorBufferPrecision = asset ? asset.hdrColorBufferPrecision : HDRColorBufferPrecision._32Bits;
             cameraData.cameraTargetDescriptor = CreateRenderTextureDescriptor(camera, cameraData.renderScale,
                 cameraData.isHdrEnabled, cameraData.hdrColorBufferPrecision, msaaSamples, needsAlphaChannel, cameraData.requiresOpaqueTexture);
+            
+            //************** CUSTOM ADD START ***************//
+            cameraData.isUICamera = cameraData.camera.CompareTag("UICamera");
+            //************** CUSTOM ADD End ****************//
         }
 
         /// <summary>
