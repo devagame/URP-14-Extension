@@ -4,6 +4,8 @@ Shader "Hidden/Universal/CoreBlit"
 
         #pragma target 2.0
         #pragma editor_sync_compilation
+        #pragma multi_compile_fragment _ _LINEAR_TO_SRGB_CONVERSION
+		#pragma multi_compile_fragment _ _SRGB_TO_LINEAR_CONVERSION
         #pragma multi_compile _ DISABLE_TEXTURE2D_X_ARRAY
         #pragma multi_compile _ BLIT_SINGLE_SLICE
         // Core.hlsl for XR dependencies
@@ -21,6 +23,7 @@ Shader "Hidden/Universal/CoreBlit"
             ZWrite Off ZTest Always Blend Off Cull Off
 
             HLSLPROGRAM
+                
                 #pragma vertex Vert
                 #pragma fragment FragNearest
             ENDHLSL

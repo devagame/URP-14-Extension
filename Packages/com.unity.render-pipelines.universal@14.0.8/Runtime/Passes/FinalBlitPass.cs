@@ -10,7 +10,7 @@ namespace UnityEngine.Rendering.Universal.Internal
     /// the camera target. The pass takes the screen viewport into
     /// consideration.
     /// </summary>
-    public class FinalBlitPass : ScriptableRenderPass
+    public partial class FinalBlitPass : ScriptableRenderPass
     {
         RTHandle m_Source;
         Material m_BlitMaterial;
@@ -102,9 +102,25 @@ namespace UnityEngine.Rendering.Universal.Internal
 
                 debugHandler?.UpdateShaderGlobalPropertiesForFinalValidationPass(cmd, ref cameraData, !resolveToDebugScreen);
 
-                CoreUtils.SetKeyword(cmd, ShaderKeywordStrings.LinearToSRGBConversion,
-                    cameraData.requireSrgbConversion);
-
+                //************** URP Orign ***************//
+                //CoreUtils.SetKeyword(cmd, ShaderKeywordStrings.LinearToSRGBConversion,cameraData.requireSrgbConversion);
+                //************** CUSTOM ADD START ***************//
+                if (m_IsLine)
+                {
+                    CoreUtils.SetKeyword(cmd, ShaderKeywordStrings.SRGBToLinearConversion, false);
+                    CoreUtils.SetKeyword(cmd, ShaderKeywordStrings.LinearToSRGBConversion,
+                        cameraData.requireSrgbConversion);
+                }
+                else
+                {
+                    CoreUtils.SetKeyword(cmd, ShaderKeywordStrings.SRGBToLinearConversion, true);
+                    CoreUtils.SetKeyword(cmd, ShaderKeywordStrings.LinearToSRGBConversion,
+                        cameraData.requireSrgbConversion);
+                }
+                //*************** CUSTOM ADD END ****************//
+                
+                
+                
                 if (outputsToHDR)
                 {
                     VolumeStack stack = VolumeManager.instance.stack;

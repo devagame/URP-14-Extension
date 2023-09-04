@@ -7,6 +7,7 @@
 
         public static bool sEnableUICameraUseSwapBuffer = false;
         
+        Material m_BlitCustom = null;
         public bool IsGammaCorrectEnable(ref CameraData cameraData)
         {
             return sUISplitEnable&&sIsGammaCorrectEnable && cameraData.isUICamera;

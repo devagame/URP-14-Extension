@@ -87,7 +87,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ecb15ce237a4cc696728dfef09762eb, type: 3}
   m_Name: SharpenV2
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   Sharpness:
     m_OverrideState: 1
     m_Value: 1.61
@@ -158,7 +158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: def584b2884a4dfcb67b92a98deca9fe, type: 3}
   m_Name: PixelizeHexagon
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   pixelSize:
     m_OverrideState: 1
     m_Value: 0.197

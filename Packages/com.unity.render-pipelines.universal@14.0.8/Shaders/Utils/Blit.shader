@@ -16,6 +16,7 @@ Shader "Hidden/Universal Render Pipeline/Blit"
             #pragma vertex Vert
             #pragma fragment Fragment
             #pragma multi_compile_fragment _ _LINEAR_TO_SRGB_CONVERSION
+			#pragma multi_compile_fragment _ _SRGB_TO_LINEAR_CONVERSION
             #pragma multi_compile_fragment _ DEBUG_DISPLAY
 
             // Core.hlsl for XR dependencies
@@ -33,8 +34,12 @@ Shader "Hidden/Universal Render Pipeline/Blit"
 
                 half4 col = SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_BlitTexture, uv);
 
+                #ifdef _SRGB_TO_LINEAR_CONVERSION
+				    col = SRGBToLinear(col);
+				#endif
+                
                 #ifdef _LINEAR_TO_SRGB_CONVERSION
-                col = LinearToSRGB(col);
+                    col = LinearToSRGB(col);
                 #endif
 
                 #if defined(DEBUG_DISPLAY)

@@ -321,6 +321,7 @@ namespace UnityEngine.Rendering.Universal
             }
             
             //************** CUSTOM ADD START ***************//
+            //m_BlitCustom = CoreUtils.CreateEngineMaterial(data.shaders.blitPS);
             m_BlitPass = new BlitPass(RenderPassEvent.AfterRenderingPostProcessing + 1, m_BlitMaterial);
             SetUIGammaController(data);
             //***********************************************//
@@ -1205,8 +1206,10 @@ namespace UnityEngine.Rendering.Universal
                  (renderingData.cameraData.IsTemporalAAEnabled() && renderingData.cameraData.taaSettings.contrastAdaptiveSharpening > 0.0f));
 
             //************** CUSTOM ADD START ***************//
+            bool cameraIsLiner = true;
             if (sUISplitEnable&&cameraData.isUICamera)
             {
+                cameraIsLiner = !sIsGammaCorrectEnable;
                 if (sEnableUICameraUseSwapBuffer)
                 {
                     applyFinalPostProcessing = false; // 使用UIGamma
@@ -1270,7 +1273,7 @@ namespace UnityEngine.Rendering.Universal
                 // We need final blit to resolve to screen
                 if (!cameraTargetResolved)
                 {
-                    m_FinalBlitPass.Setup(cameraTargetDescriptor, sourceForFinalPass);
+                    m_FinalBlitPass.Setup(cameraTargetDescriptor, sourceForFinalPass,cameraIsLiner);
                     EnqueuePass(m_FinalBlitPass);
                 }
 

@@ -106,12 +106,23 @@ Varyings VertQuadPadding(Attributes input)
 
 float4 FragBlit(Varyings input, SamplerState s)
 {
+    half4 col;
 #if defined(USE_TEXTURE2D_X_AS_ARRAY) && defined(BLIT_SINGLE_SLICE)
-    return SAMPLE_TEXTURE2D_ARRAY_LOD(_BlitTexture, s, input.texcoord.xy, _BlitTexArraySlice, _BlitMipLevel);
+    col = SAMPLE_TEXTURE2D_ARRAY_LOD(_BlitTexture, s, input.texcoord.xy, _BlitTexArraySlice, _BlitMipLevel);
 #endif
 
     UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
-    return SAMPLE_TEXTURE2D_X_LOD(_BlitTexture, s, input.texcoord.xy, _BlitMipLevel);
+    col = SAMPLE_TEXTURE2D_X_LOD(_BlitTexture, s, input.texcoord.xy, _BlitMipLevel);
+
+    #ifdef _SRGB_TO_LINEAR_CONVERSION
+    col = SRGBToLinear(col);
+    #endif
+                
+    #ifdef _LINEAR_TO_SRGB_CONVERSION
+    col = LinearToSRGB(col);
+    #endif
+
+    return col;
 }
 
 float4 FragNearest(Varyings input) : SV_Target
