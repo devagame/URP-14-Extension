@@ -11,7 +11,13 @@
         {
             return sUISplitEnable&&sIsGammaCorrectEnable && cameraData.isUICamera;
         }
-        
+
+        public void SetUIGammaController(UniversalRendererData data)
+        {
+            sUISplitEnable = data.UISplitEnable;
+            sIsGammaCorrectEnable = data.IsGammaCorrectEnable;
+            sEnableUICameraUseSwapBuffer = data.EnableUICameraUseSwapBuffer;
+        }
         public void ResizeDepth(CommandBuffer cmd, RenderTextureDescriptor descriptor,int width,int height)
         {
             if (m_ActiveCameraDepthAttachment.nameID != BuiltinRenderTextureType.CameraTarget)

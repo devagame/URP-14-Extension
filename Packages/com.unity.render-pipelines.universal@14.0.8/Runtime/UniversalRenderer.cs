@@ -322,6 +322,7 @@ namespace UnityEngine.Rendering.Universal
             
             //************** CUSTOM ADD START ***************//
             m_BlitPass = new BlitPass(RenderPassEvent.AfterRenderingPostProcessing + 1, m_BlitMaterial);
+            SetUIGammaController(data);
             //***********************************************//
             
             m_CapturePass = new CapturePass(RenderPassEvent.AfterRendering);
