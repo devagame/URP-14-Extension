@@ -111,31 +111,7 @@ namespace UnityEngine.Rendering.Universal.Internal
                 renderer.ResizeDepth(cmd, RenderTargetBufferSystem.GetDesc(), m_Width, m_Height);
             }
             renderer.SwapColorBuffer(cmd);
-            //using (new ProfilingScope(cmd, ProfilingSampler.Get(URPProfileId.Bilt)))
-            //{
-            //    RenderTargetIdentifier opaqueColorRT = destination.Identifier();
-            //
-            //    ScriptableRenderer.SetRenderTarget(cmd, opaqueColorRT, BuiltinRenderTextureType.CameraTarget, clearFlag,
-            //        clearColor);
-            //
-            //    bool useDrawProceduleBlit = renderingData.cameraData.xr.enabled;
-            //    switch (m_DownsamplingMethod)
-            //    {
-            //        case Downsampling.None:
-            //            RenderingUtils.Blit(cmd, source, opaqueColorRT, m_BlitMaterial, 0, useDrawProceduleBlit);
-            //            break;
-            //        case Downsampling._2xBilinear:
-            //            RenderingUtils.Blit(cmd, source, opaqueColorRT, m_BlitMaterial, 0, useDrawProceduleBlit);
-            //            break;
-            //        case Downsampling._4xBox:
-            //            m_SamplingMaterial.SetFloat(m_SampleOffsetShaderHandle, 2);
-            //            RenderingUtils.Blit(cmd, source, opaqueColorRT, m_SamplingMaterial, 0, useDrawProceduleBlit);
-            //            break;
-            //        case Downsampling._4xBilinear:
-            //            RenderingUtils.Blit(cmd, source, opaqueColorRT, m_BlitMaterial, 0, useDrawProceduleBlit);
-            //            break;
-            //    }
-            //}
+           
            // cmd.SetRenderTarget(renderer.m_ActiveCameraColorAttachment.id, RenderBufferLoadAction.Load, RenderBufferStoreAction.StoreAndResolve, renderer.m_ActiveCameraDepthAttachment.id, RenderBufferLoadAction.Load, RenderBufferStoreAction.StoreAndResolve);
             context.ExecuteCommandBuffer(cmd);
             CommandBufferPool.Release(cmd);
@@ -144,14 +120,7 @@ namespace UnityEngine.Rendering.Universal.Internal
         /// <inheritdoc/>
         public override void OnCameraCleanup(CommandBuffer cmd)
         {
-            //if (cmd == null)
-            //    throw new ArgumentNullException("cmd");
-            //
-            //if (destination != RenderTargetHandle.CameraTarget)
-            //{
-            //    cmd.ReleaseTemporaryRT(destination.id);
-            //    destination = RenderTargetHandle.CameraTarget;
-            //}
+            
         }
     }
 }
