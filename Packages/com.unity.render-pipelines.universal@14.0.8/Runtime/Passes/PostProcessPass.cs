@@ -241,7 +241,7 @@ namespace UnityEngine.Rendering.Universal
         /// <param name="internalLut"></param>
         /// <param name="hasFinalPass"></param>
         /// <param name="enableColorEncoding"></param>
-        public void Setup(in RenderTextureDescriptor baseDescriptor, in RTHandle source, bool resolveToScreen, in RTHandle depth, in RTHandle internalLut, in RTHandle motionVectors, bool hasFinalPass, bool enableColorEncoding)
+        public void Setup(in RenderTextureDescriptor baseDescriptor, in RTHandle source, bool resolveToScreen, in RTHandle depth, in RTHandle internalLut, in RTHandle motionVectors, bool hasFinalPass, bool enableColorEncoding/*,bool hasExternalPass*/)
         {
             m_Descriptor = baseDescriptor;
             m_Descriptor.useMipMap = false;
@@ -256,6 +256,10 @@ namespace UnityEngine.Rendering.Universal
             m_ResolveToScreen = resolveToScreen;
             m_Destination = k_CameraTarget;
             m_UseSwapBuffer = true;
+            
+            //************** CUSTOM ADD START ***************//
+            //m_hasExternalPostPasses = hasExternalPass;
+            //*************** CUSTOM ADD END ****************//
         }
 
         /// <summary>
@@ -281,6 +285,10 @@ namespace UnityEngine.Rendering.Universal
             m_HasFinalPass = hasFinalPass;
             m_EnableColorEncodingIfNeeded = enableColorEncoding;
             m_UseSwapBuffer = false;
+            
+            //************** CUSTOM ADD START **************#1#/
+            //m_hasExternalPostPasses = hasExternalPass;
+            //*************** CUSTOM ADD END ***************#1#/
         }
 
         /// <summary>
@@ -289,7 +297,7 @@ namespace UnityEngine.Rendering.Universal
         /// <param name="source"></param>
         /// <param name="useSwapBuffer"></param>
         /// <param name="enableColorEncoding"></param>
-        public void SetupFinalPass(in RTHandle source, bool useSwapBuffer = false, bool enableColorEncoding = true)
+        public void SetupFinalPass(in RTHandle source, bool useSwapBuffer = false, bool enableColorEncoding = true/*,bool hasExternalPass = false*/)
         {
             m_Source = source;
             m_Destination = k_CameraTarget;
@@ -1430,13 +1438,13 @@ namespace UnityEngine.Rendering.Universal
                 m_Source = cameraData.renderer.GetCameraColorBackBuffer(cmd);
 
             //************** CUSTOM ADD START ***************//
-            /*if (m_FinalPassUseRenderColorBuff) // force use ColorBufferSystem
+            if (m_FinalPassUseRenderColorBuff) // force use ColorBufferSystem
             {
                 var renderer = renderingData.cameraData.renderer as UniversalRenderer;
                 var colorBuffer = renderer.m_ColorBufferSystem;
                 m_Source = colorBuffer.GetBackBuffer(cmd);
                 m_Destination = colorBuffer.GetFrontBuffer(cmd);
-            }*/
+            }
             //*************** CUSTOM ADD END ****************//
             
             RTHandle sourceTex = m_Source;
@@ -1587,8 +1595,23 @@ namespace UnityEngine.Rendering.Universal
                 FSRUtils.SetRcasConstantsLinear(cmd, cameraData.taaSettings.contrastAdaptiveSharpening);
             }
             
-            var cameraTarget = RenderingUtils.GetCameraTargetIdentifier(ref renderingData);
-
+            //var cameraTarget = RenderingUtils.GetCameraTargetIdentifier(ref renderingData);
+            //************** CUSTOM ADD START ***************// 
+            RenderTargetIdentifier cameraTarget;
+            if (m_FinalPassUseRenderColorBuff)
+            {
+                
+                var univerRenderer = renderingData.cameraData.renderer as UniversalRenderer;
+                var colorBufferTemp = univerRenderer.m_ColorBufferSystem;
+                m_Destination = colorBufferTemp.GetFrontBuffer(cmd);
+                cameraTarget = m_Destination;
+            }
+            else
+            {
+                cameraTarget = RenderingUtils.GetCameraTargetIdentifier(ref renderingData);
+            }
+            //************** CUSTOM ADD End *****************// 
+            
             if (resolveToDebugScreen)
             {
                 debugHandler.BlitTextureToDebugScreenTexture(cmd, sourceTex, material, 0);
@@ -1601,6 +1624,10 @@ namespace UnityEngine.Rendering.Universal
                 var cameraTargetHandle = RTHandleStaticHelpers.s_RTHandleWrapper;
                 RenderingUtils.FinalBlit(cmd, ref cameraData, sourceTex, cameraTargetHandle, colorLoadAction, RenderBufferStoreAction.Store, material, 0);
             }
+            
+            //************** CUSTOM ADD START ***************// 
+            cameraData.renderer.SwapColorBuffer(cmd);
+            //************** CUSTOM ADD End *****************// 
         }
 
 #endregion
