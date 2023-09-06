@@ -489,6 +489,17 @@ namespace UnityEngine.Rendering.Universal
                 }
             }
 
+            //************** CUSTOM ADD START ***************//
+            if (activeVolumeRenderers != null)
+            {
+                for (int i = 0; i < activeVolumeRenderers.Count; i++)
+                {
+                    activeVolumeRenderers[i].Render(cmd, GetSource(), GetDestination());
+                    Swap(ref renderer);
+                }
+            }
+            //*************** CUSTOM ADD END ****************//
+            
             // Anti-aliasing
             if (useSubPixeMorpAA)
             {

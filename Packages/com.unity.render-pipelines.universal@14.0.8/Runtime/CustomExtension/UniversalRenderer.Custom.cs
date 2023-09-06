@@ -23,6 +23,8 @@
         {
             if (m_ActiveCameraDepthAttachment.nameID != BuiltinRenderTextureType.CameraTarget)
             {
+                RTHandles.Release(m_ActiveCameraDepthAttachment);
+                //m_ActiveCameraDepthAttachment?.Release();
                 //cmd.ReleaseTemporaryRT(m_ActiveCameraDepthAttachment.nameID.id);
                 var depthDescriptor = descriptor;
                 depthDescriptor.useMipMap = false;

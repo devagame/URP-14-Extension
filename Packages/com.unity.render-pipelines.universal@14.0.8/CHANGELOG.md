@@ -1,3 +1,17 @@
+## [14.0.8] - 2023-09-6
+
+### Changed
+- 自定义功能额外代码均在Runtime/Custom 目录下。
+- 管线中修改都使用：
+	//************** CUSTOM ADD START ***************//
+		。。。。change code
+	//*************** CUSTOM ADD END ****************//
+	包裹。
+	IDE 添加 CUSTOM ADD START TODO 注释标签可在TODO 中查看变动列表。 
+
+- UIGamma ，后处理功能已升级。 屏幕UI场景分辨率分离暂未实现。 (需要进一步研究RTHandler)
+	
+
 # Changelog
 All notable changes to this package will be documented in this file.
 

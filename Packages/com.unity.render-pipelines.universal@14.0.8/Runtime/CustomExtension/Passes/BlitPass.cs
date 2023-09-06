@@ -70,11 +70,16 @@ namespace UnityEngine.Rendering.Universal.Internal
             // }
             var renderer = renderingData.cameraData.renderer as UniversalRenderer;
             var colorBuffer = renderer.m_ColorBufferSystem;
+            
+            //TODO 需要适配新的RTHandler 去变更RT
             bool needChangeSize = RenderTargetBufferSystem.GetDesc().width != m_Width|| RenderTargetBufferSystem.GetDesc().height!= m_Height;
             if (needChangeSize)
             {
-                colorBuffer.ReSizeFrontBuffer(cmd, m_Width, m_Height);
+                //TODO 该怎么重新申请？
+                //colorBuffer.ReSizeFrontBuffer(cmd, m_Width, m_Height);
+                RTHandles.SetReferenceSize(m_Width,m_Height);
             }
+           
             bool useDrawProceduleBlit = renderingData.cameraData.xr.enabled;
             if (m_BlitColorTransform == BlitColorTransform.Gamma2Line)
             {
@@ -107,8 +112,8 @@ namespace UnityEngine.Rendering.Universal.Internal
             CoreUtils.SetKeyword(cmd, ShaderKeywordStrings.SRGBToLinearConversion,false);
             if (needChangeSize)
             {
-                colorBuffer.ReSizeBackBufferAndSave(cmd, m_Width, m_Height);
-                renderer.ResizeDepth(cmd, RenderTargetBufferSystem.GetDesc(), m_Width, m_Height);
+                //colorBuffer.ReSizeBackBufferAndSave(cmd, m_Width, m_Height);
+                //renderer.ResizeDepth(cmd, RenderTargetBufferSystem.GetDesc(), m_Width, m_Height);
             }
             renderer.SwapColorBuffer(cmd);
            
