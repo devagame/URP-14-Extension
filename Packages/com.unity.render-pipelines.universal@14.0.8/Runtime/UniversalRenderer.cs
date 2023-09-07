@@ -759,20 +759,10 @@ namespace UnityEngine.Rendering.Universal
                 if (intermediateRenderTexture)
                     CreateCameraRenderTarget(context, ref cameraTargetDescriptor, useDepthPriming, cmd, ref cameraData);
                 
-                //************** CUSTOM ADD START ***************//
-                /*if (sUISplitEnable && cameraData.isUICamera &&!sEnableUICameraUseSwapBuffer)
-                {
-                    m_ActiveCameraColorAttachment = m_XRTargetHandleAlias;
-                    m_ActiveCameraDepthAttachment = m_XRTargetHandleAlias;
-                }
-                else*/
-                //*************** CUSTOM ADD END ****************//
-                {
-                    m_ActiveCameraColorAttachment =
-                        createColorTexture ? m_ColorBufferSystem.PeekBackBuffer() : m_XRTargetHandleAlias;
-                    m_ActiveCameraDepthAttachment =
-                        createDepthTexture ? m_CameraDepthAttachment : m_XRTargetHandleAlias;
-                }
+                m_ActiveCameraColorAttachment =
+                    createColorTexture ? m_ColorBufferSystem.PeekBackBuffer() : m_XRTargetHandleAlias;
+                m_ActiveCameraDepthAttachment =
+                    createDepthTexture ? m_CameraDepthAttachment : m_XRTargetHandleAlias;
             }
             else
             {
@@ -783,23 +773,9 @@ namespace UnityEngine.Rendering.Universal
                     m_ColorBufferSystem.Dispose();
                     m_ColorBufferSystem = baseRenderer.m_ColorBufferSystem;
                 }
-                //************** CUSTOM ADD START ***************//
-                /*if (sUISplitEnable && cameraData.isUICamera && !sEnableUICameraUseSwapBuffer)
-                {
-                    RenderTargetIdentifier targetId = BuiltinRenderTextureType.CameraTarget;
-                    RTHandle cameraTargetHandle = RTHandles.Alloc(targetId);
-                    
-                    m_ActiveCameraColorAttachment = cameraTargetHandle;
-                    m_ActiveCameraDepthAttachment = cameraTargetHandle;
-                    m_XRTargetHandleAlias = cameraTargetHandle; //TODO: xr not used
-                }
-                else*/
-                //*************** CUSTOM ADD END ****************//
-                {
-                    m_ActiveCameraColorAttachment = m_ColorBufferSystem.PeekBackBuffer();
-                    m_ActiveCameraDepthAttachment = baseRenderer.m_ActiveCameraDepthAttachment;
-                    m_XRTargetHandleAlias = baseRenderer.m_XRTargetHandleAlias;
-                }
+                m_ActiveCameraColorAttachment = m_ColorBufferSystem.PeekBackBuffer();
+                m_ActiveCameraDepthAttachment = baseRenderer.m_ActiveCameraDepthAttachment;
+                m_XRTargetHandleAlias = baseRenderer.m_XRTargetHandleAlias;
             }
 
             if (rendererFeatures.Count != 0 && !isPreviewCamera)
@@ -1498,7 +1474,13 @@ namespace UnityEngine.Rendering.Universal
                     cmd.SetGlobalTexture("_AfterPostProcessTexture", m_ActiveCameraColorAttachment.nameID);
                 }
 
-                if (m_CameraDepthAttachment == null || m_CameraDepthAttachment.nameID != BuiltinRenderTextureType.CameraTarget)
+                //************** CUSTOM ADD START ***************//
+                if (m_CameraDepthAttachment == null ||
+                    m_CameraDepthAttachment.nameID != BuiltinRenderTextureType.CameraTarget ||
+                    m_CameraDepthAttachment.rt.width != descriptor.width ||
+                    m_CameraDepthAttachment.rt.height != descriptor.height)
+                //************** CUSTOM ADD End ***************//
+                //if (m_CameraDepthAttachment == null || m_CameraDepthAttachment.nameID != BuiltinRenderTextureType.CameraTarget)
                 {
                     var depthDescriptor = descriptor;
                     depthDescriptor.useMipMap = false;

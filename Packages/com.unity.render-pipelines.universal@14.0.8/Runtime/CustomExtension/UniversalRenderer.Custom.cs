@@ -1,4 +1,6 @@
-﻿namespace UnityEngine.Rendering.Universal
+﻿using UnityEngine.Experimental.Rendering;
+
+namespace UnityEngine.Rendering.Universal
 {
     public sealed partial class UniversalRenderer
     {
@@ -19,35 +21,42 @@
             sIsGammaCorrectEnable = data.IsGammaCorrectEnable;
             sEnableUICameraUseSwapBuffer = data.EnableUICameraUseSwapBuffer;
         }
-        public void ResizeDepth(CommandBuffer cmd, RenderTextureDescriptor descriptor,int width,int height)
+        
+        public void ResizeDepth(CommandBuffer cmd,int width,int height,ref RenderingData renderingData)
         {
-            if (m_ActiveCameraDepthAttachment.nameID != BuiltinRenderTextureType.CameraTarget)
+            var depthDescriptor = renderingData.cameraData.cameraTargetDescriptor;
+            depthDescriptor.width = width;
+            depthDescriptor.height = height;
+            
+            depthDescriptor.useMipMap = false;
+            depthDescriptor.autoGenerateMips = false;
+            depthDescriptor.bindMS = false;
+
+            bool hasMSAA = depthDescriptor.msaaSamples > 1 && (SystemInfo.supportsMultisampledTextures != 0);
+
+            // if MSAA is enabled and we are not resolving depth, which we only do if the CopyDepthPass is AfterTransparents,
+            // then we want to bind the multisampled surface.
+            if (hasMSAA)
             {
-                RTHandles.Release(m_ActiveCameraDepthAttachment);
-                //m_ActiveCameraDepthAttachment?.Release();
-                //cmd.ReleaseTemporaryRT(m_ActiveCameraDepthAttachment.nameID.id);
-                var depthDescriptor = descriptor;
-                depthDescriptor.useMipMap = false;
-                depthDescriptor.autoGenerateMips = false;
-                depthDescriptor.width = width;
-                depthDescriptor.height = height;
-                depthDescriptor.bindMS = depthDescriptor.msaaSamples > 1 && (SystemInfo.supportsMultisampledTextures != 0);
-
-                // binding MS surfaces is not supported by the GLES backend, and it won't be fixed after investigating
-                // the high performance impact of potential fixes, which would make it more expensive than depth prepass (fogbugz 1339401 for more info)
-                if (IsGLESDevice())
-                    depthDescriptor.bindMS = false;
-
-                depthDescriptor.colorFormat = RenderTextureFormat.Depth;
-                depthDescriptor.depthBufferBits = k_DepthBufferBits;
-
-                RenderingUtils.ReAllocateIfNeeded(
-                    ref m_ActiveCameraDepthAttachment,
-                    depthDescriptor,
-                    wrapMode: TextureWrapMode.Clamp,
-                    name: m_ActiveCameraDepthAttachment.name);
-                //cmd.GetTemporaryRT(m_ActiveCameraDepthAttachment.id, depthDescriptor, FilterMode.Point);
+                // if depth priming is enabled the copy depth primed pass is meant to do the MSAA resolve, so we want to bind the MS surface
+                if (IsDepthPrimingEnabled(ref renderingData.cameraData))
+                    depthDescriptor.bindMS = true;
+                else
+                    depthDescriptor.bindMS = !(RenderingUtils.MultisampleDepthResolveSupported() && m_CopyDepthMode == CopyDepthMode.AfterTransparents);
             }
+
+            // binding MS surfaces is not supported by the GLES backend, and it won't be fixed after investigating
+            // the high performance impact of potential fixes, which would make it more expensive than depth prepass (fogbugz 1339401 for more info)
+            if (IsGLESDevice())
+                depthDescriptor.bindMS = false;
+
+            depthDescriptor.graphicsFormat = GraphicsFormat.None;
+            depthDescriptor.depthStencilFormat = k_DepthStencilFormat;
+            
+            RenderingUtils.ReAllocateIfNeeded(ref m_CameraDepthAttachment, depthDescriptor, FilterMode.Point, TextureWrapMode.Clamp, name: "_CameraDepthAttachment");
+            cmd.SetGlobalTexture(m_CameraDepthAttachment.name, m_CameraDepthAttachment.nameID);
+            
+            m_ActiveCameraDepthAttachment = m_CameraDepthAttachment; //立即激活
         }
     }
 }

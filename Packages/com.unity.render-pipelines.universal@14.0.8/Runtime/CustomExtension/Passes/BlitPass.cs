@@ -63,23 +63,9 @@ namespace UnityEngine.Rendering.Universal.Internal
 
             CommandBuffer cmd = CommandBufferPool.Get();
 
-            //It is possible that the given color target is now the frontbuffer
-            // if (source == renderingData.cameraData.renderer.GetCameraColorFrontBuffer(cmd))
-            // {
-            //     source = renderingData.cameraData.renderer.cameraColorTarget;
-            // }
             var renderer = renderingData.cameraData.renderer as UniversalRenderer;
             var colorBuffer = renderer.m_ColorBufferSystem;
             
-            //TODO 需要适配新的RTHandler 去变更RT
-            bool needChangeSize = RenderTargetBufferSystem.GetDesc().width != m_Width|| RenderTargetBufferSystem.GetDesc().height!= m_Height;
-            if (needChangeSize)
-            {
-                //TODO 该怎么重新申请？
-                //colorBuffer.ReSizeFrontBuffer(cmd, m_Width, m_Height);
-                RTHandles.SetReferenceSize(m_Width,m_Height);
-            }
-           
             bool useDrawProceduleBlit = renderingData.cameraData.xr.enabled;
             if (m_BlitColorTransform == BlitColorTransform.Gamma2Line)
             {
@@ -91,17 +77,25 @@ namespace UnityEngine.Rendering.Universal.Internal
                 CoreUtils.SetKeyword(cmd, ShaderKeywordStrings.LinearToSRGBConversion,true);
                 CoreUtils.SetKeyword(cmd, ShaderKeywordStrings.SRGBToLinearConversion,false);
             }
-            RTHandle source;
-            source = colorBuffer.GetBackBuffer(cmd);
+            
+            RTHandle source,target;
+            source = renderingData.cameraData.renderer.cameraColorTargetHandle;
+            
+            bool needChangeSize = RenderTargetBufferSystem.GetDesc().width != m_Width|| RenderTargetBufferSystem.GetDesc().height!= m_Height;
+            if (needChangeSize)
+            {
+                colorBuffer.ReSizeFrontBuffer(cmd,m_Width,m_Height);
+            }
+            target = colorBuffer.GetFrontBuffer();
             
             var pixelRect = new Rect(
                 Vector2.zero, 
-                new Vector2(renderingData.cameraData.cameraTargetDescriptor.width, renderingData.cameraData.cameraTargetDescriptor.height));
-            //TODO Use DrawProceduleBlit
+                new Vector2(m_Width, m_Height));
+            
             RenderingUtils.Blit(cmd, 
                 source,
-                pixelRect,
-                colorBuffer.GetFrontBuffer(cmd),
+                pixelRect, 
+                target,
                 RenderBufferLoadAction.DontCare,
                 RenderBufferStoreAction.Store,
                 ClearFlag.None,
@@ -112,12 +106,12 @@ namespace UnityEngine.Rendering.Universal.Internal
             CoreUtils.SetKeyword(cmd, ShaderKeywordStrings.SRGBToLinearConversion,false);
             if (needChangeSize)
             {
-                //colorBuffer.ReSizeBackBufferAndSave(cmd, m_Width, m_Height);
-                //renderer.ResizeDepth(cmd, RenderTargetBufferSystem.GetDesc(), m_Width, m_Height);
+                //只用重置Depth ,multiBuff会自动重置Back
+                //colorBuffer.ReSizeBackBuffer(cmd);
+                renderer.ResizeDepth(cmd,m_Width, m_Height,ref renderingData);
             }
             renderer.SwapColorBuffer(cmd);
            
-           // cmd.SetRenderTarget(renderer.m_ActiveCameraColorAttachment.id, RenderBufferLoadAction.Load, RenderBufferStoreAction.StoreAndResolve, renderer.m_ActiveCameraDepthAttachment.id, RenderBufferLoadAction.Load, RenderBufferStoreAction.StoreAndResolve);
             context.ExecuteCommandBuffer(cmd);
             CommandBufferPool.Release(cmd);
         }

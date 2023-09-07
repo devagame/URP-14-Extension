@@ -47,6 +47,37 @@ MonoBehaviour:
   dirtIntensity:
     m_OverrideState: 0
     m_Value: 0
+--- !u!114 &-7321081795851498158
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15931d0391b948789297724ed5b53e39, type: 3}
+  m_Name: DepthFog
+  m_EditorClassIdentifier: 
+  active: 1
+  fogStrength:
+    m_OverrideState: 1
+    m_Value: 0.261
+  fogColor:
+    m_OverrideState: 1
+    m_Value: {r: 1, g: 0.4198113, b: 0.4198113, a: 1}
+  fogHeightScale:
+    m_OverrideState: 1
+    m_Value: 20.7
+  fogEnableDistance:
+    m_OverrideState: 1
+    m_Value: 6.41
+  fogEnableDistanceArea:
+    m_OverrideState: 1
+    m_Value: 19.94
+  fogBaseLevel:
+    m_OverrideState: 1
+    m_Value: 3.3
 --- !u!114 &-7011558710299706105
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -92,6 +123,7 @@ MonoBehaviour:
   - {fileID: -7893295128165547882}
   - {fileID: -7011558710299706105}
   - {fileID: 3232787976699680669}
+  - {fileID: -7321081795851498158}
 --- !u!114 &849379129802519247
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -147,7 +179,7 @@ MonoBehaviour:
   active: 0
   pixelSize:
     m_OverrideState: 1
-    m_Value: 0.383
+    m_Value: 0.232
   useAutoScreenRatio:
     m_OverrideState: 1
     m_Value: 1

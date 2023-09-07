@@ -6,39 +6,41 @@
         {
             return m_Desc;
         }
+
+        public RTHandle GetFrontBuffer()
+        {
+            if (!m_AllowMSAA && frontBuffer.msaa > 1)
+                frontBuffer.msaa = 1;
+            return (m_AllowMSAA && frontBuffer.msaa > 1) ? frontBuffer.rtMSAA : frontBuffer.rtResolve;
+        }
         
         public void ReSizeFrontBuffer(CommandBuffer cmd, int width,int height)
         {
-            RTHandles.Release( frontBuffer.rtMSAA);
-            //cmd.ReleaseTemporaryRT(Shader.PropertyToID(frontBuffer.name));
-            var tempDes = m_Desc;
-            tempDes.width = width;
-            tempDes.height = height;
-            RenderingUtils.ReAllocateIfNeeded(ref frontBuffer.rtMSAA, tempDes, m_FilterMode, TextureWrapMode.Clamp, name: frontBuffer.name);
-            //cmd.GetTemporaryRT(frontBuffer.name, tempDes, m_FilterMode);
+            m_Desc.width = width;
+            m_Desc.height = height;
             
-            RTHandles.Release( frontBuffer.rtResolve);
-            //cmd.ReleaseTemporaryRT(Shader.PropertyToID(frontBuffer.name));
-            var tempDes0 = m_Desc;
-            tempDes0.width = width;
-            tempDes0.height = height;
-            RenderingUtils.ReAllocateIfNeeded(ref frontBuffer.rtResolve, tempDes0, m_FilterMode, TextureWrapMode.Clamp, name: frontBuffer.name);
+            var desc = m_Desc;
+            desc.msaaSamples = frontBuffer.msaa;
+            if (desc.msaaSamples > 1)
+                RenderingUtils.ReAllocateIfNeeded(ref frontBuffer.rtMSAA, desc, m_FilterMode, TextureWrapMode.Clamp, name: frontBuffer.name);
+            
+            desc.msaaSamples = 1;
+            RenderingUtils.ReAllocateIfNeeded(ref frontBuffer.rtResolve, desc, m_FilterMode, TextureWrapMode.Clamp, name: frontBuffer.name);
+          
+            cmd.SetGlobalTexture(frontBuffer.name, frontBuffer.rtResolve);
         }
-        
-        public void ReSizeBackBufferAndSave(CommandBuffer cmd, int width, int height)
+   
+        public void ReSizeBackBuffer(CommandBuffer cmd)
         {
-            RTHandles.Release(backBuffer.rtMSAA);
-            //cmd.ReleaseTemporaryRT(Shader.PropertyToID(backBuffer.name));
-            m_Desc.width = width;
-            m_Desc.height = height;
-            RenderingUtils.ReAllocateIfNeeded(ref backBuffer.rtMSAA, m_Desc, m_FilterMode, TextureWrapMode.Clamp, name: backBuffer.name);
-            //cmd.GetTemporaryRT(backBuffer.name, m_Desc, m_FilterMode);
+            var desc = m_Desc;
+            desc.msaaSamples = backBuffer.msaa;
+            if (desc.msaaSamples > 1)
+                RenderingUtils.ReAllocateIfNeeded(ref backBuffer.rtMSAA, desc, m_FilterMode, TextureWrapMode.Clamp, name: backBuffer.name);
             
-            RTHandles.Release(backBuffer.rtResolve);
-            //cmd.ReleaseTemporaryRT(Shader.PropertyToID(backBuffer.name));
-            m_Desc.width = width;
-            m_Desc.height = height;
-            RenderingUtils.ReAllocateIfNeeded(ref backBuffer.rtResolve, m_Desc, m_FilterMode, TextureWrapMode.Clamp, name: backBuffer.name);
+            desc.msaaSamples = 1;
+            RenderingUtils.ReAllocateIfNeeded(ref backBuffer.rtResolve, desc, m_FilterMode, TextureWrapMode.Clamp, name: backBuffer.name);
+          
+            cmd.SetGlobalTexture(backBuffer.name, backBuffer.rtResolve);
         }
     }
 }

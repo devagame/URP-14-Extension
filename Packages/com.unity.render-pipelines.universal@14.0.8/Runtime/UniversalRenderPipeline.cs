@@ -205,7 +205,7 @@ namespace UnityEngine.Rendering.Universal
             // Initial state of the RTHandle system.
             // We initialize to screen width/height to avoid multiple realloc that can lead to inflated memory usage (as releasing of memory is delayed).
             RTHandles.Initialize(Screen.width, Screen.height);
-
+            
             GraphicsSettings.useScriptableRenderPipelineBatching = asset.useSRPBatcher;
 
             // In QualitySettings.antiAliasing disabled state uses value 0, where in URP 1
@@ -631,7 +631,7 @@ namespace UnityEngine.Rendering.Universal
                     UpdateTemporalAATargets(ref cameraData);
 
                 RTHandles.SetReferenceSize(cameraData.cameraTargetDescriptor.width, cameraData.cameraTargetDescriptor.height);
-
+                
                 // Do NOT use cameraData after 'InitializeRenderingData'. CameraData state may diverge otherwise.
                 // RenderingData takes a copy of the CameraData.
                 var cullResults = context.Cull(ref cullingParameters);
