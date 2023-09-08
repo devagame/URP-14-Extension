@@ -11,7 +11,7 @@ public class PlayerGraphicsLogic: MonoBehaviour
 {
     public int[] ResolutionLevel = new int[] { 1920, 1334, 1024, 800 };
 
-    private float updateInterval = 0.5f;
+    /*private float updateInterval = 0.5f;
     private float lastInterval;
     private float fps;
     private const int fpsArrayLen = 15;
@@ -22,7 +22,7 @@ public class PlayerGraphicsLogic: MonoBehaviour
     private int Width_750p = 1334;
     private int Height_750p = 750;
     private int Width_576p = 1024;
-    private int Height_576p = 576;
+    private int Height_576p = 576;*/
 
 
    //int i_Frames = 0;

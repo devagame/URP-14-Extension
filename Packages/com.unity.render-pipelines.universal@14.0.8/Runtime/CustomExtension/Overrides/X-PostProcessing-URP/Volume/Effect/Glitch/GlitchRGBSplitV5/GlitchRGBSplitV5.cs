@@ -26,7 +26,7 @@ namespace XPostProcessing
         private const string PROFILER_TAG = "GlitchRGBSplitV5";
         private Texture2D m_NoiseTex;
 
-        private float TimeX = 1.0f;
+        //private float TimeX = 1.0f;
 
 
         public override bool Init()
