@@ -1301,6 +1301,21 @@ namespace UnityEngine.Rendering.Universal
                 //*************** CUSTOM ADD END ****************//
                
             }
+            //************** CUSTOM ADD START ***************//
+            else
+            {
+                if (sUISplitEnable && cameraData.nextIsUICamera)
+                {
+                    BlitPass.BlitColorTransform transformMode = BlitPass.BlitColorTransform.None;
+                    if (sIsGammaCorrectEnable)
+                    {
+                        transformMode = BlitPass.BlitColorTransform.Line2Gamma;
+                    }
+                    m_BlitPass.Setup(Screen.width, Screen.height, transformMode);
+                    EnqueuePass(m_BlitPass);
+                }
+            }
+            //*************** CUSTOM ADD END ****************//
 
 #if UNITY_EDITOR
             if (isSceneViewOrPreviewCamera || (isGizmosEnabled && lastCameraInTheStack))

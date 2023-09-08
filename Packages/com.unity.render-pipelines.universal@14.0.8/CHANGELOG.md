@@ -1,3 +1,17 @@
+## [14.0.8] - 2023-09-8
+
+### Changed
+- 支持Overlay模式
+- 修复场景相机未开启后处理的颜色空间异常
+- 消除警告
+
+
+## [14.0.8] - 2023-09-7
+
+### Changed
+- 支持UI、场景分辨率分离
+- TODO 优化RTHandlerSystem 的HistoryDepthRT
+
 ## [14.0.8] - 2023-09-6
 
 ### Changed
@@ -9,8 +23,8 @@
 	包裹。
 	IDE 添加 CUSTOM ADD START TODO 注释标签可在TODO 中查看变动列表。 
 
-- UIGamma ，后处理功能已升级。 屏幕UI场景分辨率分离暂未实现。 (需要进一步研究RTHandler)
-	
+- UIGamma ，后处理功能已升级。
+- TODO 屏幕UI场景分辨率分离
 
 # Changelog
 All notable changes to this package will be documented in this file.
