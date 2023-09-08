@@ -184,7 +184,7 @@ namespace UnityEngine.Rendering.Universal.Internal
                 cmd.SetGlobalVector(ShaderPropertyId.scaleBiasRt, scaleBias);
                 
                 //************** CUSTOM ADD START ***************//
-                cmd.SetGlobalFloat(ShaderPropertyId.isInUICamera, 1);
+                cmd.SetGlobalFloat(ShaderPropertyId.isInUICamera,  m_IsUICamera ? 1 : 0);
                 //************** CUSTOM ADD END ***************//
                 
                 // Set a value that can be used by shaders to identify when AlphaToMask functionality may be active
@@ -234,6 +234,9 @@ namespace UnityEngine.Rendering.Universal.Internal
 
                 // Clean up
                 CoreUtils.SetKeyword(cmd, ShaderKeywordStrings.WriteRenderingLayers, false);
+                //************** CUSTOM ADD START ***************//
+                cmd.SetGlobalFloat(ShaderPropertyId.isInUICamera,   0);
+                //************** CUSTOM ADD END ***************//
                 context.ExecuteCommandBuffer(cmd);
                 cmd.Clear();
             }

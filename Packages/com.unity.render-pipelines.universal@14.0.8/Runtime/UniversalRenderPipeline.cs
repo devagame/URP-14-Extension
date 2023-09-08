@@ -1087,7 +1087,7 @@ namespace UnityEngine.Rendering.Universal
                 cameraData.isHdrEnabled, cameraData.hdrColorBufferPrecision, msaaSamples, needsAlphaChannel, cameraData.requiresOpaqueTexture);
             
             //************** CUSTOM ADD START ***************//
-            cameraData.isUICamera = cameraData.camera.CompareTag("UICamera");
+            //cameraData.isUICamera = cameraData.camera.CompareTag("UICamera");
             //************** CUSTOM ADD End ****************//
         }
 
