@@ -1611,7 +1611,6 @@ namespace UnityEngine.Rendering.Universal
             RenderTargetIdentifier cameraTarget;
             if (m_FinalPassUseRenderColorBuff)
             {
-                
                 var univerRenderer = renderingData.cameraData.renderer as UniversalRenderer;
                 var colorBufferTemp = univerRenderer.m_ColorBufferSystem;
                 m_Destination = colorBufferTemp.GetFrontBuffer(cmd);
@@ -1637,7 +1636,10 @@ namespace UnityEngine.Rendering.Universal
             }
             
             //************** CUSTOM ADD START ***************// 
-            cameraData.renderer.SwapColorBuffer(cmd);
+            if (m_FinalPassUseRenderColorBuff)
+            {
+                cameraData.renderer.SwapColorBuffer(cmd);
+            }
             //************** CUSTOM ADD End *****************// 
         }
 

@@ -1244,6 +1244,7 @@ namespace UnityEngine.Rendering.Universal
                 {
                     //************** CUSTOM ADD START ***************//
                     //Changed is In [line] in fanalBlitPass
+                    //*************** CUSTOM ADD END ****************//
                     m_FinalBlitPass.Setup(cameraTargetDescriptor, sourceForFinalPass,isLine);
                     EnqueuePass(m_FinalBlitPass);
                 }
@@ -1381,6 +1382,12 @@ namespace UnityEngine.Rendering.Universal
         public override void FinishRendering(CommandBuffer cmd)
         {
             m_ColorBufferSystem.Clear();
+            //************** CUSTOM ADD START ***************//
+            if(sUISplitEnable)
+            {
+                m_ActiveCameraDepthAttachment?.Release();
+            }
+            //*************** CUSTOM ADD END ****************//
             m_ActiveCameraColorAttachment = null;
             m_ActiveCameraDepthAttachment = null;
         }
@@ -1491,9 +1498,9 @@ namespace UnityEngine.Rendering.Universal
 
                 //************** CUSTOM ADD START ***************//
                 if (m_CameraDepthAttachment == null ||
-                    m_CameraDepthAttachment.nameID != BuiltinRenderTextureType.CameraTarget ||
+                    m_CameraDepthAttachment.nameID != BuiltinRenderTextureType.CameraTarget /*||
                     m_CameraDepthAttachment.rt.width != descriptor.width ||
-                    m_CameraDepthAttachment.rt.height != descriptor.height)
+                    m_CameraDepthAttachment.rt.height != descriptor.height*/)
                 //************** CUSTOM ADD End ***************//
                 //if (m_CameraDepthAttachment == null || m_CameraDepthAttachment.nameID != BuiltinRenderTextureType.CameraTarget)
                 {
@@ -1524,6 +1531,7 @@ namespace UnityEngine.Rendering.Universal
                     depthDescriptor.depthStencilFormat = k_DepthStencilFormat;
                     RenderingUtils.ReAllocateIfNeeded(ref m_CameraDepthAttachment, depthDescriptor, FilterMode.Point, TextureWrapMode.Clamp, name: "_CameraDepthAttachment");
                     cmd.SetGlobalTexture(m_CameraDepthAttachment.name, m_CameraDepthAttachment.nameID);
+
                 }
             }
 

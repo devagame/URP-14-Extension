@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15931d0391b948789297724ed5b53e39, type: 3}
   m_Name: DepthFog
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   fogStrength:
     m_OverrideState: 1
     m_Value: 0.261
@@ -106,6 +106,82 @@ MonoBehaviour:
   rounded:
     m_OverrideState: 0
     m_Value: 0
+--- !u!114 &-6160529158922473502
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 738d0d8177e04cf690968c3d71102d6b, type: 3}
+  m_Name: SurfaceSnow
+  m_EditorClassIdentifier: 
+  active: 0
+  snowStrength:
+    m_OverrideState: 1
+    m_Value: 0.133
+  snowTexture:
+    m_OverrideState: 1
+    m_Value: {fileID: 10305, guid: 0000000000000000f000000000000000, type: 0}
+    dimension: 1
+  snowBias:
+    m_OverrideState: 1
+    m_Value: 0.112
+  snowSize:
+    m_OverrideState: 1
+    m_Value: 32.1
+  debugValue:
+    m_OverrideState: 1
+    m_Value: 0.73
+  sampleOffset:
+    m_OverrideState: 1
+    m_Value: 22
+  blurInt:
+    m_OverrideState: 1
+    m_Value: 1
+--- !u!114 &-6064593438024708440
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 840e1aff4490446eba13c9a817fa7e0e, type: 3}
+  m_Name: EdgeDetectionScharrNeon
+  m_EditorClassIdentifier: 
+  active: 0
+  EdgeWidth:
+    m_OverrideState: 1
+    m_Value: 0.22
+  BackgroundFade:
+    m_OverrideState: 1
+    m_Value: 0.388
+  Brigtness:
+    m_OverrideState: 1
+    m_Value: 0.79
+  BackgroundColor:
+    m_OverrideState: 1
+    m_Value: {r: 0, g: 0, b: 0, a: 1}
+--- !u!114 &-1526403193238695029
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ecb15ce237a4cc696728dfef09762eb, type: 3}
+  m_Name: SharpenV2
+  m_EditorClassIdentifier: 
+  active: 0
+  Sharpness:
+    m_OverrideState: 1
+    m_Value: 3.58
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -124,6 +200,10 @@ MonoBehaviour:
   - {fileID: -7011558710299706105}
   - {fileID: 3232787976699680669}
   - {fileID: -7321081795851498158}
+  - {fileID: -6160529158922473502}
+  - {fileID: -6064593438024708440}
+  - {fileID: 7175332992907046120}
+  - {fileID: -1526403193238695029}
 --- !u!114 &849379129802519247
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -192,3 +272,34 @@ MonoBehaviour:
   pixelScaleY:
     m_OverrideState: 1
     m_Value: 2.36
+--- !u!114 &7175332992907046120
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ad274c0318441f38bfde68d348c0e5c, type: 3}
+  m_Name: RaderWave
+  m_EditorClassIdentifier: 
+  active: 0
+  raderWaveStrenght:
+    m_OverrideState: 1
+    m_Value: 0.292
+  raderWaveColor:
+    m_OverrideState: 1
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
+  raderAreaColor:
+    m_OverrideState: 1
+    m_Value: {r: 0, g: 0, b: 1, a: 1}
+  raderWaveWidth:
+    m_OverrideState: 1
+    m_Value: 1.49
+  raderWaveSpeed:
+    m_OverrideState: 1
+    m_Value: 2.56
+  raderWaveTime:
+    m_OverrideState: 1
+    m_Value: 13.63
