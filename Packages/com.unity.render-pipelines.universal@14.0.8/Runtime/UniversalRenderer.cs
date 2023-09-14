@@ -1382,12 +1382,6 @@ namespace UnityEngine.Rendering.Universal
         public override void FinishRendering(CommandBuffer cmd)
         {
             m_ColorBufferSystem.Clear();
-            //************** CUSTOM ADD START ***************//
-            if(sUISplitEnable)
-            {
-                m_ActiveCameraDepthAttachment?.Release();
-            }
-            //*************** CUSTOM ADD END ****************//
             m_ActiveCameraColorAttachment = null;
             m_ActiveCameraDepthAttachment = null;
         }

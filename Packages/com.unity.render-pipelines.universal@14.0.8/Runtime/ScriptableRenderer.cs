@@ -2095,8 +2095,11 @@ namespace UnityEngine.Rendering.Universal
                     for (int i = 0; i < m_ActiveRenderPassQueue.Count; ++i)
                         m_ActiveRenderPassQueue[i].OnFinishCameraStackRendering(renderingData.commandBuffer);
 
-                    FinishRendering(renderingData.commandBuffer);
-
+                    //FinishRendering(renderingData.commandBuffer);
+                    //************** CUSTOM ADD START ***************//
+                    FinishRendering(renderingData.commandBuffer,renderingData);
+                    //*************** CUSTOM ADD END ****************//
+                    
                     // We finished camera stacking and released all intermediate pipeline textures.
                     m_IsPipelineExecuting = false;
                 }

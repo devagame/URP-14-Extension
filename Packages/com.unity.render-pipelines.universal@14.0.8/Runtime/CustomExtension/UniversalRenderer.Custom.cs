@@ -58,5 +58,18 @@ namespace UnityEngine.Rendering.Universal
             
             m_ActiveCameraDepthAttachment = m_CameraDepthAttachment; //立即激活
         }
+        
+        public override void FinishRendering(CommandBuffer cmd,RenderingData renderingData)
+        {
+            m_ColorBufferSystem.Clear();
+            //************** CUSTOM ADD START ***************//
+            if(sUISplitEnable && renderingData.cameraData.isUICamera)
+            {
+                m_ActiveCameraDepthAttachment?.Release();
+            }
+            //*************** CUSTOM ADD END ****************//
+            m_ActiveCameraColorAttachment = null;
+            m_ActiveCameraDepthAttachment = null;
+        }
     }
 }
