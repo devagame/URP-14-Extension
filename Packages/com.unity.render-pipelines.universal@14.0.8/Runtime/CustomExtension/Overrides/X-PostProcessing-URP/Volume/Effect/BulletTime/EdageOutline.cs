@@ -5,7 +5,7 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 namespace XPostProcessing
 {
-    [VolumeComponentMenu(VolumeDefine.VOLUMEROOT + "*深度检测描边 (edge outline)")]
+    [VolumeComponentMenu(VolumeDefine.Extra + "*深度检测描边 (edge outline)")]
     public class EdageOutline : VolumeSetting
     {
         public override bool IsActive() => isActive.value;

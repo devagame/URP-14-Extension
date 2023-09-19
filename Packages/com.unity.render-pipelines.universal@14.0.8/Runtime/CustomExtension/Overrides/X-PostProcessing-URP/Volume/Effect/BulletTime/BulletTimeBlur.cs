@@ -6,7 +6,7 @@ using UnityEngine.Rendering.Universal;
 
 namespace XPostProcessing
 {
-    [VolumeComponentMenu(VolumeDefine.VOLUMEROOT + "*子弹时间模糊 (Bullet Time Blur)")]
+    [VolumeComponentMenu(VolumeDefine.Blur + "子弹时间模糊 (Bullet Time Blur)")]
     public class BulletTimeBlur : VolumeSetting
     {
         public override bool IsActive() => bulletBlurControl.value > 0;
