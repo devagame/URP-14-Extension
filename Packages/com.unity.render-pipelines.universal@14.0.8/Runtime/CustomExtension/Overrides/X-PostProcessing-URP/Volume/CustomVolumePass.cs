@@ -96,11 +96,13 @@ namespace XPostProcessing
             AddEffect(new RaderWaveRenderer());
             AddEffect(new BulletTimeRenderer());
             AddEffect(new SpaceContractionRenderer());
+            AddEffect(new EdageOutlineRenderer());
 
             //Blur
             AddEffect(new IrisBlurV2Renderer());
             AddEffect(new GaussianBlurRenderer());
             AddEffect(new BoxBlurRenderer());
+            AddEffect(new BulletTimeBlurRenderer());
             AddEffect(new KawaseBlurRenderer());
             AddEffect(new DualBoxBlurRenderer());
             AddEffect(new DualGaussianBlurRenderer());

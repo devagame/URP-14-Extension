@@ -226,6 +226,7 @@ MonoBehaviour:
   - {fileID: 5583512978693916694}
   - {fileID: 3836089843444146662}
   - {fileID: -7477849935364009645}
+  - {fileID: 7696919558959672019}
 --- !u!114 &849379129802519247
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -309,22 +310,22 @@ MonoBehaviour:
   active: 0
   bulletBlurControl:
     m_OverrideState: 1
-    m_Value: 0.52
+    m_Value: 0.22
   bulletUnBlurRadius:
     m_OverrideState: 1
-    m_Value: 0.2
+    m_Value: 0.3
   bulletBlurLength:
     m_OverrideState: 1
     m_Value: 0.55
   bulletBlurCenterPoint:
     m_OverrideState: 1
-    m_Value: {x: 0.5, y: 0.65}
+    m_Value: {x: 0.49, y: 0.65}
   bulletBlurStartTime:
     m_OverrideState: 1
     m_Value: 0.2
   bulletBlurEndTime:
     m_OverrideState: 1
-    m_Value: 0.05
+    m_Value: 0.21
 --- !u!114 &5022239743862157841
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -413,7 +414,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   active: 1
   Enable:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 1
   Center:
     m_OverrideState: 1
@@ -475,3 +476,25 @@ MonoBehaviour:
   raderWaveTime:
     m_OverrideState: 1
     m_Value: 13.63
+--- !u!114 &7696919558959672019
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d51c71f93cbfd8749bb31f79f43e72da, type: 3}
+  m_Name: EdageOutline
+  m_EditorClassIdentifier: 
+  active: 1
+  isActive:
+    m_OverrideState: 0
+    m_Value: 0
+  sampleOff:
+    m_OverrideState: 0
+    m_Value: 0.5
+  checkValue:
+    m_OverrideState: 0
+    m_Value: 0.01
