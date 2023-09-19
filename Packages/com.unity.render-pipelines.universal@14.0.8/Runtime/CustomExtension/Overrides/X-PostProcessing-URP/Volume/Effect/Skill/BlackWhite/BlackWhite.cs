@@ -16,7 +16,6 @@ namespace XPostProcessing
         public ColorParameter TintColor = new ColorParameter(Color.white);
         public ClampedFloatParameter Threshold = new ClampedFloatParameter(0.51f, 0.51f, 0.99f);
 
-
         public TextureParameter NoiseTex = new TextureParameter(null);
         public ClampedFloatParameter TillingX = new ClampedFloatParameter(0.1f, 0, 20);
         public ClampedFloatParameter TillingY = new ClampedFloatParameter(5, 0, 20);
@@ -25,7 +24,6 @@ namespace XPostProcessing
         public TextureParameter DissolveTex = new TextureParameter(null);
 
         public ClampedIntParameter Change = new ClampedIntParameter(0, 0, 1);
-
         public override string GetShaderName()
         {
             return "Hidden/PostProcessing/Skill/BlackWhite";
