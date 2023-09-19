@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 
 namespace XPostProcessing
@@ -24,24 +25,21 @@ namespace XPostProcessing
     public class GlitchScreenJumpRenderer : VolumeRenderer<GlitchScreenJump>
     {
         private const string PROFILER_TAG = "GlitchScreenJump";
-      
 
         float ScreenJumpTime;
-
-
 
         static class ShaderIDs
         {
             internal static readonly int Params = Shader.PropertyToID("_Params");
         }
 
-
-        public override void Render(CommandBuffer cmd, RenderTargetIdentifier source, RenderTargetIdentifier target)
+        public override void Render(CommandBuffer cmd, 
+            RenderTargetIdentifier source, 
+            RenderTargetIdentifier target, 
+            ref RenderingData renderingData)
         {
             if (m_BlitMaterial == null)
                 return;
-
-
             cmd.BeginSample(PROFILER_TAG);
 
             ScreenJumpTime += Time.deltaTime * settings.ScreenJumpIndensity.value * 9.8f;
@@ -53,7 +51,5 @@ namespace XPostProcessing
 
             cmd.EndSample(PROFILER_TAG);
         }
-
     }
-
 }

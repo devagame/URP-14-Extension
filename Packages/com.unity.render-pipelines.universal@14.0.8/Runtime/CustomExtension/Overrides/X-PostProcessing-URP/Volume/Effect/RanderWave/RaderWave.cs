@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
+
 // #if SOUL_ENGINE
 // using SoulEngine;
 // #endif
@@ -76,7 +78,10 @@ namespace XPostProcessing
             public static readonly int raderWaveAreaColorID = Shader.PropertyToID("_RaderAreaColor");
         }
 
-        public override void Render(CommandBuffer cmd, RenderTargetIdentifier source, RenderTargetIdentifier target)
+        public override void Render(CommandBuffer cmd,
+            RenderTargetIdentifier source,
+            RenderTargetIdentifier target, 
+            ref RenderingData renderingData)
         {
             if (m_BlitMaterial == null) return;
 

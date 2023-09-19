@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 namespace XPostProcessing
 {
@@ -19,20 +20,18 @@ namespace XPostProcessing
     public class SharpenV2Renderer : VolumeRenderer<SharpenV2>
     {
         private const string PROFILER_TAG = "SharpenV2";
-      
 
         private float randomFrequency;
-
-
-      
-
         static class ShaderIDs
         {
             internal static readonly int Sharpness = Shader.PropertyToID("_Sharpness");
         }
 
 
-        public override void Render(CommandBuffer cmd, RenderTargetIdentifier source, RenderTargetIdentifier target)
+        public override void Render(CommandBuffer cmd,
+            RenderTargetIdentifier source,
+            RenderTargetIdentifier target, 
+            ref RenderingData renderingData)
         {
             if (m_BlitMaterial == null)
                 return;

@@ -42,9 +42,17 @@ namespace XPostProcessing
             // {
             //     AddEffect(customVolumes[i]);
             // }
-
+            
+            //环境
             AddEffect(new DepthFogRenderer());
             AddEffect(new CloudShadowRenderer());
+           // AddEffect(new BloomRenderer()); //TODO Error
+            AddEffect(new DepthFog2Renderer());
+            AddEffect(new LightShaftRenderer());
+            AddEffect(new SSAORenderer());
+            AddEffect(new RainRippleRenderer());
+            AddEffect(new SurfaceSnowRenderer());
+
             //故障
             AddEffect(new GlitchRGBSplitRenderer());
             AddEffect(new GlitchRGBSplitV2Renderer());
@@ -84,15 +92,13 @@ namespace XPostProcessing
             AddEffect(new PixelizeSectorRenderer());
             AddEffect(new PixelizeTriangleRenderer());
 
-
-            AddEffect(new IrisBlurRenderer());
-            AddEffect(new RainRippleRenderer());
-
-            AddEffect(new SurfaceSnowRenderer());
+            //extra
             AddEffect(new RaderWaveRenderer());
             AddEffect(new BulletTimeRenderer());
+            AddEffect(new SpaceContractionRenderer());
 
             //Blur
+            AddEffect(new IrisBlurV2Renderer());
             AddEffect(new GaussianBlurRenderer());
             AddEffect(new BoxBlurRenderer());
             AddEffect(new KawaseBlurRenderer());
@@ -137,6 +143,13 @@ namespace XPostProcessing
             AddEffect(new ColorAdjustmentColorReplaceRenderer());
             AddEffect(new ScreenBinarizationRenderer());
 
+            //story
+            AddEffect(new AwakingEyeRenderer());
+            AddEffect(new SpaceWarpRenderer());
+            
+            //skill
+            AddEffect(new BlackWhiteRenderer());
+            
             m_AcitvePostProcessing = new List<AbstractVolumeRenderer>(m_PostProcessingRenderers.Count);
         }
 

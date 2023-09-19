@@ -47,6 +47,34 @@ MonoBehaviour:
   dirtIntensity:
     m_OverrideState: 0
     m_Value: 0
+--- !u!114 &-7477849935364009645
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: def584b2884a4dfcb67b92a98deca9fe, type: 3}
+  m_Name: PixelizeHexagon
+  m_EditorClassIdentifier: 
+  active: 0
+  pixelSize:
+    m_OverrideState: 1
+    m_Value: 0.04
+  useAutoScreenRatio:
+    m_OverrideState: 1
+    m_Value: 1
+  pixelRatio:
+    m_OverrideState: 1
+    m_Value: 1
+  pixelScaleX:
+    m_OverrideState: 1
+    m_Value: 1
+  pixelScaleY:
+    m_OverrideState: 1
+    m_Value: 1
 --- !u!114 &-7321081795851498158
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -195,15 +223,9 @@ MonoBehaviour:
   m_Name: SampleSceneProfile
   m_EditorClassIdentifier: 
   components:
-  - {fileID: 849379129802519247}
-  - {fileID: -7893295128165547882}
-  - {fileID: -7011558710299706105}
-  - {fileID: 3232787976699680669}
-  - {fileID: -7321081795851498158}
-  - {fileID: -6160529158922473502}
-  - {fileID: -6064593438024708440}
-  - {fileID: 7175332992907046120}
-  - {fileID: -1526403193238695029}
+  - {fileID: 5583512978693916694}
+  - {fileID: 3836089843444146662}
+  - {fileID: -7477849935364009645}
 --- !u!114 &849379129802519247
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -272,6 +294,156 @@ MonoBehaviour:
   pixelScaleY:
     m_OverrideState: 1
     m_Value: 2.36
+--- !u!114 &3836089843444146662
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e661b3ae6078a4344b208ec7c4de26c2, type: 3}
+  m_Name: BulletTimeBlur
+  m_EditorClassIdentifier: 
+  active: 0
+  bulletBlurControl:
+    m_OverrideState: 1
+    m_Value: 0.52
+  bulletUnBlurRadius:
+    m_OverrideState: 1
+    m_Value: 0.2
+  bulletBlurLength:
+    m_OverrideState: 1
+    m_Value: 0.55
+  bulletBlurCenterPoint:
+    m_OverrideState: 1
+    m_Value: {x: 0.5, y: 0.65}
+  bulletBlurStartTime:
+    m_OverrideState: 1
+    m_Value: 0.2
+  bulletBlurEndTime:
+    m_OverrideState: 1
+    m_Value: 0.05
+--- !u!114 &5022239743862157841
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d4f2afc2c92b1b41bcf46a93a0a6aeb, type: 3}
+  m_Name: BlackWhite
+  m_EditorClassIdentifier: 
+  active: 1
+  Enable:
+    m_OverrideState: 1
+    m_Value: 1
+  Center:
+    m_OverrideState: 1
+    m_Value: {x: 0.5, y: 0.5}
+  TintColor:
+    m_OverrideState: 1
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
+  Threshold:
+    m_OverrideState: 1
+    m_Value: 0.51
+  NoiseTex:
+    m_OverrideState: 1
+    m_Value: {fileID: 0}
+    dimension: 1
+  TillingX:
+    m_OverrideState: 1
+    m_Value: 0.1
+  TillingY:
+    m_OverrideState: 1
+    m_Value: 5
+  Speed:
+    m_OverrideState: 1
+    m_Value: 0.1
+  DissolveTex:
+    m_OverrideState: 1
+    m_Value: {fileID: 0}
+    dimension: 1
+  Change:
+    m_OverrideState: 1
+    m_Value: 0
+--- !u!114 &5169454306663500458
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1d260afb8296b24aaa9def7e6a9753c, type: 3}
+  m_Name: PixelizeHexagon
+  m_EditorClassIdentifier: 
+  active: 1
+  <displayName>k__BackingField: 
+  pixelSize:
+    m_OverrideState: 1
+    m_Value: 0.36
+  useAutoScreenRatio:
+    m_OverrideState: 1
+    m_Value: 1
+  pixelRatio:
+    m_OverrideState: 1
+    m_Value: 1
+  pixelScaleX:
+    m_OverrideState: 1
+    m_Value: 1
+  pixelScaleY:
+    m_OverrideState: 1
+    m_Value: 1
+--- !u!114 &5583512978693916694
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d4f2afc2c92b1b41bcf46a93a0a6aeb, type: 3}
+  m_Name: BlackWhite
+  m_EditorClassIdentifier: 
+  active: 1
+  Enable:
+    m_OverrideState: 1
+    m_Value: 1
+  Center:
+    m_OverrideState: 1
+    m_Value: {x: 0.5, y: 0.5}
+  TintColor:
+    m_OverrideState: 1
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
+  Threshold:
+    m_OverrideState: 1
+    m_Value: 0.923
+  NoiseTex:
+    m_OverrideState: 1
+    m_Value: {fileID: 0}
+    dimension: 1
+  TillingX:
+    m_OverrideState: 1
+    m_Value: 18.6
+  TillingY:
+    m_OverrideState: 1
+    m_Value: 9.7
+  Speed:
+    m_OverrideState: 1
+    m_Value: 8.7
+  DissolveTex:
+    m_OverrideState: 1
+    m_Value: {fileID: 0}
+    dimension: 1
+  Change:
+    m_OverrideState: 1
+    m_Value: 0
 --- !u!114 &7175332992907046120
 MonoBehaviour:
   m_ObjectHideFlags: 3

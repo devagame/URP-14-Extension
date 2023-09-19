@@ -10,7 +10,8 @@ namespace XPostProcessing
     {
         public abstract bool IsActive();
         public abstract bool Init();
-        public abstract void Render(CommandBuffer cmd, RenderTargetIdentifier source, RenderTargetIdentifier target);
+        public abstract bool CheckActive(ref RenderingData renderingData);
+        public abstract void Render(CommandBuffer cmd, RenderTargetIdentifier source, RenderTargetIdentifier target, ref RenderingData renderingData);
         public virtual void Cleanup() { }
     }
 
@@ -50,6 +51,12 @@ namespace XPostProcessing
                 m_BlitMaterial = null;
             }
         }
+
+        public override bool CheckActive(ref RenderingData renderingData)
+        {
+            return IsActive();
+        }
+
         // public override void Render(CommandBuffer cmd, RenderTargetIdentifier source, RenderTargetIdentifier target)
         // {
 

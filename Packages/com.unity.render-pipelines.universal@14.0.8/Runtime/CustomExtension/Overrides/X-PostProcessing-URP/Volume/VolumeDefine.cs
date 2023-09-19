@@ -18,6 +18,8 @@ namespace XPostProcessing
         public const string Vignette = VOLUMEROOT + "渐晕 (Vignette)/";
         public const string CutScene = VOLUMEROOT + "转场 (CutScene)/";
         public const string Extra = VOLUMEROOT + "其他 (Extra)/";
+        public const string Story = VOLUMEROOT + "剧情 (Story)/";
+        public const string Skill = VOLUMEROOT + "技能 (Skill)/";
     }
 
 }

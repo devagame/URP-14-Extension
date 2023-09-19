@@ -35,12 +35,8 @@ namespace XPostProcessing
     public sealed class GlitchImageBlockRenderer : VolumeRenderer<GlitchImageBlock>
     {
         private const string PROFILER_TAG = "GlitchImageBlock";
-      
 
         private float TimeX = 1.0f;
-
-
-     
 
         static class ShaderIDs
         {
@@ -49,8 +45,10 @@ namespace XPostProcessing
             internal static readonly int Params3 = Shader.PropertyToID("_Params3");
         }
 
-
-        public override void Render(CommandBuffer cmd, RenderTargetIdentifier source, RenderTargetIdentifier target)
+        public override void Render(CommandBuffer cmd, 
+            RenderTargetIdentifier source, 
+            RenderTargetIdentifier target, 
+            ref RenderingData renderingData)
         {
 
             if (m_BlitMaterial == null)

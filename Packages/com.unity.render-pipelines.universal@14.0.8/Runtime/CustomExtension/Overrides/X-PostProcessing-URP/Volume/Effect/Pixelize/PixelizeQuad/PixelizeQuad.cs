@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 namespace XPostProcessing
 {
@@ -37,8 +38,10 @@ namespace XPostProcessing
             internal static readonly int Params = Shader.PropertyToID("_Params");
         }
 
-
-        public override void Render(CommandBuffer cmd, RenderTargetIdentifier source, RenderTargetIdentifier target)
+        public override void Render(CommandBuffer cmd, 
+            RenderTargetIdentifier source, 
+            RenderTargetIdentifier target, 
+            ref RenderingData renderingData)
         {
             if (m_BlitMaterial == null)
                 return;

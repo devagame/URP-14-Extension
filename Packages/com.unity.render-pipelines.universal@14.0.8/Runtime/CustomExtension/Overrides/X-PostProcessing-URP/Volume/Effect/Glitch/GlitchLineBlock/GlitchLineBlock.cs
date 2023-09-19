@@ -53,7 +53,10 @@ namespace XPostProcessing
         }
 
 
-        public override void Render(CommandBuffer cmd, RenderTargetIdentifier source, RenderTargetIdentifier target)
+        public override void Render(CommandBuffer cmd, 
+            RenderTargetIdentifier source, 
+            RenderTargetIdentifier target, 
+            ref RenderingData renderingData)
         {
             if (m_BlitMaterial == null)
                 return;

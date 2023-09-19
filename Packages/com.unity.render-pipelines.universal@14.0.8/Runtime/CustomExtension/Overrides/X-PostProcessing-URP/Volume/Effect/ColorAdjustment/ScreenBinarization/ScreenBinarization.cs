@@ -32,7 +32,10 @@ namespace XPostProcessing
             public static readonly int BinarizationAmountPID = Shader.PropertyToID("_BinarizationAmount");
         }
 
-        public override void Render(CommandBuffer cmd, RenderTargetIdentifier source, RenderTargetIdentifier target)
+        public override void Render(CommandBuffer cmd, 
+            RenderTargetIdentifier source, 
+            RenderTargetIdentifier target,
+            ref RenderingData renderingData)
         {
             if (m_BlitMaterial == null)
                 return;

@@ -494,8 +494,15 @@ namespace UnityEngine.Rendering.Universal
             {
                 for (int i = 0; i < activeVolumeRenderers.Count; i++)
                 {
-                    activeVolumeRenderers[i].Render(cmd, GetSource(), GetDestination());
-                    Swap(ref renderer);
+                    if (activeVolumeRenderers[i].CheckActive(ref renderingData))
+                    {
+                        activeVolumeRenderers[i].Render(cmd, 
+                            GetSource(), 
+                            GetDestination(),
+                            ref renderingData);
+                    
+                        Swap(ref renderer);
+                    }
                 }
             }
             //*************** CUSTOM ADD END ****************//

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 namespace XPostProcessing
 {
@@ -31,14 +32,15 @@ namespace XPostProcessing
         }
 
 
-        public override void Render(CommandBuffer cmd, RenderTargetIdentifier source, RenderTargetIdentifier target)
+        public override void Render(CommandBuffer cmd, 
+            RenderTargetIdentifier source, 
+            RenderTargetIdentifier target, 
+            ref RenderingData renderingData)
         {
             if (m_BlitMaterial == null)
                 return;
 
-
             cmd.BeginSample(PROFILER_TAG);
-
 
             m_BlitMaterial.SetFloat(ShaderIDs.ScreenShakeIndensity, settings.ScreenShakeIndensity.value * 0.25f);
             cmd.Blit(source, target, m_BlitMaterial, (int)settings.ScreenShakeDirection.value);

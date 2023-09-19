@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 namespace XPostProcessing
 {
@@ -32,7 +33,6 @@ namespace XPostProcessing
     {
         
         private const string PROFILER_TAG = "Surface Snow";
-       
 
         static class ShaderContants
         {
@@ -46,7 +46,10 @@ namespace XPostProcessing
             public static readonly int snowBlurTexID = Shader.PropertyToID("_SnowBlurTex");
         }
 
-        public override void Render(CommandBuffer cmd, RenderTargetIdentifier source, RenderTargetIdentifier target)
+        public override void Render(CommandBuffer cmd, 
+            RenderTargetIdentifier source,
+            RenderTargetIdentifier target, 
+            ref RenderingData renderingData)
         {
             if (m_BlitMaterial == null) return;
             //var setting = VolumeManager.instance.stack.GetComponent<SurfaceSnowSetting>();			

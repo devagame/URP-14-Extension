@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 namespace XPostProcessing
 {
@@ -26,10 +27,6 @@ namespace XPostProcessing
     {
         private const string PROFILER_TAG = "RapidVignette";
         
-
-
-       
-
         static class ShaderIDs
         {
             internal static readonly int VignetteIndensity = Shader.PropertyToID("_VignetteIndensity");
@@ -37,8 +34,10 @@ namespace XPostProcessing
             internal static readonly int VignetteColor = Shader.PropertyToID("_VignetteColor");
         }
 
-
-        public override void Render(CommandBuffer cmd, RenderTargetIdentifier source, RenderTargetIdentifier target)
+        public override void Render(CommandBuffer cmd,
+            RenderTargetIdentifier source, 
+            RenderTargetIdentifier target, 
+            ref RenderingData renderingData)
         {
             if (m_BlitMaterial == null)
                 return;
