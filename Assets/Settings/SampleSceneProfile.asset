@@ -62,7 +62,7 @@ MonoBehaviour:
   active: 0
   pixelSize:
     m_OverrideState: 1
-    m_Value: 0.04
+    m_Value: 0.01
   useAutoScreenRatio:
     m_OverrideState: 1
     m_Value: 1
