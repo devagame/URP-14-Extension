@@ -151,7 +151,8 @@ namespace XPostProcessing
             
             //skill
             AddEffect(new BlackWhiteRenderer());
-            
+            AddEffect(new BlackWhite2Renderer());
+            AddEffect(new BlackWhite3Renderer());
             m_AcitvePostProcessing = new List<AbstractVolumeRenderer>(m_PostProcessingRenderers.Count);
         }
 

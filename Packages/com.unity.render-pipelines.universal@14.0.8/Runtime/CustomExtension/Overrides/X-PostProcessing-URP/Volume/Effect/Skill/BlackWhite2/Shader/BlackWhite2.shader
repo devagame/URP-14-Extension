@@ -1,6 +1,4 @@
-﻿
-
-Shader "Hidden/PostProcessing/Skill/BlackWhite2"
+﻿Shader "Hidden/PostProcessing/Skill/BlackWhite2"
 {
     Properties
     {
@@ -32,20 +30,22 @@ Shader "Hidden/PostProcessing/Skill/BlackWhite2"
         return dot(color, half3(0.222, 0.707, 0.071));
     }
 
-
-
     half4 Frag(VaryingsDefault input): SV_Target
     {
         half grey = luminance(GetScreenColor(input.uv).rgb);
-
-        // return grey;
+        //return grey;
 
         //极坐标纹理
         float2 centerdUV = input.uv - Center;
+        //return float4(centerdUV,0,1);
+        
         float2 polarUV = float2(length(centerdUV) * NoiseTillingX * 2, atan2(centerdUV.x, centerdUV.y) * (1.0 / TWO_PI) * NoiseTillingY);
+        //return float4(polarUV,0,1);
+
         polarUV += _Time.y * NoiseSpeed.xx;
         half polarColor = luminance(SAMPLE_TEXTURE2D(_NoiseTex, sampler_NoiseTex, polarUV).rgb);
-
+        //return polarColor;
+        
         half dissloveColor = SAMPLE_TEXTURE2D(_DissolveTex, sampler_DissolveTex, polarUV * 0.5).r;
         polarColor *= dissloveColor;
 

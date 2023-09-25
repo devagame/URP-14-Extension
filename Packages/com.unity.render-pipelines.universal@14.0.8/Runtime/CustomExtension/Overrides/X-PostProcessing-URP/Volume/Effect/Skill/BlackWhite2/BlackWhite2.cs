@@ -18,15 +18,15 @@ namespace XPostProcessing
         public ColorParameter TintColor = new ColorParameter(Color.white);
         //整体灰度对比
         public ClampedFloatParameter Threshold = new ClampedFloatParameter(0.51f, 0.51f, 0.99f);
-
-        public TextureParameter NoiseTex = new TextureParameter(null);
+        
+        public TextureParameter PolarNoiseTex = new TextureParameter(null);
         public ClampedFloatParameter TillingX = new ClampedFloatParameter(0.1f, 0, 20);
         public ClampedFloatParameter TillingY = new ClampedFloatParameter(5, 0, 20);
         // 贴图移动速度
         public ClampedFloatParameter Speed = new ClampedFloatParameter(0.1f, -10, 10);
         
         //溶解贴图
-        public TextureParameter DissolveTex = new TextureParameter(null);
+        public TextureParameter PolarDissolveTex = new TextureParameter(null);
 
         //更替闪烁
         public ClampedIntParameter Change = new ClampedIntParameter(0, 0, 1);
@@ -37,17 +37,17 @@ namespace XPostProcessing
          * 2 黑白闪的中间值能调整，灰度调节可以保留
          * 3 扰动溶解图添加除极坐标外的上下和水平方向，分开控制tilling 和 speed, speed 使用曲线控制
          * 4 扰动贴图范围区域通过数值可以控制
-         * 5 change 参数曲线
+         * 5 change  参数可以通过曲线控制
          * 6 黑白闪和径向模糊的混合 添加贴图实现混合效果
          * 
          */
         public override string GetShaderName()
         {
-            return "Hidden/PostProcessing/Skill/BlackWhite";
+            return "Hidden/PostProcessing/Skill/BlackWhite2";
         }
     }
 
-    public class BlackWhite2Renderer : VolumeRenderer<BlackWhite>
+    public class BlackWhite2Renderer : VolumeRenderer<BlackWhite2>
     {
         //public override string ShaderName => "Hidden/PostProcessing/Skill/BlackWhite";
         public const string PROFILER_TAG = "BlackWhite2";
@@ -66,8 +66,8 @@ namespace XPostProcessing
             RenderTargetIdentifier target,
             ref RenderingData renderingData)
         {
-            m_BlitMaterial.SetTexture(ShaderIDs.NoiseTexID, settings.NoiseTex.value);
-            m_BlitMaterial.SetTexture(ShaderIDs.DissolveTexID, settings.DissolveTex.value);
+            m_BlitMaterial.SetTexture(ShaderIDs.NoiseTexID, settings.PolarNoiseTex.value);
+            m_BlitMaterial.SetTexture(ShaderIDs.DissolveTexID, settings.PolarDissolveTex.value);
             m_BlitMaterial.SetColor(ShaderIDs.ColorID, settings.TintColor.value);
             m_BlitMaterial.SetVector(ShaderIDs.ParamsID, new Vector4(settings.Threshold.value, settings.Center.value.x, settings.Center.value.y, 0));
             m_BlitMaterial.SetVector(ShaderIDs.Params2ID, new Vector4(settings.TillingX.value, settings.TillingY.value, settings.Speed.value, settings.Change.value));
