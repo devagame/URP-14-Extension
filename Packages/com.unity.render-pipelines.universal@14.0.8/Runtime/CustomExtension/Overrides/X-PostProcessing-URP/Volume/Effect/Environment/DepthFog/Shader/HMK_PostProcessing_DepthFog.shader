@@ -19,8 +19,8 @@ Shader "Hidden/PostProcessing/DepthFog"
         {
             HLSLPROGRAM
 
-            #pragma vertex VertWorld
-            #pragma fragment frag
+            //#pragma vertex vert
+           // #pragma fragment frag
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
@@ -30,7 +30,7 @@ Shader "Hidden/PostProcessing/DepthFog"
             TEXTURE2D_X_FLOAT(_CameraDepthTexture); SAMPLER(sampler_CameraDepthTexture);
 
 
-            float4 frag(VaryingsWorld input): SV_Target
+            float4 frag(VaryingsDefault input): SV_Target
             {
                 // sample the texture
                 float4 col = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, input.uv);
@@ -41,7 +41,7 @@ Shader "Hidden/PostProcessing/DepthFog"
                 // float3 positionWS = ComputeWorldSpacePosition(input.uv, sceneRawDepth, UNITY_MATRIX_I_VP);
                 // return half4(positionWS, 1);
                 float eyeDepth = LinearEyeDepth(sceneRawDepth, _ZBufferParams);
-                float3 positionWS = _WorldSpaceCameraPos + eyeDepth * input.interpolatedRay.xyz; //作者：lyh萌主 https: //www.bilibili.com/read/cv14565799/ 出处：bilibili
+                float3 positionWS = _WorldSpaceCameraPos + eyeDepth /** input.interpolatedRay.xyz*/; //作者：lyh萌主 https: //www.bilibili.com/read/cv14565799/ 出处：bilibili
                 // return half4(positionWS, 1);
                 col.rgb = ApplyFog(col.rgb, positionWS);
                 return col;

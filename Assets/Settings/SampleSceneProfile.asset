@@ -206,7 +206,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ea99dd580b748e429ad8190d484299f, type: 3}
   m_Name: BlackWhite3
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   Enable:
     m_OverrideState: 1
     m_Value: 1
@@ -224,10 +224,10 @@ MonoBehaviour:
     m_Value: 0
   _Float6:
     m_OverrideState: 1
-    m_Value: -0.02
+    m_Value: 0
   _Float7:
     m_OverrideState: 1
-    m_Value: 0.23
+    m_Value: 0
   _TextureSample1:
     m_OverrideState: 1
     m_Value: {fileID: 2800000, guid: 0152f5971e9b8e94389438333c130ab9, type: 3}
@@ -267,7 +267,7 @@ MonoBehaviour:
     m_Value: 0
   _Float4:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 1
   _Float10:
     m_OverrideState: 1
     m_Value: 0
@@ -285,23 +285,23 @@ MonoBehaviour:
     m_Value: 0
   _TextureSample0:
     m_OverrideState: 1
-    m_Value: {fileID: 2800000, guid: 049f087976915a44dad5a67ebaa234ff, type: 3}
+    m_Value: {fileID: 2800000, guid: d5beed4aa26627a46abadc5b9c616aad, type: 3}
     dimension: 1
   _TextureSample0_ST:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 1, z: 0, w: 0}
+    m_Value: {x: 1.44, y: 1, z: 0, w: 0}
   _Float31:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0
   _Float32:
     m_OverrideState: 1
     m_Value: 0
   _Float21:
     m_OverrideState: 1
-    m_Value: 0.335
+    m_Value: 0.44
   _Float2:
     m_OverrideState: 1
-    m_Value: 0.422
+    m_Value: 0.362
   _Float3:
     m_OverrideState: 1
     m_Value: 0.1
@@ -348,7 +348,7 @@ MonoBehaviour:
   active: 0
   Enable:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0
   Center:
     m_OverrideState: 1
     m_Value: {x: 0.5, y: 0.5}
@@ -357,9 +357,9 @@ MonoBehaviour:
     m_Value: {r: 1, g: 1, b: 1, a: 1}
   Threshold:
     m_OverrideState: 1
-    m_Value: 0.51
+    m_Value: 0.612
   PolarNoiseTex:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: {fileID: 0}
     dimension: 1
   TillingX:
@@ -374,6 +374,51 @@ MonoBehaviour:
   PolarDissolveTex:
     m_OverrideState: 0
     m_Value: {fileID: 0}
+    dimension: 1
+  Change:
+    m_OverrideState: 1
+    m_Value: 1
+--- !u!114 &-2225580155215804391
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d4f2afc2c92b1b41bcf46a93a0a6aeb, type: 3}
+  m_Name: BlackWhite
+  m_EditorClassIdentifier: 
+  active: 0
+  Enable:
+    m_OverrideState: 1
+    m_Value: 1
+  Center:
+    m_OverrideState: 1
+    m_Value: {x: 0.5, y: 0.5}
+  TintColor:
+    m_OverrideState: 1
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
+  Threshold:
+    m_OverrideState: 1
+    m_Value: 0.51
+  NoiseTex:
+    m_OverrideState: 1
+    m_Value: {fileID: 2800000, guid: 1767a81d111ed8142b4243ba1a7607d7, type: 3}
+    dimension: 1
+  TillingX:
+    m_OverrideState: 1
+    m_Value: 0.1
+  TillingY:
+    m_OverrideState: 1
+    m_Value: 4.8
+  Speed:
+    m_OverrideState: 1
+    m_Value: 0.1
+  DissolveTex:
+    m_OverrideState: 1
+    m_Value: {fileID: 10912, guid: 0000000000000000f000000000000000, type: 0}
     dimension: 1
   Change:
     m_OverrideState: 1
@@ -411,6 +456,7 @@ MonoBehaviour:
   - {fileID: -2322939532001627026}
   - {fileID: 2502149083324688709}
   - {fileID: -4312560222676278158}
+  - {fileID: -2225580155215804391}
 --- !u!114 &849379129802519247
 MonoBehaviour:
   m_ObjectHideFlags: 3

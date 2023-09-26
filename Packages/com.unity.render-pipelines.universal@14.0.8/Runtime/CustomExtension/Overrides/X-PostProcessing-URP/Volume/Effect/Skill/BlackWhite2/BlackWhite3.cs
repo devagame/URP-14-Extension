@@ -147,66 +147,66 @@ namespace XPostProcessing
         
         public override bool IsActive() => Enable.value;
 
-        public BoolParameter Enable = new BoolParameter(false);
+        public BoolParameter Enable = new(false);
        
         //***************************************************************************************//
-        [Space(5),Header("色阶调整_________________________")]
-        [InspectorName("色阶黑")]public FloatParameter _Float20 = new FloatParameter(0);
-        [InspectorName("色阶白")]public FloatParameter _Float19 = new FloatParameter(1);
-        [InspectorName("暗角强度")]public FloatParameter _Float28 = new FloatParameter(0);
-        [InspectorName("暗角阈值")]public ClampedFloatParameter _Float36 = new ClampedFloatParameter(0,0,1);
-        [InspectorName("中心位置U")]public ClampedFloatParameter _Float6 = new ClampedFloatParameter(0,-0.5f,0.5f);
-        [InspectorName("中心位置V")]public ClampedFloatParameter _Float7 = new ClampedFloatParameter(0,-0.5f,0.5f);
+        [Space(5),Header("色阶调整__________________________________________________")]
+        [InspectorName("色阶黑")]public FloatParameter _Float20 = new(0);
+        [InspectorName("色阶白")]public FloatParameter _Float19 = new(1);
+        [InspectorName("暗角强度")]public FloatParameter _Float28 = new(0);
+        [InspectorName("暗角阈值")]public ClampedFloatParameter _Float36 = new(0,0,1);
+        [InspectorName("中心位置U")]public ClampedFloatParameter _Float6 = new(0,-0.5f,0.5f);
+        [InspectorName("中心位置V")]public ClampedFloatParameter _Float7 = new(0,-0.5f,0.5f);
 
-        [Space(5),Header("Mask遮罩_________________________")]
-        [InspectorName("Mask")]public TextureParameter _TextureSample1 = new TextureParameter(null);
-        [InspectorName("_TextureSample1_ST")]public Vector4Parameter _TextureSample1_ST = new Vector4Parameter(new Vector4(1,1,0,0));
-        [InspectorName("Mask通道")]public MaskEnumParameter _Float30 = new MaskEnumParameter(0);
-        [InspectorName("Mask反转")]public BoolParameter _Float24 = new BoolParameter(false);
-        [InspectorName("Mask平方")]public FloatParameter _MaskPower1 = new FloatParameter(1);
-        [InspectorName("Msak强度")]public FloatParameter _Float9 = new FloatParameter(1);
+        [Space(5),Header("Mask遮罩__________________________________________________")]
+        [InspectorName("Mask")]public TextureParameter _TextureSample1 = new(null);
+        [InspectorName("_TextureSample1_ST")]public Vector4Parameter _TextureSample1_ST = new(new Vector4(1,1,0,0));
+        [InspectorName("Mask通道")]public MaskEnumParameter _Float30 = new(0);
+        [InspectorName("Mask反转")]public BoolParameter _Float24 = new(false);
+        [InspectorName("Mask平方")]public FloatParameter _MaskPower1 = new(1);
+        [InspectorName("Msak强度")]public FloatParameter _Float9 = new(1);
         
-        [Space(5),Header("色散模糊_________________________")]
-        [InspectorName("色散强度")]public FloatParameter _Float11 = new FloatParameter(0);
-        [InspectorName("色散控制方式")]public Blur_X_EnumParameter _Float17 = new Blur_X_EnumParameter(0);
-        [InspectorName("模糊缩放")]public FloatParameter _Float5 = new FloatParameter(0);
-        [InspectorName("模糊控制方式")]public Blur_Y_EnumParameter _Float18 = new Blur_Y_EnumParameter(0);
-        [InspectorName("色散模糊比重")]public ClampedFloatParameter _Float8 = new ClampedFloatParameter(1,0,1);
-        [InspectorName("放射纹理强度")]public FloatParameter _Float27 = new FloatParameter(0);
+        [Space(5),Header("色散模糊__________________________________________________")]
+        [InspectorName("色散强度")]public FloatParameter _Float11 = new(0);
+        [InspectorName("色散控制方式")]public Blur_X_EnumParameter _Float17 = new(0);
+        [InspectorName("模糊缩放")]public FloatParameter _Float5 = new(0);
+        [InspectorName("模糊控制方式")]public Blur_Y_EnumParameter _Float18 = new(0);
+        [InspectorName("色散模糊比重")]public ClampedFloatParameter _Float8 = new(1,0,1);
+        [InspectorName("放射纹理强度")]public FloatParameter _Float27 = new(0);
         
-        [Space(5),Header("黑白闪_________________________")]
-        [InspectorName("黑白闪开关")]public BoolParameter _Float4 = new BoolParameter(false);
-        [InspectorName("黑白闪开关控制方式")]public BlackWhiteEnumParameter _Float10 = new BlackWhiteEnumParameter(0);
-        [InspectorName("黑白闪颜色1")]public ColorParameter _Color0 = new ColorParameter(Color.white);
-        [InspectorName("黑白闪颜色2")]public ColorParameter _Color1 = new ColorParameter(Color.black);
-        [InspectorName("黑白切换")]public BoolParameter _Float33 = new BoolParameter(false);
-        [InspectorName("黑白切换控制方式")]public BlackWhiteSwtichEnumParameter _Float34 = new BlackWhiteSwtichEnumParameter(0);
+        [Space(5),Header("黑白闪__________________________________________________")]
+        [InspectorName("黑白闪开关")]public BoolParameter _Float4 = new(false);
+        [InspectorName("黑白闪开关控制方式")]public BlackWhiteEnumParameter _Float10 = new(0);
+        [InspectorName("黑白闪颜色1")]public ColorParameter _Color0 = new(Color.white);
+        [InspectorName("黑白闪颜色2")]public ColorParameter _Color1 = new(Color.black);
+        [InspectorName("黑白切换")]public BoolParameter _Float33 = new(false);
+        [InspectorName("黑白切换控制方式")]public BlackWhiteSwtichEnumParameter _Float34 = new(0);
         
-        [InspectorName("黑白闪纹理")]public TextureParameter _TextureSample0 = new TextureParameter(null);
-        [InspectorName("_TextureSample0_ST")]public Vector4Parameter _TextureSample0_ST = new Vector4Parameter(new Vector4(1,1,0,0));
-        [InspectorName("极坐标方向")]public PolayEnumParameter _Float31 = new PolayEnumParameter(0);
-        [InspectorName("黑白闪流动控制方式")]public BWMoveEnumParameter _Float32 = new BWMoveEnumParameter(0);
-        [InspectorName("黑白闪纹理强度")]public ClampedFloatParameter _Float21 = new ClampedFloatParameter(0,0,1);
+        [InspectorName("黑白闪纹理")]public TextureParameter _TextureSample0 = new(null);
+        [InspectorName("_TextureSample0_ST")]public Vector4Parameter _TextureSample0_ST = new(new Vector4(1,1,0,0));
+        [InspectorName("极坐标方向")]public PolayEnumParameter _Float31 = new(0);
+        [InspectorName("黑白闪流动控制方式")]public BWMoveEnumParameter _Float32 = new(0);
+        [InspectorName("黑白闪纹理强度")]public ClampedFloatParameter _Float21 = new(0,0,1);
         
-        [InspectorName("黑白范围")]public ClampedFloatParameter _Float2 = new ClampedFloatParameter(1,0,1);
-        [InspectorName("黑白过度")]public ClampedFloatParameter _Float3 = new ClampedFloatParameter(0,0,0.1f);
+        [InspectorName("黑白范围")]public ClampedFloatParameter _Float2 = new(1,0,1);
+        [InspectorName("黑白过度")]public ClampedFloatParameter _Float3 = new(0,0,0.1f);
        
-        [Space(5),Header("震频_________________________")]
-        [InspectorName("震屏测试(Custom2xy_UV震频,zw_UV振幅)")]public ShakeEnumParameter _Float25 = new ShakeEnumParameter(0);
-        [InspectorName("U震频测试(随数值变化往复震动)")]public FloatParameter _Float15 = new FloatParameter(0);
-        [InspectorName("U振幅测试")]public ClampedFloatParameter _Float14 = new ClampedFloatParameter(0,0,1);
-        [InspectorName("V振频测试(随数值变化往复震动)")]public FloatParameter _Float12 = new FloatParameter(0);
-        [InspectorName("V振幅测试")]public ClampedFloatParameter _Float13 = new ClampedFloatParameter(0,0,1);
+        [Space(5),Header("震频__________________________________________________")]
+        [InspectorName("震屏测试(Custom2xy_UV震频,zw_UV振幅)")]public ShakeEnumParameter _Float25 = new(0);
+        [InspectorName("U震频测试(随数值变化往复震动)")]public FloatParameter _Float15 = new(0);
+        [InspectorName("U振幅测试")]public ClampedFloatParameter _Float14 = new(0,0,1);
+        [InspectorName("V振频测试(随数值变化往复震动)")]public FloatParameter _Float12 = new(0);
+        [InspectorName("V振幅测试")]public ClampedFloatParameter _Float13 = new(0,0,1);
 
-        [Space(5),Header("肌理_________________________")]
-        [InspectorName("肌理图")]public TextureParameter _TextureSample2 = new TextureParameter(null);
-        [InspectorName("_TextureSample2_ST")]public Vector4Parameter _TextureSample2_ST = new Vector4Parameter(new Vector4(1,1,0,0));
-        [InspectorName("旋转肌理图")]public ClampedFloatParameter _Float26 = new ClampedFloatParameter(0,0,1);
-        [InspectorName("肌理强度")]public ClampedFloatParameter _Float23 = new ClampedFloatParameter(0,-1,1);
+        [Space(5),Header("肌理__________________________________________________")]
+        [InspectorName("肌理图")]public TextureParameter _TextureSample2 = new(null);
+        [InspectorName("_TextureSample2_ST")]public Vector4Parameter _TextureSample2_ST = new(new Vector4(1,1,0,0));
+        [InspectorName("旋转肌理图")]public ClampedFloatParameter _Float26 = new(0,0,1);
+        [InspectorName("肌理强度")]public ClampedFloatParameter _Float23 = new(0,-1,1);
 
         public override string GetShaderName()
         {
-            return "Hidden/PostProcessing/Skill/BlackWhiteURP";
+            return  "Hidden/PostProcessing/Skill/BlackWhiteURP";
         }
     }
 

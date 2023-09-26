@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "./Global.hlsl"
+//#include "./Global.hlsl"
 
 half3 _FogColor;
 float _FogGlobalDensity;
@@ -40,7 +40,7 @@ half3 IQFog(half3 originColor, float3 positionWS, Light light)
     float fog = saturate(fogFactor * fogDensity * distanceFactor);
     // return fog;
 
-    float3 lightDirection = normalize(_LightDir);
+    float3 lightDirection = normalize(_MainLightPosition);
     // float3 lightDirection = light.direction;
 
     // float fogAmount = 1.0 - exp(-rayLength * fogDensity);
