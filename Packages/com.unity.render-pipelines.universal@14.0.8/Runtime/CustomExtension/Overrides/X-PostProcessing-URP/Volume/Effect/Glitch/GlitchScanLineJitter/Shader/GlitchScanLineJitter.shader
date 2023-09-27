@@ -54,7 +54,7 @@ Shader "Hidden/PostProcessing/Glitch/ScanLineJitter"
             strength = 0.5 + 0.5 * cos(_Time.y * _Frequency);
         #endif
         
-        float jitter = randomNoise(i.uv.x, _Time.x) * 2 - 1;
+        float jitter = randomNoise(i.uv.x, 1/*_Time.x*/) * 2 - 1;
         jitter *= step(_Threshold, abs(jitter)) * _Amount * strength;
         
         half4 sceneColor = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, frac(i.uv + float2(0, jitter)));
