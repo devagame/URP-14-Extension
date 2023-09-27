@@ -13,7 +13,7 @@ namespace XPostProcessing
 
         public BoolParameter Enable = new BoolParameter(false);
         //noise dissolve center
-        [Space(10),Header("极坐标")]
+        [Space(10),Header("噪点图极坐标")]
         public Vector2Parameter Center = new Vector2Parameter(new Vector2(0.5f, 0.5f));
         public ClampedFloatParameter TillingX = new ClampedFloatParameter(0.1f, 0, 20);
         public ClampedFloatParameter TillingY = new ClampedFloatParameter(5, 0, 20);
