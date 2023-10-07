@@ -12,6 +12,7 @@
 
     float4 _Params;
     float4 _Params2;
+    float4 _Params3;
     float3 _Color;
 
     TEXTURE2D(_NoiseTex);SAMPLER(sampler_NoiseTex);
@@ -20,7 +21,8 @@
     TEXTURE2D(_DissolveTex);SAMPLER(sampler_DissolveTex);
     float4 _DissolveTex_ST;
 
-    #define GreyThreshold _Params.x
+    #define GreyThreshold _Params3.x
+    #define Threshold _Params.x
     #define Center _Params.yz
 
     #define NoiseTillingX _Params2.x
@@ -28,7 +30,7 @@
     #define NoiseSpeed _Params2.z
     #define ChangeRate _Params2.w
 
-     #define DissolveSpeed _Params.w
+    #define DissolveSpeed _Params.w
     half luminance(half3 color)
     {
         return dot(color, half3(0.222, 0.707, 0.071));
@@ -69,13 +71,24 @@
         grey = grey + grey * polarColor;
 
         //切换
-        grey = lerp(grey, 1 - grey, ChangeRate);
+        //grey = lerp(grey, 1 - grey, ChangeRate);
 
         // grey = polarColor;
         grey = saturate(grey);
-        half3 finalColor = saturate(grey.rrr * _Color);
+
+        //纯黑白颜色控制
+        float r =  step(GreyThreshold,grey.r);
+        
+        r = smoothstep(Threshold , Threshold + GreyThreshold  ,grey.r);
+        
+        r = lerp(r, 1-r, ChangeRate);
+        
+        half3 finalColor = saturate(r * _Color);
+
+        return float4(finalColor,1);
+        
         //提取黑白
-        return smoothstep(1 - GreyThreshold, GreyThreshold, half4(finalColor, 1));
+        //return smoothstep(1 - GreyThreshold, GreyThreshold, half4(finalColor, 1));
         
         // return sceneColor;
 

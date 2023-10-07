@@ -21,19 +21,24 @@ namespace XPostProcessing
         [Space(10),Header("黑白闪控制")]
         //整体颜色对比
         public ColorParameter TintColor = new ColorParameter(Color.white);
-        //整体灰度对比
-        public ClampedFloatParameter Threshold = new ClampedFloatParameter(0.51f, 0.51f, 0.99f);
+        
+        //纯黑白强度
+        public ClampedFloatParameter Threshold = new ClampedFloatParameter(0.51f, 0f, 1f);
+        
+        //黑白灰度过度
+        public ClampedFloatParameter greyThreshold = new ClampedFloatParameter(0f, 0f, 0.51f);
+        
         //更替闪烁
         public ClampedIntParameter Change = new ClampedIntParameter(0, 0, 1);
         
         //扰动图
-        [Space(10),Header("噪点图1")]
+        [Space(10),Header("噪点图")]
         public TextureParameter PolarNoiseTex = new TextureParameter(null);
         public Vector4Parameter PolarNoiseTexST = new Vector4Parameter(new Vector4(1, 1, 0, 0));
         // 贴图移动速度
         public ClampedFloatParameter NoiseSpeed = new ClampedFloatParameter(0.1f, -10, 10);
         
-        [Space(10),Header("噪点图2")]
+        [Space(10),Header("Mask图")]
         //溶解贴图
         public TextureParameter PolarDissolveTex = new TextureParameter(null);
         public Vector4Parameter PolarDissolveTexST = new Vector4Parameter(new Vector4(1, 1, 0, 0));
@@ -64,6 +69,7 @@ namespace XPostProcessing
         {
             public static readonly int ParamsID = Shader.PropertyToID("_Params");
             public static readonly int Params2ID = Shader.PropertyToID("_Params2");
+            public static readonly int Params3ID = Shader.PropertyToID("_Params3");
             public static readonly int ColorID = Shader.PropertyToID("_Color");
             public static readonly int NoiseTexID = Shader.PropertyToID("_NoiseTex");
             public static readonly int NoiseTexSTID = Shader.PropertyToID("_NoiseTex_ST");
@@ -81,9 +87,10 @@ namespace XPostProcessing
             m_BlitMaterial.SetTexture(ShaderIDs.DissolveTexID, settings.PolarDissolveTex.value);
             m_BlitMaterial.SetVector(ShaderIDs.DissolveTexSTID, settings.PolarDissolveTexST.value);
             m_BlitMaterial.SetColor(ShaderIDs.ColorID, settings.TintColor.value);
-            m_BlitMaterial.SetVector(ShaderIDs.ParamsID, new Vector4(settings.Threshold.value, settings.Center.value.x, settings.Center.value.y, settings.DissolveSpeed.value));
+            m_BlitMaterial.SetVector(ShaderIDs.ParamsID, new Vector4(settings.Threshold.value , settings.Center.value.x, settings.Center.value.y, settings.DissolveSpeed.value));
             m_BlitMaterial.SetVector(ShaderIDs.Params2ID, new Vector4(settings.TillingX.value, settings.TillingY.value, settings.NoiseSpeed.value, settings.Change.value));
-
+            m_BlitMaterial.SetVector(ShaderIDs.Params3ID, new Vector4(settings.greyThreshold.value, 0, 0,0));
+            
             cmd.Blit(source, target, m_BlitMaterial, 0);
         }
 
