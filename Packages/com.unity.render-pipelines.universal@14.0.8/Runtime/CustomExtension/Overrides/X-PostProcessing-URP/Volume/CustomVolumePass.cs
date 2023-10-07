@@ -153,6 +153,7 @@ namespace XPostProcessing
             AddEffect(new BlackWhiteRenderer());
             AddEffect(new BlackWhite2Renderer());
             AddEffect(new BlackWhite3Renderer());
+            AddEffect(new BlackWhite4Renderer());
             m_AcitvePostProcessing = new List<AbstractVolumeRenderer>(m_PostProcessingRenderers.Count);
         }
 

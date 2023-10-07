@@ -156,6 +156,81 @@ MonoBehaviour:
   fogBaseLevel:
     m_OverrideState: 1
     m_Value: 3.3
+--- !u!114 &-7269209214739366853
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80596a97dc3e1904d92e708c44abf192, type: 3}
+  m_Name: BlackWhite4
+  m_EditorClassIdentifier: 
+  active: 1
+  Enable:
+    m_OverrideState: 0
+    m_Value: 0
+  blackBlend:
+    m_OverrideState: 0
+    m_Value: 0
+  whiteBlend:
+    m_OverrideState: 0
+    m_Value: 1
+  Center:
+    m_OverrideState: 0
+    m_Value: {x: 0.5, y: 0.5}
+  TillingX:
+    m_OverrideState: 0
+    m_Value: 0.1
+  TillingY:
+    m_OverrideState: 0
+    m_Value: 5
+  TintColor1:
+    m_OverrideState: 0
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
+  TintColor2:
+    m_OverrideState: 0
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
+  blackWhiteThreshold:
+    m_OverrideState: 0
+    m_Value: 0.51
+  greyThreshold:
+    m_OverrideState: 0
+    m_Value: 0
+  Change:
+    m_OverrideState: 0
+    m_Value: 0
+  blendMode:
+    m_OverrideState: 0
+    m_Value: 1
+  PolarNoiseTex:
+    m_OverrideState: 0
+    m_Value: {fileID: 0}
+    dimension: 1
+  NoiseUVRotate:
+    m_OverrideState: 0
+    m_Value: 0
+  PolarNoiseTexST:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1, z: 0, w: 0}
+  NoiseSpeed:
+    m_OverrideState: 0
+    m_Value: 0.1
+  PolarDissolveTex:
+    m_OverrideState: 0
+    m_Value: {fileID: 0}
+    dimension: 1
+  DissolveUVRotate:
+    m_OverrideState: 0
+    m_Value: 0
+  PolarDissolveTexST:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1, z: 0, w: 0}
+  DissolveSpeed:
+    m_OverrideState: 0
+    m_Value: 0.1
 --- !u!114 &-7011558710299706105
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -327,10 +402,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ea99dd580b748e429ad8190d484299f, type: 3}
   m_Name: BlackWhite3
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   Enable:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 1
   _Float20:
     m_OverrideState: 1
     m_Value: 0
@@ -400,7 +475,7 @@ MonoBehaviour:
     m_Value: {r: 0, g: 0, b: 0, a: 1}
   _Float33:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0
   _Float34:
     m_OverrideState: 1
     m_Value: 0
@@ -419,13 +494,13 @@ MonoBehaviour:
     m_Value: 0
   _Float21:
     m_OverrideState: 1
-    m_Value: 0.505
+    m_Value: 0.92
   _Float2:
     m_OverrideState: 1
     m_Value: 0.34
   _Float3:
     m_OverrideState: 1
-    m_Value: 0.0475
+    m_Value: 0.026
   _Float25:
     m_OverrideState: 0
     m_Value: 1
@@ -454,6 +529,22 @@ MonoBehaviour:
   _Float23:
     m_OverrideState: 1
     m_Value: 0
+--- !u!114 &-4300032984953258143
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6059131ee64a437cb6a7c6d060a200cb, type: 3}
+  m_Name: ScreenBinarization
+  m_EditorClassIdentifier: 
+  active: 0
+  intensity:
+    m_OverrideState: 1
+    m_Value: 1
 --- !u!114 &-3798917092182184533
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -504,6 +595,26 @@ MonoBehaviour:
   bulletBlurEndTime:
     m_OverrideState: 1
     m_Value: 0.61
+--- !u!114 &-2609851153598975010
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e021b4c809a781e468c2988c016ebbea, type: 3}
+  m_Name: ColorLookup
+  m_EditorClassIdentifier: 
+  active: 0
+  texture:
+    m_OverrideState: 1
+    m_Value: {fileID: 0}
+    dimension: 1
+  contribution:
+    m_OverrideState: 1
+    m_Value: 0.248
 --- !u!114 &-2322939532001627026
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -530,14 +641,14 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: 20
   TintColor:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: {r: 1, g: 1, b: 1, a: 1}
   Threshold:
-    m_OverrideState: 1
-    m_Value: 0.48
+    m_OverrideState: 0
+    m_Value: 0.51
   greyThreshold:
     m_OverrideState: 1
-    m_Value: 0.049
+    m_Value: 0.188
   Change:
     m_OverrideState: 1
     m_Value: 0
@@ -606,6 +717,46 @@ MonoBehaviour:
   Change:
     m_OverrideState: 1
     m_Value: 0
+--- !u!114 &-1738446182263484943
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdfbdbb87d3286943a057f7791b43141, type: 3}
+  m_Name: ChannelMixer
+  m_EditorClassIdentifier: 
+  active: 0
+  redOutRedIn:
+    m_OverrideState: 1
+    m_Value: 85
+  redOutGreenIn:
+    m_OverrideState: 1
+    m_Value: 6
+  redOutBlueIn:
+    m_OverrideState: 1
+    m_Value: 16
+  greenOutRedIn:
+    m_OverrideState: 0
+    m_Value: 0
+  greenOutGreenIn:
+    m_OverrideState: 0
+    m_Value: 100
+  greenOutBlueIn:
+    m_OverrideState: 0
+    m_Value: 0
+  blueOutRedIn:
+    m_OverrideState: 0
+    m_Value: 0
+  blueOutGreenIn:
+    m_OverrideState: 0
+    m_Value: 0
+  blueOutBlueIn:
+    m_OverrideState: 0
+    m_Value: 100
 --- !u!114 &-1526403193238695029
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -700,6 +851,28 @@ MonoBehaviour:
   RTDownScaling:
     m_OverrideState: 1
     m_Value: 1.8
+--- !u!114 &-331861498338562799
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5485954d14dfb9a4c8ead8edb0ded5b1, type: 3}
+  m_Name: LiftGammaGain
+  m_EditorClassIdentifier: 
+  active: 0
+  lift:
+    m_OverrideState: 1
+    m_Value: {x: 1, y: 1, z: 1, w: 0}
+  gamma:
+    m_OverrideState: 1
+    m_Value: {x: 1, y: 0.9395491, z: 0.92108876, w: 0}
+  gain:
+    m_OverrideState: 1
+    m_Value: {x: 1, y: 1, z: 1, w: 0}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -730,6 +903,11 @@ MonoBehaviour:
   - {fileID: -4531761181460586080}
   - {fileID: -8484761874802747003}
   - {fileID: 1602590535133473337}
+  - {fileID: -1738446182263484943}
+  - {fileID: -2609851153598975010}
+  - {fileID: -331861498338562799}
+  - {fileID: -4300032984953258143}
+  - {fileID: -7269209214739366853}
 --- !u!114 &849379129802519247
 MonoBehaviour:
   m_ObjectHideFlags: 3
