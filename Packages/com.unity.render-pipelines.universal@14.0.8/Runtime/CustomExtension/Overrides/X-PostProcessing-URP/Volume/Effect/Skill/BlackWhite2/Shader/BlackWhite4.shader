@@ -14,39 +14,68 @@
     float4 _Params2;
     float4 _Params3;
     float4 _Params4;
+    float4 _Params5;
     float3 _Color1;
     float3 _Color2;
 
-    TEXTURE2D(_NoiseTex);SAMPLER(sampler_NoiseTex);
-    float4 _NoiseTex_ST;
+    TEXTURE2D(_TurbulenceTex);SAMPLER(sampler_TurbulenceTex);
+    float4 _TurbulenceTex_ST;
     
-    TEXTURE2D(_DissolveTex);SAMPLER(sampler_DissolveTex);
-    float4 _DissolveTex_ST;
+    TEXTURE2D(_MaskTex);SAMPLER(sampler_MaskTex);
+    float4 _MaskTex_ST;
 
-    #define blendType _Params4.x
-    #define ColorBlend0 _Params4.y
-     #define ColorBlend1 _Params4.z
-    
-    #define blackWhiteThreshold _Params3.y
-    #define GreyThreshold _Params3.x
-    #define NoiseAngle  _Params3.z
-    #define DissolvAngle  _Params3.w   
-    
-    #define Threshold _Params.x
-    #define Center _Params.yz
+    //turbulence
+    #define TurbulencePolarBlend _Params.x
+    #define TurbulencePolarRaduis _Params.y
+    #define TexMove_X _Params.z
+    #define TexMove_Y _Params.w
 
-    #define NoiseTillingX _Params2.x
-    #define NoiseTillingY _Params2.y
-    #define NoiseSpeed _Params2.z
+    #define TurbulenceRotate _Params2.x
+    #define TurbulenceStrength _Params2.y
+    #define useMask _Params2.z
     #define ChangeRate _Params2.w
 
-    #define DissolveSpeed _Params.w
+    //黑白控制
+    #define ColorBlend0 _Params3.x
+    #define ColorBlend1 _Params3.y
+    
+    #define jitterX _Params3.z
+    #define jitterY _Params3.w
+    
+    #define blackWhiteThreshold _Params4.x
+    #define GreyThreshold _Params4.y
+    
+    #define Center _Params4.zw
     
     half luminance(half3 color)
     {
         return dot(color, half3(0.222, 0.707, 0.071));
     }
+    
+    float randomNoise(float x, float y)
+    {
+        return frac(sin(dot(float2(x, y), float2(12.9898, 78.233))) * 43758.5453);
+    }
 
+    float2 Polaruv(float2 uv,float radius)
+    {
+        float2 puv = uv;
+        puv -= float2(0.5,0.5);
+        puv = float2(atan2(puv.y,puv.x)/3.14159*0.5 + 0.5,length(puv)+radius);
+        return puv;
+    }
+
+    float2 rotation(float2 uv , float angle)
+    {
+        float2 ruv;
+        float rgl = radians(angle);
+        ruv = uv;
+        ruv -= float2(0.5,0.5);
+        ruv = float2(ruv.x * cos(rgl) - ruv.y * sin(rgl) , ruv.x * sin(rgl) + ruv.y * cos(rgl));
+        ruv += float2(0.5,0.5);
+        return ruv;
+    }
+    
     void Unity_Remap_float4(float4 In, float4 minOld,float4 maxOld,float minNew, float maxNew, out float4 Out)
     {
        // Out = OutMinMax.x + (In - InMinMax.x) * (OutMinMax.y - OutMinMax.x) / (InMinMax.y - InMinMax.x);
@@ -55,59 +84,40 @@
 
     half4 Frag(VaryingsDefault input): SV_Target
     {
-        half grey = luminance(GetScreenColor(input.uv).rgb);
-        //return grey;
-
-        half2x2 NoiseRot = half2x2(cos(NoiseAngle),-sin(NoiseAngle) ,sin(NoiseAngle),cos(NoiseAngle));
-        half2x2 DissolveRot = half2x2(cos(DissolvAngle),-sin(DissolvAngle) ,sin(DissolvAngle),cos(DissolvAngle));
-
-        //uv 旋转
-        float angle = NoiseAngle*0.017453292519943295;
-		float2	newNoiseUV = input.uv - float2(0.5,0.5);
-		newNoiseUV = float2(
-		    newNoiseUV.x * cos(angle) - newNoiseUV.y * sin(angle)
-		    ,newNoiseUV.y * cos(angle) + newNoiseUV.x * sin(angle));
-		newNoiseUV += float2(0.5,0.5);
-        
-        float2 noiseUV = newNoiseUV * _NoiseTex_ST.xy + _NoiseTex_ST.zw;
-
-        //溶解图uv旋转
-        angle = DissolvAngle*0.017453292519943295;
-		float2	newDissolveUV = input.uv - float2(0.5,0.5);
-		newDissolveUV = float2(
-		    newDissolveUV.x * cos(angle) - newDissolveUV.y * sin(angle)
-		    ,newDissolveUV.y * cos(angle) + newDissolveUV.x * sin(angle));
-		newDissolveUV += float2(0.5,0.5);
-        
-        float2 _Dissolve = newDissolveUV * _DissolveTex_ST.xy + _DissolveTex_ST.zw;
-        
         //极坐标纹理
-        float2 centerdUV = input.uv - Center;
+        float2 uv = input.uv - Center;
+        float2 turbulenceUv = lerp(uv , Polaruv(uv, TurbulencePolarRaduis) , TurbulencePolarBlend);
 
-        noiseUV -= Center;
-        _Dissolve -= Center;
+        float2 turbulenceMove = float2(TexMove_X,TexMove_Y) * _Time.y;
+        turbulenceUv = turbulenceUv + turbulenceMove;
+        float2 _turbulenceUv = rotation(turbulenceUv, TurbulenceRotate);
 
-        float2 noisePolarUV = float2(length(noiseUV) * NoiseTillingX * 2, atan2(noiseUV.x, noiseUV.y) * (1.0 / TWO_PI) * NoiseTillingY);
-        float2 _DissolvePolarUV = float2(length(_Dissolve) * NoiseTillingX * 2, atan2(_Dissolve.x, _Dissolve.y) * (1.0 / TWO_PI) * NoiseTillingY);
+        float4 turbulence = SAMPLE_TEXTURE2D(_TurbulenceTex,sampler_TurbulenceTex, _turbulenceUv.xy *_TurbulenceTex_ST.xy +_TurbulenceTex_ST.zw  );
+
+        //计算扭曲强度
+        float suv = turbulence.r * turbulence.a * TurbulenceStrength;
+        float2 baseUV = suv + input.uv;
+
+        //计算mask
+
+        float mask = SAMPLE_TEXTURE2D(_MaskTex,sampler_MaskTex, input.uv.xy *_MaskTex_ST.xy +_MaskTex_ST.zw  );
+        baseUV = lerp( baseUV , input.uv , (1- mask) * useMask);
         
-        noisePolarUV += _Time.y * NoiseSpeed.xx;
-        _DissolvePolarUV += _Time.y * DissolveSpeed.xx;
+        //给uv 添加 noise 
+        float jitter = randomNoise(input.uv.y, _Time.x) * 2 - 1;
+        jitter *= step(jitterY, abs(jitter)) * jitterX;
         
-        half polarColor = luminance(SAMPLE_TEXTURE2D(_NoiseTex, sampler_NoiseTex, noisePolarUV ).rgb);
-        //half dissloveColor = SAMPLE_TEXTURE2D(_DissolveTex, sampler_DissolveTex, _DissolvePolarUV * 0.5).r;
+        //float2 noisePolarUV = float2(length(noiseUV) * NoiseTillingX * 2, atan2(noiseUV.x, noiseUV.y) * (1.0 / TWO_PI) * NoiseTillingY);
 
-        //polarColor *= dissloveColor;
-        grey = lerp(grey + grey * polarColor,grey + polarColor ,blendType) ;
-            
+        half grey = luminance(GetScreenColor(baseUV).rgb);    
         //屏幕颜色
         grey = saturate(grey);
-
         float greyValue = smoothstep(blackWhiteThreshold , blackWhiteThreshold + GreyThreshold , grey.r);
-        
         greyValue = lerp(greyValue,1-greyValue,ChangeRate);
         
         float3 finalColor = lerp(_Color1,_Color2,greyValue);
 
+        //黑白渐变
         float4 colorRemap ;
         Unity_Remap_float4(float4(finalColor,1), float4(0,0,0,0),float4(1,1,1,1),ColorBlend0,ColorBlend1, colorRemap);
         

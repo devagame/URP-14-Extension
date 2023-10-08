@@ -8,7 +8,7 @@ using UnityEngine.Rendering.Universal;
 
 namespace XPostProcessing
 {
-    [VolumeComponentMenu(VolumeDefine.Skill + "黑白闪 (BlackWhite3)")]
+    //[VolumeComponentMenu(VolumeDefine.Skill + "黑白闪 (BlackWhite3)")]
     public class BlackWhite3 : VolumeSetting
     {
        public  enum Mask

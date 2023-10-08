@@ -170,67 +170,60 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   active: 1
   Enable:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 1
   blackBlend:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
   whiteBlend:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 1
   Center:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: {x: 0.5, y: 0.5}
   TillingX:
-    m_OverrideState: 0
-    m_Value: 0.1
+    m_OverrideState: 1
+    m_Value: 0
   TillingY:
-    m_OverrideState: 0
-    m_Value: 5
+    m_OverrideState: 1
+    m_Value: 3.1
+  JitterX:
+    m_OverrideState: 1
+    m_Value: 9
+  JitterY:
+    m_OverrideState: 1
+    m_Value: 11.4
   TintColor1:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: {r: 1, g: 1, b: 1, a: 1}
   TintColor2:
-    m_OverrideState: 0
-    m_Value: {r: 1, g: 1, b: 1, a: 1}
+    m_OverrideState: 1
+    m_Value: {r: 0, g: 0, b: 0, a: 1}
   blackWhiteThreshold:
-    m_OverrideState: 0
-    m_Value: 0.51
+    m_OverrideState: 1
+    m_Value: 0.29
   greyThreshold:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 0.51
   Change:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
   blendMode:
-    m_OverrideState: 0
-    m_Value: 1
+    m_OverrideState: 1
+    m_Value: 0
   PolarNoiseTex:
-    m_OverrideState: 0
-    m_Value: {fileID: 0}
+    m_OverrideState: 1
+    m_Value: {fileID: 2800000, guid: f7c4a09e67a3bb74088e96dde8c096ce, type: 3}
     dimension: 1
   NoiseUVRotate:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 33
   PolarNoiseTexST:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: {x: 1, y: 1, z: 0, w: 0}
   NoiseSpeed:
-    m_OverrideState: 0
-    m_Value: 0.1
-  PolarDissolveTex:
-    m_OverrideState: 0
-    m_Value: {fileID: 0}
-    dimension: 1
-  DissolveUVRotate:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
-  PolarDissolveTexST:
-    m_OverrideState: 0
-    m_Value: {x: 1, y: 1, z: 0, w: 0}
-  DissolveSpeed:
-    m_OverrideState: 0
-    m_Value: 0.1
 --- !u!114 &-7011558710299706105
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -627,7 +620,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20a23cbf32f45d748bef941d68ba8425, type: 3}
   m_Name: BlackWhite2
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   Enable:
     m_OverrideState: 1
     m_Value: 1

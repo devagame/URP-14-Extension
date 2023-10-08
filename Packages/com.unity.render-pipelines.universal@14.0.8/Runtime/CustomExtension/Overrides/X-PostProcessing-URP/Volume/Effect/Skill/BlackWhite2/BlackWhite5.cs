@@ -8,8 +8,25 @@ using UnityEngine.Rendering.Universal;
 
 namespace XPostProcessing
 {
-    [VolumeComponentMenu(VolumeDefine.Skill + "黑白闪 (BlackWhite4)")]
-    public class BlackWhite4 : VolumeSetting
+    public enum BlendType
+    {
+        Multiply = 0,
+        Add = 1,
+    }
+    
+    [Serializable, DebuggerDisplay(k_DebuggerDisplay)]
+    public class BlendTypeEnumParameter : VolumeParameter<BlendType>
+    {
+        public BlendTypeEnumParameter(BlendType value, bool overrideState = false)
+            : base(value, overrideState) { }
+        public sealed override void Interp(BlendType from, BlendType to, float t)
+        {
+            m_Value = from;
+        }
+    }
+    
+    [VolumeComponentMenu(VolumeDefine.Skill + "黑白闪 (BlackWhite5)")]
+    public class BlackWhite5 : VolumeSetting
     {
         public override bool IsActive() => Enable.value;
 
@@ -19,6 +36,8 @@ namespace XPostProcessing
         public ClampedFloatParameter blackBlend = new ClampedFloatParameter(0f, 0, 1);
         public ClampedFloatParameter whiteBlend = new ClampedFloatParameter(1f, 0, 1);
         public Vector2Parameter Center = new Vector2Parameter(new Vector2(0.5f, 0.5f));
+        public ClampedFloatParameter TillingX = new ClampedFloatParameter(0.1f, 0, 20);
+        public ClampedFloatParameter TillingY = new ClampedFloatParameter(5, 0, 20);
         public ClampedFloatParameter JitterX = new ClampedFloatParameter(0.1f, 0, 20);
         public ClampedFloatParameter JitterY = new ClampedFloatParameter(5, 0, 20);
         
@@ -28,25 +47,32 @@ namespace XPostProcessing
         
         //纯黑白强度
         public ClampedFloatParameter blackWhiteThreshold = new ClampedFloatParameter(0.51f, 0f, 1f);
+        //纯黑白强度
+        //public ClampedFloatParameter Threshold = new ClampedFloatParameter(0.51f, 0f, 1f);
+        
         //黑白灰度过度
         public ClampedFloatParameter greyThreshold = new ClampedFloatParameter(0f, 0f, 0.51f);
+        
         //更替闪烁
         public ClampedIntParameter Change = new ClampedIntParameter(0, 0, 1);
         
         //扰动图
         [Space(10), Header("噪点图")]
-        public TextureParameter TurbulenceTex = new TextureParameter(null);
-        public Vector4Parameter TurbulenceTex_ST = new Vector4Parameter(new Vector4(1, 1, 0, 0));
-        public ClampedFloatParameter TurbulencePolarBlend = new ClampedFloatParameter(0f, 0f, 360f);
-        public ClampedFloatParameter TurbulencePolarRaduis = new ClampedFloatParameter(0f, 0f, 360f);
-        public Vector2Parameter TurbulenceTexMove = new Vector2Parameter(new Vector4(0,0));
-        public ClampedFloatParameter TurbulenceRotate = new ClampedFloatParameter(0f, 0f, 360f);
-
-        [Space(10), Header("Mask图")]
+        public BoolParameter blendMode = new BoolParameter(true);
+        public TextureParameter PolarNoiseTex = new TextureParameter(null);
+        public ClampedFloatParameter NoiseUVRotate = new ClampedFloatParameter(0f, 0f, 360f);
+        public Vector4Parameter PolarNoiseTexST = new Vector4Parameter(new Vector4(1, 1, 0, 0));
+        // 贴图移动速度
+        public ClampedFloatParameter NoiseSpeed = new ClampedFloatParameter(0.1f, -10, 10);
+        
+        /*
+        [Space(10),Header("Mask图")]
         //溶解贴图
-        public BoolParameter UseMask = new BoolParameter(false);
-        public TextureParameter MaskTex = new TextureParameter(null);
-        public Vector4Parameter MaskTexTex_ST = new Vector4Parameter(new Vector4(1, 1, 0, 0));
+        public TextureParameter PolarDissolveTex = new TextureParameter(null);
+        public ClampedFloatParameter DissolveUVRotate = new ClampedFloatParameter(0f, 0f, 360f);
+        public Vector4Parameter PolarDissolveTexST = new Vector4Parameter(new Vector4(1, 1, 0, 0));
+        public ClampedFloatParameter DissolveSpeed = new ClampedFloatParameter(0.1f, -10, 10);
+        */
 
         //TODO 
         /*
@@ -64,10 +90,10 @@ namespace XPostProcessing
         }
     }
 
-    public class BlackWhite4Renderer : VolumeRenderer<BlackWhite4>
+    public class BlackWhite5Renderer : VolumeRenderer<BlackWhite5>
     {
         //public override string ShaderName => "Hidden/PostProcessing/Skill/BlackWhite";
-        public const string PROFILER_TAG = "BlackWhite4";
+        public const string PROFILER_TAG = "BlackWhite5";
 
         static class ShaderIDs
         {
@@ -78,10 +104,10 @@ namespace XPostProcessing
             public static readonly int Params5ID = Shader.PropertyToID("_Params5");
             public static readonly int Color1ID = Shader.PropertyToID("_Color1");
             public static readonly int Color2ID = Shader.PropertyToID("_Color2");
-            public static readonly int TurbulenceID = Shader.PropertyToID("_TurbulenceTex");
-            public static readonly int TurbulenceTexSTID = Shader.PropertyToID("_TurbulenceTex_ST");
-            public static readonly int MaskTexID = Shader.PropertyToID("_MaskTex");
-            public static readonly int MaskTexSTID = Shader.PropertyToID("_MaskTex_ST");
+            public static readonly int NoiseTexID = Shader.PropertyToID("_NoiseTex");
+            public static readonly int NoiseTexSTID = Shader.PropertyToID("_NoiseTex_ST");
+            public static readonly int DissolveTexID = Shader.PropertyToID("_DissolveTex");
+            public static readonly int DissolveTexSTID = Shader.PropertyToID("_DissolveTex_ST");
         }
 
         public override void Render(CommandBuffer cmd, 
@@ -89,15 +115,12 @@ namespace XPostProcessing
             RenderTargetIdentifier target,
             ref RenderingData renderingData)
         {
-            m_BlitMaterial.SetTexture(ShaderIDs.TurbulenceID, settings.TurbulenceTex.value);
-            m_BlitMaterial.SetVector(ShaderIDs.TurbulenceTexSTID, settings.TurbulenceTex_ST.value);
-            
-           m_BlitMaterial.SetTexture(ShaderIDs.MaskTexID, settings.MaskTex.value);
-            m_BlitMaterial.SetVector(ShaderIDs.MaskTexSTID, settings.MaskTexTex_ST.value);
-            
+            m_BlitMaterial.SetTexture(ShaderIDs.NoiseTexID, settings.PolarNoiseTex.value);
+            m_BlitMaterial.SetVector(ShaderIDs.NoiseTexSTID, settings.PolarNoiseTexST.value);
+            /*m_BlitMaterial.SetTexture(ShaderIDs.DissolveTexID, settings.PolarDissolveTex.value);
+            m_BlitMaterial.SetVector(ShaderIDs.DissolveTexSTID, settings.PolarDissolveTexST.value);*/
             m_BlitMaterial.SetColor(ShaderIDs.Color1ID, settings.TintColor1.value);
             m_BlitMaterial.SetColor(ShaderIDs.Color2ID, settings.TintColor2.value);
-            
             m_BlitMaterial.SetVector(ShaderIDs.ParamsID, 
                 new Vector4(
                     0/*settings.Threshold.value */, 
