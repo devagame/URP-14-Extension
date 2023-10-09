@@ -38,6 +38,7 @@
     //黑白控制
     #define ColorBlend0 _Params3.x
     #define ColorBlend1 _Params3.y
+
     
     #define jitterX _Params3.z
     #define jitterY _Params3.w
@@ -46,6 +47,9 @@
     #define GreyThreshold _Params4.y
     
     #define Center _Params4.zw
+
+    #define uvNoise _Params5.x
+    #define PolarTill _Params5.yz
     
     half luminance(half3 color)
     {
@@ -61,7 +65,17 @@
     {
         float2 puv = uv;
         puv -= float2(0.5,0.5);
-        puv = float2(atan2(puv.y,puv.x)/3.14159*0.5 + 0.5,length(puv)+radius);
+
+        /*float polarLenght = length(puv);
+        if(uvNoise == 3)
+        {
+            float jitter = randomNoise(polarLenght, 0) * 2 - 1;
+            jitter *= step(jitterY, abs(jitter)) * jitterX;
+            polarLenght = jitter;
+        }*/
+        
+        puv = float2(atan2(puv.y,puv.x)/3.14159 * 0.5 * PolarTill.x + 0.5,length(puv) * PolarTill.y +radius);
+        //puv = float2(length(puv) * NoiseTillingX * 2, atan2(puv.x, puv.y) * (1.0 / TWO_PI) * NoiseTillingY);//控制file
         return puv;
     }
 
@@ -86,7 +100,10 @@
     {
         //极坐标纹理
         float2 uv = input.uv - Center;
-        float2 turbulenceUv = lerp(uv , Polaruv(uv, TurbulencePolarRaduis) , TurbulencePolarBlend);
+
+        float2 polarJitterUV = uv;
+       
+        float2 turbulenceUv = lerp(uv , Polaruv(polarJitterUV, TurbulencePolarRaduis) , TurbulencePolarBlend);
 
         float2 turbulenceMove = float2(TexMove_X,TexMove_Y) * _Time.y;
         turbulenceUv = turbulenceUv + turbulenceMove;
@@ -99,17 +116,26 @@
         float2 baseUV = suv + input.uv;
 
         //计算mask
-
         float mask = SAMPLE_TEXTURE2D(_MaskTex,sampler_MaskTex, input.uv.xy *_MaskTex_ST.xy +_MaskTex_ST.zw  );
         baseUV = lerp( baseUV , input.uv , (1- mask) * useMask);
+        //return float4(baseUV,1,1);
         
-        //给uv 添加 noise 
-        float jitter = randomNoise(input.uv.y, _Time.x) * 2 - 1;
-        jitter *= step(jitterY, abs(jitter)) * jitterX;
+        //给uv 添加 noise
+        if(uvNoise == 1)
+        {
+            float jitter = randomNoise(input.uv.x, 0) * 2 - 1;
+            jitter *= step(jitterY, abs(jitter)) * jitterX;
+            baseUV += float2(jitter,0);
+        }
+        else if(uvNoise == 2)
+        {
+            float jitter = randomNoise(input.uv.y, 0) * 2 - 1;
+            jitter *= step(jitterY, abs(jitter)) * jitterX;
+            baseUV += float2(0,jitter);
+        }
+       
+        half grey = luminance(GetScreenColor(baseUV).rgb);
         
-        //float2 noisePolarUV = float2(length(noiseUV) * NoiseTillingX * 2, atan2(noiseUV.x, noiseUV.y) * (1.0 / TWO_PI) * NoiseTillingY);
-
-        half grey = luminance(GetScreenColor(baseUV).rgb);    
         //屏幕颜色
         grey = saturate(grey);
         float greyValue = smoothstep(blackWhiteThreshold , blackWhiteThreshold + GreyThreshold , grey.r);
