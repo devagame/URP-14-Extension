@@ -248,6 +248,7 @@ namespace UnityEngine.Rendering.Universal
                 m_DeferredPass.OnCameraCleanup(renderingData.commandBuffer);
 
             m_CopyDepthPass.OnCameraCleanup(renderingData.commandBuffer);
+ 			m_DepthNormalPrepass.OnCameraCleanup(renderingData.commandBuffer);
         }
 
         // TODO RENDERGRAPH: do this properly
@@ -356,6 +357,11 @@ namespace UnityEngine.Rendering.Universal
                 Downsampling downsamplingMethod = UniversalRenderPipeline.asset.opaqueDownsampling;
                 m_CopyColorPass.Render(renderGraph, out frameResources.cameraOpaqueTexture, in m_ActiveRenderGraphColor, downsamplingMethod, ref renderingData);
             }
+            
+           // {
+           //    Downsampling downsamplingMethod = UniversalRenderPipeline.asset.opaqueDownsampling;
+           //    m_CopyTransparentPass.Render(renderGraph, out frameResources.cameraOpaqueTexture, in m_ActiveRenderGraphColor, downsamplingMethod, ref renderingData);
+           //}
 
             // if (renderPassInputs.requiresMotionVectors && !cameraData.xr.enabled)
             {

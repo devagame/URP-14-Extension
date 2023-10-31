@@ -72,7 +72,8 @@
             float jitter = randomNoise(polarLenght, 0) * 2 - 1;
             jitter *= step(jitterY, abs(jitter)) * jitterX;
             polarLenght = jitter;
-        }*/
+        }
+        */
         
         puv = float2(atan2(puv.y,puv.x)/3.14159 * 0.5 * PolarTill.x + 0.5,length(puv) * PolarTill.y +radius);
         //puv = float2(length(puv) * NoiseTillingX * 2, atan2(puv.x, puv.y) * (1.0 / TWO_PI) * NoiseTillingY);//控制file

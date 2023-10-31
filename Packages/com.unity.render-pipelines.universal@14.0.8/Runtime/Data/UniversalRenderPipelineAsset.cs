@@ -435,6 +435,7 @@ namespace UnityEngine.Rendering.Universal
 
         // General settings
         [SerializeField] bool m_RequireDepthTexture = false;
+        [SerializeField] bool m_RequireTransparentTexture = false;
         [SerializeField] bool m_RequireOpaqueTexture = false;
         [SerializeField] Downsampling m_OpaqueDownsampling = Downsampling._2xBilinear;
         [SerializeField] bool m_SupportsTerrainHoles = true;
@@ -1018,6 +1019,16 @@ namespace UnityEngine.Rendering.Universal
             get { return m_RequireOpaqueTexture; }
             set { m_RequireOpaqueTexture = value; }
         }
+        
+        /// <summary>
+        /// When true, the pipeline creates a texture that contains a copy of the color buffer after rendering opaque objects. This texture can be accessed in shaders as _CameraOpaqueTexture. This setting can be overridden per camera.
+        /// </summary>
+        public bool supportsCameraTransparentTexture
+        {
+            get { return m_RequireTransparentTexture; }
+            set { m_RequireTransparentTexture = value; }
+        }
+        
 
         /// <summary>
         /// Returns the downsampling method used when copying the camera color texture after rendering opaques.

@@ -382,7 +382,12 @@ namespace UnityEngine.Rendering.Universal
         /// True if this camera requires to copy camera color texture to _CameraOpaqueTexture.
         /// </summary>
         public bool requiresOpaqueTexture;
-
+        
+        /// <summary>
+        /// True if this camera requires to copy camera color texture to _CameraOpaqueTexture.
+        /// </summary>
+        public bool requiresTransparentTexture;
+        
         /// <summary>
         /// Returns true if post processing passes require depth texture.
         /// </summary>

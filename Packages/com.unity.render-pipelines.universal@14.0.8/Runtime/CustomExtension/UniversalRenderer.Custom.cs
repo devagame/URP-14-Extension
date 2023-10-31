@@ -1,4 +1,5 @@
 ﻿using UnityEngine.Experimental.Rendering;
+using UnityEngine.Rendering.Universal.Internal;
 
 namespace UnityEngine.Rendering.Universal
 {
@@ -8,6 +9,8 @@ namespace UnityEngine.Rendering.Universal
         public static bool sIsGammaCorrectEnable = true;
 
         public static bool sEnableUICameraUseSwapBuffer = false;
+        
+        public CopyTransparentPass m_CopyTransparentPass;
         
         //Material m_BlitCustom = null;
         public bool IsGammaCorrectEnable(ref CameraData cameraData)

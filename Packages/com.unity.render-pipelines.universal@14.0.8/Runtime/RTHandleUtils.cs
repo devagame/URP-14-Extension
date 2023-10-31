@@ -48,7 +48,11 @@ namespace UnityEngine.Rendering.Universal
         internal bool AddResourceToPool(in TextureDesc texDesc, RTHandle resource, int currentFrameIndex)
         {
             if (s_CurrentStaleResourceCount >= s_StaleResourceMaxCapacity)
+            {
+                Debug.LogWarning($"RT:{texDesc.name} Add to pool in Max currentFrameIndex!");
+                LogDebugInfo();
                 return false;
+            }
 
             int hashCode = GetHashCodeWithNameHash(texDesc);
 
@@ -58,10 +62,15 @@ namespace UnityEngine.Rendering.Universal
                 list = new SortedList<int, (RTHandle resource, int frameIndex)>(s_StaleResourceMaxCapacity);
                 m_ResourcePool.Add(hashCode, list);
             }
-
+            
+            Debug.LogWarning($"RT:{texDesc.name} Add to pool!");
+            Debug.LogWarning($"RT In Pool Relase :{texDesc.name}_Weight:{texDesc.width}_Height:{texDesc.height}!");
+            
             list.Add(resource.GetInstanceID(), (resource, currentFrameIndex));
             s_CurrentStaleResourceCount++;
 
+            LogDebugInfo();
+            
             return true;
         }
 
@@ -122,6 +131,8 @@ namespace UnityEngine.Rendering.Universal
                     var value = values[i];
                     if (ShouldReleaseResource(value.frameIndex, currentFrameIndex))
                     {
+                        Debug.LogWarning($"RT In Pool Relase :{value.resource.name}_Weight:{value.resource.rt.width}_Height:{value.resource.rt.height}!");
+                        //LogDebugInfo();
                         value.resource.Release();
                         m_RemoveList.Add(keys[i]);
                         s_CurrentStaleResourceCount--;
