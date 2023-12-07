@@ -92,6 +92,7 @@ SubShader {
 		#include "UnityCG.cginc"
 		#include "UnityUI.cginc"
 		#include "TMPro_Properties.cginc"
+		#include "Packages/com.unity.render-pipelines.core@14.0.8/ShaderLibrary/Color.hlsl"
 
 		struct vertex_t {
 			UNITY_VERTEX_INPUT_INSTANCE_ID
@@ -191,7 +192,7 @@ SubShader {
 			return output;
 		}
 
-
+		half _IsInUICamera;
 		// PIXEL SHADER
 		fixed4 PixShader(pixel_t input) : SV_Target
 		{
@@ -230,6 +231,8 @@ SubShader {
 			clip(c.a - 0.001);
 			#endif
 
+			// Guaranteeing that your UI texture is selected "sRGB (Color Texture)" in "(Texture 2D) Import Setting".
+			c.rgb = lerp(c.rgb, LinearToSRGB(c.rgb), _IsInUICamera);
 			return c;
 		}
 		ENDCG

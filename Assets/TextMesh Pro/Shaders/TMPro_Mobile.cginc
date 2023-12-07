@@ -92,7 +92,9 @@ pixel_t VertShader(vertex_t input)
 
     return output;
 }
+#include "Packages/com.unity.render-pipelines.core@14.0.8/ShaderLibrary/Color.hlsl"
 
+half _IsInUICamera;
 float4 PixShader(pixel_t input) : SV_Target
 {
     UNITY_SETUP_INSTANCE_ID(input);
@@ -153,5 +155,8 @@ float4 PixShader(pixel_t input) : SV_Target
     clip(faceColor.a - 0.001);
     #endif
 
+    // Guaranteeing that your UI texture is selected "sRGB (Color Texture)" in "(Texture 2D) Import Setting".
+    faceColor.rgb = lerp(faceColor.rgb, LinearToSRGB(faceColor.rgb), _IsInUICamera);
+    
     return faceColor;
 }
