@@ -233,6 +233,9 @@ SubShader {
 
 			// Guaranteeing that your UI texture is selected "sRGB (Color Texture)" in "(Texture 2D) Import Setting".
 			c.rgb = lerp(c.rgb, LinearToSRGB(c.rgb), _IsInUICamera);
+
+			c.rgb *= c.a;
+			
 			return c;
 		}
 		ENDCG
