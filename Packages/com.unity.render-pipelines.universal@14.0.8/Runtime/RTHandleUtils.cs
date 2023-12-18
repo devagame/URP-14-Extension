@@ -49,7 +49,7 @@ namespace UnityEngine.Rendering.Universal
         {
             if (s_CurrentStaleResourceCount >= s_StaleResourceMaxCapacity)
             {
-                Debug.LogWarning($"RT:{texDesc.name} Add to pool in Max currentFrameIndex!");
+            //    Debug.LogWarning($"RT:{texDesc.name} Add to pool in Max currentFrameIndex!");
                 LogDebugInfo();
                 return false;
             }
@@ -63,8 +63,8 @@ namespace UnityEngine.Rendering.Universal
                 m_ResourcePool.Add(hashCode, list);
             }
             
-            Debug.LogWarning($"RT:{texDesc.name} Add to pool!");
-            Debug.LogWarning($"RT In Pool Relase :{texDesc.name}_Weight:{texDesc.width}_Height:{texDesc.height}!");
+            //Debug.LogWarning($"RT:{texDesc.name} Add to pool!");
+            //Debug.LogWarning($"RT In Pool Relase :{texDesc.name}_Weight:{texDesc.width}_Height:{texDesc.height}!");
             
             list.Add(resource.GetInstanceID(), (resource, currentFrameIndex));
             s_CurrentStaleResourceCount++;
@@ -131,7 +131,7 @@ namespace UnityEngine.Rendering.Universal
                     var value = values[i];
                     if (ShouldReleaseResource(value.frameIndex, currentFrameIndex))
                     {
-                        Debug.LogWarning($"RT In Pool Relase :{value.resource.name}_Weight:{value.resource.rt.width}_Height:{value.resource.rt.height}!");
+                        //Debug.LogWarning($"RT In Pool Relase :{value.resource.name}_Weight:{value.resource.rt.width}_Height:{value.resource.rt.height}!");
                         //LogDebugInfo();
                         value.resource.Release();
                         m_RemoveList.Add(keys[i]);
@@ -169,7 +169,7 @@ namespace UnityEngine.Rendering.Universal
                 }
             }
 
-            Debug.Log(sb);
+            //Debug.Log(sb);
         }
 
         // NOTE: Only allow reusing resource with the same name.

@@ -732,17 +732,13 @@ namespace UnityEngine.Rendering.Universal
             if (SystemInfo.graphicsDeviceType != GraphicsDeviceType.Vulkan)
                 createColorTexture |= createDepthTexture;
 #endif
-            // If there is any scaling, the color and depth need to be the same resolution and the target texture
-            // will not be the proper size in this case. Same happens with GameView.
-            // This introduces the final blit pass.
-            if (RTHandles.rtHandleProperties.rtHandleScale.x != 1.0f || RTHandles.rtHandleProperties.rtHandleScale.y != 1.0f)
-                createColorTexture |= createDepthTexture;
 
  			// If there is any scaling, the color and depth need to be the same resolution and the target texture
             // will not be the proper size in this case. Same happens with GameView.
             // This introduces the final blit pass.
             if (RTHandles.rtHandleProperties.rtHandleScale.x != 1.0f || RTHandles.rtHandleProperties.rtHandleScale.y != 1.0f)
                 createColorTexture |= createDepthTexture;
+            
             if (useRenderPassEnabled || useDepthPriming)
                 createColorTexture |= createDepthTexture;
 
@@ -1181,7 +1177,7 @@ namespace UnityEngine.Rendering.Universal
                 m_RenderTransparentForwardPass.Setup(IsGammaCorrectEnable(ref cameraData));
                 EnqueuePass(m_RenderTransparentForwardPass);
                 
-                if (copyTrasparentTexturePass)
+                if (copyTrasparentTexturePass && m_ActiveCameraColorAttachment.rt!=null) //preview  窗口没创建 是null
                 {
                     // TODO: Downsampling method should be stored in the renderer instead of in the asset.
                     // We need to migrate this data to renderer. For now, we query the method in the active asset.

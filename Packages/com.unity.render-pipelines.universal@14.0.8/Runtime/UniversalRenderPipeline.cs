@@ -204,7 +204,7 @@ namespace UnityEngine.Rendering.Universal
 
             // Initial state of the RTHandle system.
             // We initialize to screen width/height to avoid multiple realloc that can lead to inflated memory usage (as releasing of memory is delayed).
-            RTHandles.Initialize(Screen.width, Screen.height);
+            RTHandles.Initialize(Screen.width, Screen.height,true);
             
             GraphicsSettings.useScriptableRenderPipelineBatching = asset.useSRPBatcher;
 
