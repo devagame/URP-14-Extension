@@ -63,10 +63,10 @@ namespace UnityEngine.Rendering.Universal
         {
             m_ColorBufferSystem.Clear();
             //************** CUSTOM ADD START ***************//
-            if(sUISplitEnable && renderingData.cameraData.isUICamera)
+            /*if(sUISplitEnable && renderingData.cameraData.isUICamera)
             {
                 m_ActiveCameraDepthAttachment?.Release();
-            }
+            }*/
             //*************** CUSTOM ADD END ****************//
             m_ActiveCameraColorAttachment = null;
             m_ActiveCameraDepthAttachment = null;
