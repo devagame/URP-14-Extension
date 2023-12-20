@@ -68,7 +68,7 @@ namespace UnityEngine.Rendering.Universal
             //************** CUSTOM ADD START ***************//
             if(sUISplitEnable && renderingData.cameraData.isUICamera)
             {
-                m_ActiveCameraDepthAttachment?.Release();
+                //m_ActiveCameraDepthAttachment?.Release();
             }
             //*************** CUSTOM ADD END ****************//
             m_ActiveCameraColorAttachment = null;
