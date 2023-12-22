@@ -819,16 +819,35 @@ namespace UnityEngine.Rendering.Universal
 #endif
                 
                 //************** CUSTOM ADD START ***************//
+                
                 bool baseCameraNextIsUICamera = false;
                 if (isStackedRendering)
                 {
-                    var nextCamera = cameraStack[0];
+                    Camera nextCamera = cameraStack[0];
                     if (nextCamera.isActiveAndEnabled)
                     {
                         if (nextCamera.CompareTag("UICamera"))
                         {
                             baseCameraNextIsUICamera = true;
                         }
+                    }
+                    else
+                    {
+                         
+                        for (int i = 0; i < cameraStack.Count; i++)
+                        {
+                            nextCamera = cameraStack[i];
+                            if (!nextCamera.isActiveAndEnabled)
+                            {
+                                continue;
+                            }
+                            if (nextCamera.CompareTag("UICamera"))
+                            {
+                                baseCameraNextIsUICamera = true;
+                            }
+                            break;
+                        }
+                        
                     }
                 }
                 baseCameraData.nextIsUICamera = baseCameraNextIsUICamera;
