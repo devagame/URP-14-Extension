@@ -26,7 +26,7 @@ namespace XPostProcessing
         {
             
             //【渲染设置】
-            var stack = VolumeManager.instance.stack; //传入volume数据
+            /*var stack = VolumeManager.instance.stack; //传入volume数据
           var  colorTint = stack.GetComponent<GaussianBlur2>(); //拿到我们的Volume
             if (colorTint == null)
             {
@@ -34,7 +34,7 @@ namespace XPostProcessing
             }
             
             if(!colorTint.IsActive())
-                return;
+                return;*/
             
             colorTintPass.Setup(renderer /*,renderer.cameraColorTarget*/); //初始化
             renderer.EnqueuePass(colorTintPass); //汇入队列
@@ -120,7 +120,14 @@ namespace XPostProcessing
         #endregion
 
         #region 渲染
+        private const string PROFILER_TAG = "GaussianBlur";
 
+        static class ShaderIDs
+        {
+            internal static readonly int BlurRadius = Shader.PropertyToID("_BlurOffset");
+            internal static readonly int BufferRT1 = Shader.PropertyToID("_BufferRT1");
+            internal static readonly int BufferRT2 = Shader.PropertyToID("_BufferRT2");
+        }
         void Render(CommandBuffer cmd, ref RenderingData renderingData)
         {
             ref var cameraData = ref renderingData.cameraData; //汇入摄像机数据
@@ -128,6 +135,7 @@ namespace XPostProcessing
             var source = renderer.cameraColorTarget; // currentTarget;//当前渲染图片汇入
             int destination = TempTargetId; //渲染目的地
 
+            /*
             colorTintMaterial.SetColor("_ColorTint", colorTint.colorChange.value); //汇入颜色校正
             colorTintMaterial.SetFloat("_BlurRange", colorTint.BlurRange.value); //汇入颜色校正
 
@@ -139,6 +147,41 @@ namespace XPostProcessing
                 cmd.Blit(source, destination, colorTintMaterial, 1); //设置后处理
                 cmd.Blit(destination, source, colorTintMaterial, 2); //传入颜色校正
             }
+            */
+            
+            
+            
+            cmd.BeginSample(PROFILER_TAG);
+
+            int RTWidth = (int)(Screen.width / colorTint.RTDownScaling.value);
+            int RTHeight = (int)(Screen.height / colorTint.RTDownScaling.value);
+            cmd.GetTemporaryRT(ShaderIDs.BufferRT1, RTWidth, RTHeight, 0, FilterMode.Bilinear);
+            cmd.GetTemporaryRT(ShaderIDs.BufferRT2, RTWidth, RTHeight, 0, FilterMode.Bilinear);
+
+            // downsample screen copy into smaller RT
+            cmd.Blit(source, ShaderIDs.BufferRT1);
+
+
+            for (int i = 0; i < colorTint.Iteration.value; i++)
+            {
+                // horizontal blur
+                colorTintMaterial.SetVector(ShaderIDs.BlurRadius, new Vector4(colorTint.BlurRadius.value / Screen.width, 0, 0, 0));
+                cmd.Blit(ShaderIDs.BufferRT1, ShaderIDs.BufferRT2, colorTintMaterial);
+
+                // vertical blur
+                colorTintMaterial.SetVector(ShaderIDs.BlurRadius, new Vector4(0, colorTint.BlurRadius.value / Screen.height, 0, 0));
+                cmd.Blit(ShaderIDs.BufferRT2, ShaderIDs.BufferRT1, colorTintMaterial);
+            }
+
+            // Render blurred texture in blend pass
+            cmd.Blit(ShaderIDs.BufferRT1, source, colorTintMaterial);
+
+            // release
+            cmd.ReleaseTemporaryRT(ShaderIDs.BufferRT1);
+            cmd.ReleaseTemporaryRT(ShaderIDs.BufferRT2);
+
+            cmd.EndSample(PROFILER_TAG);
+            
         }
 
         #endregion

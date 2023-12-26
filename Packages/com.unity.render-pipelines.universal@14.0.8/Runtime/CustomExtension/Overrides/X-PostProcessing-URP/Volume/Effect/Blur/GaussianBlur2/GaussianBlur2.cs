@@ -17,6 +17,12 @@ namespace XPostProcessing
         //【高斯模糊：半径】
         public FloatParameter BlurRange = new ClampedFloatParameter(0f, 0.0f, 0.5f); //模糊半径
 
+        
+        public FloatParameter BlurRadius = new ClampedFloatParameter(0f, 0f, 5f);
+        public IntParameter Iteration = new ClampedIntParameter(6, 1, 15);
+        public FloatParameter RTDownScaling = new ClampedFloatParameter(1f, 1f, 8f);
+
+        
         public override bool IsActive()
         {
             return BlurRange.value > 0;
