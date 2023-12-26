@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c133717c76e564a5fa90d7f12908d17e, type: 3}
   m_Name: Beautify
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   disabled:
     m_OverrideState: 1
     m_Value: 0
@@ -718,3 +718,72 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   components:
   - {fileID: -6283516933607777591}
+  - {fileID: 4418684091257203264}
+  - {fileID: 7144738916551014432}
+  - {fileID: 878473131510404853}
+--- !u!114 &878473131510404853
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6def2f6854dffdf48915ed82e41b4eec, type: 3}
+  m_Name: ColorTint
+  m_EditorClassIdentifier: 
+  active: 1
+  colorChange:
+    m_OverrideState: 1
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
+  BlurTimes:
+    m_OverrideState: 1
+    m_Value: 5
+  BlurRange:
+    m_OverrideState: 1
+    m_Value: 0.192
+--- !u!114 &4418684091257203264
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c6ad7520ebe4dd79b42d2b36c96f461, type: 3}
+  m_Name: GaussianBlur
+  m_EditorClassIdentifier: 
+  active: 0
+  BlurRadius:
+    m_OverrideState: 1
+    m_Value: 3
+  Iteration:
+    m_OverrideState: 1
+    m_Value: 3
+  RTDownScaling:
+    m_OverrideState: 1
+    m_Value: 1
+--- !u!114 &7144738916551014432
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c5623645ba24005a5ca9b30d4e5c6b7, type: 3}
+  m_Name: KawaseBlur
+  m_EditorClassIdentifier: 
+  active: 0
+  BlurRadius:
+    m_OverrideState: 1
+    m_Value: 3.33
+  Iteration:
+    m_OverrideState: 1
+    m_Value: 2
+  RTDownScaling:
+    m_OverrideState: 1
+    m_Value: 2
