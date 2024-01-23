@@ -19,7 +19,7 @@ namespace XPostProcessing
         public override void Create() //新建pass
         {
             this.name = "ColorTintPass"; //名字
-            colorTintPass = new GaussianBlur2Pass(RenderPassEvent.BeforeRenderingPostProcessing, settings.shader); //初始化
+            //colorTintPass = new GaussianBlur2Pass(RenderPassEvent.BeforeRenderingPostProcessing, settings.shader); //初始化
         }
 
         public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData) //Pass逻辑
@@ -36,8 +36,8 @@ namespace XPostProcessing
             if(!colorTint.IsActive())
                 return;*/
             
-            colorTintPass.Setup(renderer /*,renderer.cameraColorTarget*/); //初始化
-            renderer.EnqueuePass(colorTintPass); //汇入队列
+            //colorTintPass.Setup(renderer /*,renderer.cameraColorTarget*/); //初始化
+            //renderer.EnqueuePass(colorTintPass); //汇入队列
         }
     }
 

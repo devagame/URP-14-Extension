@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77af9f9bc7fd1bf47a80f82f0871dce9, type: 3}
   m_Name: ColorTintPass
   m_EditorClassIdentifier: 
-  m_Active: 1
+  m_Active: 0
   settings:
     renderPassEvent: 550
     shader: {fileID: 4800000, guid: fdd173b0337c00a49bce853c54d3841e, type: 3}
@@ -78,7 +78,9 @@ MonoBehaviour:
   - {fileID: -2479627741613725203}
   - {fileID: 4010424545900383808}
   - {fileID: -9182490978679960080}
-  m_RendererFeatureMap: ede9e8e5b49796dd404ee658e0e3a737f04d8d161b3d9180
+  - {fileID: 3973892965856734693}
+  - {fileID: 3788401060427799164}
+  m_RendererFeatureMap: ede9e8e5b49796dd404ee658e0e3a737f04d8d161b3d9180e56d500d991a26377c1a8351b11a9334
   m_UseNativeRenderPass: 0
   m_sUISplitEnable: 1
   m_sIsGammaCorrectEnable: 1
@@ -120,6 +122,38 @@ MonoBehaviour:
   m_CopyDepthMode: 0
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 1
+--- !u!114 &3788401060427799164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9b9ba4df3933c54fbf2f1e74347c3f6, type: 3}
+  m_Name: DepthTextureSaver
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  save: 0
+  type: 450
+  mat: {fileID: 2100000, guid: 5d069813f15db79488799c5d4245905f, type: 2}
+--- !u!114 &3973892965856734693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77af9f9bc7fd1bf47a80f82f0871dce9, type: 3}
+  m_Name: ColorTintPass
+  m_EditorClassIdentifier: 
+  m_Active: 0
+  settings:
+    renderPassEvent: 550
+    shader: {fileID: 0}
 --- !u!114 &4010424545900383808
 MonoBehaviour:
   m_ObjectHideFlags: 0

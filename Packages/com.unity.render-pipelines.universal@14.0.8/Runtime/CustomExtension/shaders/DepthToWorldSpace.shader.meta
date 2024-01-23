@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: 71ca6a58457411c419d0db674e3ab557
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - _MainTex: {instanceID: 0}
+  - _CameraDepthTexture: {instanceID: 0}
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

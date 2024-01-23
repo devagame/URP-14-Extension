@@ -1,0 +1,17 @@
+{
+    "name": "LeTai.TranslucentImage.Demo",
+    "rootNamespace": "",
+    "references": [
+        "LeTai.TranslucentImage",
+        "TranslucentImage"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

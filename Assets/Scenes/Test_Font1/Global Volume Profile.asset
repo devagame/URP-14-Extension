@@ -734,16 +734,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6def2f6854dffdf48915ed82e41b4eec, type: 3}
   m_Name: ColorTint
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   colorChange:
     m_OverrideState: 1
     m_Value: {r: 1, g: 1, b: 1, a: 1}
   BlurTimes:
     m_OverrideState: 1
-    m_Value: 5
+    m_Value: 3
   BlurRange:
     m_OverrideState: 1
-    m_Value: 0.5
+    m_Value: 0.228
   BlurRadius:
     m_OverrideState: 1
     m_Value: 5
@@ -752,7 +752,7 @@ MonoBehaviour:
     m_Value: 7
   RTDownScaling:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 3.12
 --- !u!114 &4418684091257203264
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -814,11 +814,11 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 1
   threshold:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0.9
   intensity:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 1.56
   scatter:
     m_OverrideState: 0
     m_Value: 0.7
