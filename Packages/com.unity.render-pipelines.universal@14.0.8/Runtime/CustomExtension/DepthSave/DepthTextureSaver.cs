@@ -9,6 +9,7 @@ public class DepthTextureSaver : ScriptableRendererFeature
 {
     public bool save = false;
     public RenderPassEvent type = RenderPassEvent.BeforeRenderingTransparents;
+    
     public Material mat;
     class DepthSavePass : ScriptableRenderPass
     {
@@ -55,11 +56,14 @@ public class DepthTextureSaver : ScriptableRendererFeature
                 context.ExecuteCommandBuffer(cmd);
                 cmd.Clear();
 
-               // SaveRenderTextureToPNG(tempTexture, savePath);
+                if (saveEnabled)
+                {
+                    SaveRenderTextureToPNG(tempTexture, savePath);
+                    saveEnabled = false;
+                    feature.save = false;
+                }
 
                 CommandBufferPool.Release(cmd);
-                saveEnabled = false;
-                feature.save = false;
             }
         }
         
@@ -68,12 +72,12 @@ public class DepthTextureSaver : ScriptableRendererFeature
         {
             RenderTexture previous = RenderTexture.active;
             RenderTexture.active = renderTexture;
-            Texture2D tempTexture = new Texture2D(renderTexture.width, renderTexture.height, TextureFormat.RGBA32, false);
-            tempTexture.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0);
-            tempTexture.Apply();
-            byte[] bytes = tempTexture.EncodeToPNG();
+            Texture2D temp = new Texture2D(renderTexture.width, renderTexture.height, TextureFormat.RGBA32, false);
+            temp.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0);
+            temp.Apply();
+            byte[] bytes = temp.EncodeToPNG();
             File.WriteAllBytes(filePath, bytes);
-            DestroyImmediate(tempTexture);
+            DestroyImmediate(temp);
             RenderTexture.active = previous;
         }
 

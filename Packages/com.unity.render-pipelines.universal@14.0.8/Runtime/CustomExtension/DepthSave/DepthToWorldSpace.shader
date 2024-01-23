@@ -4,8 +4,8 @@ Shader "Custom/DepthToWorldSpace"
     {
         //_MainTex ("Texture", 2D) = "white" {}
         //_CameraDepthTexture ("Depth", 2D) = "white" {}
-        _MinZ ("Min Z", Float) = 0.0
-        _MaxZ ("Max Z", Float) = 1.0
+        //_MinZ ("Min Z", Float) = 0.0
+        //_MaxZ ("Max Z", Float) = 1.0
     }
     SubShader
     {
@@ -21,8 +21,9 @@ Shader "Custom/DepthToWorldSpace"
 
             //sampler2D _MainTex;
             sampler2D _CameraDepthAttachment;
-            float _MinZ;
-            float _MaxZ;
+            float4 _MinMaxHeightZ;
+           // #define  _MinZ = _MinMaxHeightZ.x;
+            //#define  _MaxZ = _MinMaxHeightZ.y;
 
             struct appdata
             {
@@ -48,22 +49,36 @@ Shader "Custom/DepthToWorldSpace"
                 return o;
             }
 
-            float LinearizeDepth(float z)
+            /*float LinearizeDepth(float z)
             {
                 float n = _ProjectionParams.y; // Camera near
                 float f = _ProjectionParams.z; // Camera far
                 return (2.0 * n) / (f + n - z * (f - n));
-            }
+            }*/
 
             float4 frag (v2f i) : SV_Target
             {
                 float depth = tex2D(_CameraDepthAttachment, i.uv).r;
-                float linear01Depth = Linear01Depth(depth);
-                float worldPos = _WorldSpaceCameraPos + linear01Depth * i.viewRayWorld.xyz;
-                float3 cameraSpacePos = UnityWorldToViewPos(worldPos);
+                float linearEyeDepth = LinearEyeDepth(depth);
+               // float worldPos = _WorldSpaceCameraPos + linear01Depth * i.viewRayWorld.xyz;
+                //float3 cameraSpacePos = UnityWorldToViewPos(worldPos);
+                float view_depth = linearEyeDepth * (_ProjectionParams.z -  _ProjectionParams.y);
+               // return view_depth;
+                float viewZ = (view_depth - _MinMaxHeightZ.x) / (_MinMaxHeightZ.y - _MinMaxHeightZ.x); // Normalize depth
+                /*if(linearEyeDepth<=1 &&linearEyeDepth>=0)
+                {
+                    return float4(0,1,0,1);
+                }
+                if(linearEyeDepth<=0)
+                {
+                    return float4(0,0,0,1);
+                }
+                if(linearEyeDepth>0.5)
+                {
+                    return float4(1,0,0,1);
+                }*/
                 
-                float viewZ = (cameraSpacePos.z - _MinZ) / (_MaxZ - _MinZ); // Normalize depth
-                return float4(viewZ, viewZ, viewZ, 1.0);
+                return float4(viewZ,viewZ,viewZ, 1.0);
             }
             ENDCG
         }
