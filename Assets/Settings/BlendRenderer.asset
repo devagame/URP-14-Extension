@@ -1,64 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-9182490978679960080
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77af9f9bc7fd1bf47a80f82f0871dce9, type: 3}
-  m_Name: ColorTintPass
-  m_EditorClassIdentifier: 
-  m_Active: 0
-  settings:
-    renderPassEvent: 550
-    shader: {fileID: 4800000, guid: fdd173b0337c00a49bce853c54d3841e, type: 3}
---- !u!114 &-2479627741613725203
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
-  m_Name: Grab
-  m_EditorClassIdentifier: 
-  m_Active: 0
-  settings:
-    passTag: Grab
-    Event: 550
-    filterSettings:
-      RenderQueueType: 1
-      LayerMask:
-        serializedVersion: 2
-        m_Bits: 4294967295
-      PassNames:
-      - Grab
-    overrideMaterial: {fileID: 0}
-    overrideMaterialPassIndex: 0
-    overrideShader: {fileID: 0}
-    overrideShaderPassIndex: 0
-    overrideMode: 1
-    overrideDepthState: 0
-    depthCompareFunction: 4
-    enableWrite: 1
-    stencilSettings:
-      overrideStencilState: 0
-      stencilReference: 0
-      stencilCompareFunction: 8
-      passOperation: 0
-      failOperation: 0
-      zFailOperation: 0
-    cameraSettings:
-      overrideCamera: 0
-      restoreCamera: 1
-      offset: {x: 0, y: 0, z: 0, w: 0}
-      cameraFieldOfView: 60
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75,12 +16,8 @@ MonoBehaviour:
     debugReplacementPS: {fileID: 4800000, guid: cf852408f2e174538bcd9b7fda1c5ae7, type: 3}
     hdrDebugViewPS: {fileID: 4800000, guid: 573620ae32aec764abd4d728906d2587, type: 3}
   m_RendererFeatures:
-  - {fileID: -2479627741613725203}
-  - {fileID: 4010424545900383808}
-  - {fileID: -9182490978679960080}
-  - {fileID: 3973892965856734693}
   - {fileID: 3788401060427799164}
-  m_RendererFeatureMap: ede9e8e5b49796dd404ee658e0e3a737f04d8d161b3d9180e56d500d991a26377c1a8351b11a9334
+  m_RendererFeatureMap: 7c1a8351b11a9334
   m_UseNativeRenderPass: 0
   m_sUISplitEnable: 1
   m_sIsGammaCorrectEnable: 1
@@ -138,41 +75,6 @@ MonoBehaviour:
   save: 0
   type: 450
   mat: {fileID: 2100000, guid: 5d069813f15db79488799c5d4245905f, type: 2}
---- !u!114 &3973892965856734693
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77af9f9bc7fd1bf47a80f82f0871dce9, type: 3}
-  m_Name: ColorTintPass
-  m_EditorClassIdentifier: 
-  m_Active: 0
-  settings:
-    renderPassEvent: 550
-    shader: {fileID: 0}
---- !u!114 &4010424545900383808
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7cbabd8e2cb2e4f8a930752453adf79a, type: 3}
-  m_Name: Beautify
-  m_EditorClassIdentifier: 
-  m_Active: 1
-  shader: {fileID: 4800000, guid: 55d70ca4ea7504a38b66170bbe587b2f, type: 3}
-  renderPassEvent: 500
-  ignorePostProcessingOption: 0
-  cameraLayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
 --- !u!114 &4273284693896473279
 MonoBehaviour:
   m_ObjectHideFlags: 0

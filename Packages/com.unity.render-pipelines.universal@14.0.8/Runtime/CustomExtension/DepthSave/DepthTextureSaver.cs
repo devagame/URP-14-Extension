@@ -1,13 +1,19 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using System.IO;
 using Sirenix.OdinInspector; // 引入Odin Inspector命名空间
 
+public enum RenderMode
+{
+    CopyDepth,
+    RenderObj,
+}
 public class DepthTextureSaver : ScriptableRendererFeature
 {
-    public bool save = false;
+    public RenderMode renderType = RenderMode.RenderObj;
     public RenderPassEvent type = RenderPassEvent.BeforeRenderingTransparents;
     
     public Material mat;
@@ -19,6 +25,11 @@ public class DepthTextureSaver : ScriptableRendererFeature
         private string savePath;
         public bool saveEnabled = false;
         public RenderPassEvent type = RenderPassEvent.BeforeRenderingTransparents;
+        
+        public RenderMode renderType = RenderMode.RenderObj;
+        private List<ShaderTagId> m_ShaderTagIdList;
+        private FilteringSettings filterSettings;
+        
         private DepthTextureSaver feature;
         public Material mat;
         public DepthSavePass(string savePath,DepthTextureSaver feature,RenderPassEvent type,Material mat)
@@ -41,18 +52,19 @@ public class DepthTextureSaver : ScriptableRendererFeature
             this.descriptor.colorFormat = RenderTextureFormat.ARGB32;
             this.descriptor.depthBufferBits = 0;
             tempTexture = RenderTexture.GetTemporary(this.descriptor);
+            filterSettings = new FilteringSettings(RenderQueueRange.opaque);
         }
 
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
-            //if (saveEnabled)
+            if (renderType == RenderMode.RenderObj)
             {
                 CommandBuffer cmd = CommandBufferPool.Get("SaveDepthTexture");
                 depthTexture = renderingData.cameraData.renderer.cameraDepthTarget;
-                Blit(cmd, depthTexture, tempTexture,mat);
-                
-                cmd.SetGlobalTexture("_SceneHeightMap",tempTexture);
-                
+                Blit(cmd, depthTexture, tempTexture, mat);
+
+                cmd.SetGlobalTexture("_SceneHeightMap", tempTexture);
+
                 context.ExecuteCommandBuffer(cmd);
                 cmd.Clear();
 
@@ -60,11 +72,34 @@ public class DepthTextureSaver : ScriptableRendererFeature
                 {
                     SaveRenderTextureToPNG(tempTexture, savePath);
                     saveEnabled = false;
-                    feature.save = false;
                 }
-
                 CommandBufferPool.Release(cmd);
             }
+            else
+            {
+                CommandBuffer cmd = CommandBufferPool.Get("SaveDepthTexture");
+
+
+                m_ShaderTagIdList = new List<ShaderTagId>()
+                {
+                    new ShaderTagId("DepthRender")
+                };
+                var sortFlags = renderingData.cameraData.defaultOpaqueSortFlags;
+                DrawingSettings drawingSettings = CreateDrawingSettings(m_ShaderTagIdList, ref renderingData, sortFlags);
+                
+                context.DrawRenderers(renderingData.cullResults, ref drawingSettings,  ref filterSettings);
+
+                
+                cmd.SetGlobalTexture("_SceneHeightMap", tempTexture);
+
+                context.ExecuteCommandBuffer(cmd);
+                cmd.Clear();
+
+               
+                CommandBufferPool.Release(cmd);
+            }
+
+                
         }
         
 

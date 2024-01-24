@@ -294,14 +294,19 @@ MonoBehaviour:
   CaptureRoot: {fileID: 665423899}
   heightMapCamera: {fileID: 128664266}
   heightMap: {fileID: 0}
-  MapSize: {x: 10, y: 10}
-  mapMinPos: {x: -5, y: -5}
-  mapMaxPos: {x: -5, y: -5}
+  MapSize: {x: 27.441177, y: 10}
+  mapMinPos: {x: -13.720589, y: -5}
+  mapMaxPos: {x: -13.720589, y: -5}
   mapBounds:
     m_Center: {x: 1.1600002, y: 1.145, z: -0.70392466}
     m_Extent: {x: 2.5000005, y: 1.2950001, z: 2.5339737}
-  _MinMaxHeightZ: {x: -0.1500001, y: 2.44, z: 0, w: 0}
-  _MinMaxMapPos: {x: -5, y: -5, z: -5, w: -5}
+  worldMin: {x: -1.3400003, y: -0.1500001, z: -3.2378983}
+  worldMax: {x: 3.6600008, y: 2.44, z: 1.830049}
+  viewMin: {x: 0.45116827, y: 0.17621014, z: 3.5600002}
+  viewMax: {x: 0.6333762, y: 0.683005, z: 0.9699997}
+  _ViewMinMaxHeightZ: {x: 3.5600002, y: 0.9699997, z: 0, w: 0}
+  _WorldMinMaxHeightZ: {x: -0.1500001, y: 2.44, z: 0, w: 0}
+  _MinMaxMapPos: {x: -13.720589, y: -5, z: -13.720589, w: -5}
 --- !u!114 &128664264
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -319,7 +324,7 @@ MonoBehaviour:
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
   m_Cameras: []
-  m_RendererIndex: -1
+  m_RendererIndex: 1
   m_VolumeLayerMask:
     serializedVersion: 2
     m_Bits: 1
@@ -386,7 +391,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 50
+  far clip plane: 5
   field of view: 60
   orthographic: 1
   orthographic size: 5
@@ -395,7 +400,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
+  m_TargetTexture: {fileID: 8400000, guid: 203b10b4ecaaf43499a0ed08e97a0d4c, type: 2}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -414,7 +419,7 @@ Transform:
   m_GameObject: {fileID: 128664262}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 4.064, z: 0}
+  m_LocalPosition: {x: 0, y: 3.41, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
