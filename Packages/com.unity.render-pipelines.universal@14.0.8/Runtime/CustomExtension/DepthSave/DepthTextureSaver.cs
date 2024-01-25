@@ -6,14 +6,15 @@ using UnityEngine.Rendering.Universal;
 using System.IO;
 using Sirenix.OdinInspector; // 引入Odin Inspector命名空间
 
-public enum RenderMode
+public enum Mode
 {
     CopyDepth,
     RenderObj,
 }
 public class DepthTextureSaver : ScriptableRendererFeature
 {
-    public RenderMode renderType = RenderMode.RenderObj;
+    public Mode renderType = Mode.RenderObj;
+    public RenderTexture renderObjTex;
     public RenderPassEvent type = RenderPassEvent.BeforeRenderingTransparents;
     
     public Material mat;
@@ -26,19 +27,25 @@ public class DepthTextureSaver : ScriptableRendererFeature
         public bool saveEnabled = false;
         public RenderPassEvent type = RenderPassEvent.BeforeRenderingTransparents;
         
-        public RenderMode renderType = RenderMode.RenderObj;
+        public Mode renderType = Mode.RenderObj;
         private List<ShaderTagId> m_ShaderTagIdList;
         private FilteringSettings filterSettings;
         
         private DepthTextureSaver feature;
+        private RenderTexture renderObjTex;
         public Material mat;
-        public DepthSavePass(string savePath,DepthTextureSaver feature,RenderPassEvent type,Material mat)
+        public DepthSavePass(string savePath,
+            DepthTextureSaver feature,
+            RenderPassEvent type,
+            Material mat,
+            RenderTexture renderObjTex)
         {
             this.mat = mat;
             this.type = type;
             this.feature = feature;
             this.savePath = savePath;
             this.renderPassEvent = type;
+            this.renderObjTex = renderObjTex;
         }
 
         public void EnableSave()
@@ -53,31 +60,29 @@ public class DepthTextureSaver : ScriptableRendererFeature
             this.descriptor.depthBufferBits = 0;
             tempTexture = RenderTexture.GetTemporary(this.descriptor);
             filterSettings = new FilteringSettings(RenderQueueRange.opaque);
+            
+            ConfigureClear(ClearFlag.All, Color.black);
+            ConfigureTarget(renderObjTex);
         }
 
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
-            if (renderType == RenderMode.RenderObj)
+            CommandBuffer cmd = CommandBufferPool.Get("SaveDepthTexture");
+            if (renderType == Mode.CopyDepth)
             {
-                CommandBuffer cmd = CommandBufferPool.Get("SaveDepthTexture");
+                
                 depthTexture = renderingData.cameraData.renderer.cameraDepthTarget;
                 Blit(cmd, depthTexture, tempTexture, mat);
 
                 cmd.SetGlobalTexture("_SceneHeightMap", tempTexture);
-
-                context.ExecuteCommandBuffer(cmd);
-                cmd.Clear();
-
                 if (saveEnabled)
                 {
                     SaveRenderTextureToPNG(tempTexture, savePath);
                     saveEnabled = false;
                 }
-                CommandBufferPool.Release(cmd);
             }
             else
             {
-                CommandBuffer cmd = CommandBufferPool.Get("SaveDepthTexture");
 
 
                 m_ShaderTagIdList = new List<ShaderTagId>()
@@ -88,32 +93,49 @@ public class DepthTextureSaver : ScriptableRendererFeature
                 DrawingSettings drawingSettings = CreateDrawingSettings(m_ShaderTagIdList, ref renderingData, sortFlags);
                 
                 context.DrawRenderers(renderingData.cullResults, ref drawingSettings,  ref filterSettings);
-
-                
                 cmd.SetGlobalTexture("_SceneHeightMap", tempTexture);
-
-                context.ExecuteCommandBuffer(cmd);
-                cmd.Clear();
-
-               
-                CommandBufferPool.Release(cmd);
+                if (saveEnabled)
+                {
+                    SaveRenderTextureToPNG(renderObjTex, savePath);
+                    saveEnabled = false;
+                }
             }
 
-                
+            
+            
+            context.ExecuteCommandBuffer(cmd);
+            cmd.Clear();
+            CommandBufferPool.Release(cmd);
         }
         
 
         void SaveRenderTextureToPNG(RenderTexture renderTexture, string filePath)
         {
-            RenderTexture previous = RenderTexture.active;
-            RenderTexture.active = renderTexture;
-            Texture2D temp = new Texture2D(renderTexture.width, renderTexture.height, TextureFormat.RGBA32, false);
-            temp.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0);
-            temp.Apply();
-            byte[] bytes = temp.EncodeToPNG();
-            File.WriteAllBytes(filePath, bytes);
-            DestroyImmediate(temp);
-            RenderTexture.active = previous;
+            if (renderType == Mode.CopyDepth)
+            {
+                RenderTexture previous = RenderTexture.active;
+                RenderTexture.active = renderTexture;
+                Texture2D temp = new Texture2D(renderTexture.width, renderTexture.height, TextureFormat.RFloat, false);
+                temp.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0);
+                temp.Apply();
+                byte[] bytes = temp.EncodeToPNG();
+                File.WriteAllBytes(filePath, bytes);
+                DestroyImmediate(temp);
+                RenderTexture.active = previous;
+            }
+            else
+            {
+                RenderTexture previous = RenderTexture.active;
+                RenderTexture.active = renderTexture;
+                
+                Texture2D temp = new Texture2D(renderObjTex.width, renderObjTex.height, TextureFormat.RFloat, false);
+                temp.ReadPixels(new Rect(0, 0, renderObjTex.width, renderObjTex.height), 0, 0);
+                temp.Apply();
+                byte[] bytes = temp.EncodeToPNG();
+                File.WriteAllBytes(filePath, bytes);
+                
+                RenderTexture.active = previous;
+            }
         }
 
         public override void FrameCleanup(CommandBuffer cmd)
@@ -139,7 +161,7 @@ public class DepthTextureSaver : ScriptableRendererFeature
 
     public override void Create()
     {
-        depthSavePass = new DepthSavePass("Assets/depth.png",this,type,mat);
+        depthSavePass = new DepthSavePass("Assets/depth.png",this,type,mat,renderObjTex);
     }
 
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
