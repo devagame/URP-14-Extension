@@ -1313,23 +1313,30 @@ namespace UnityEngine.Rendering.Universal
                 //************** CUSTOM ADD START ***************//
                 if (sUISplitEnable && cameraData.nextIsUICamera)
                 {
+                    
+                    //处理final upscale相关
                     applyFinalPostProcessing =
                         ((renderingData.cameraData.antialiasing == AntialiasingMode.FastApproximateAntialiasing) ||
-                         ((renderingData.cameraData.imageScalingMode == ImageScalingMode.Upscaling) && (renderingData.cameraData.upscalingFilter != ImageUpscalingFilter.Linear)));
-                    
+                         ((renderingData.cameraData.imageScalingMode == ImageScalingMode.Upscaling) /*&& (renderingData.cameraData.upscalingFilter != ImageUpscalingFilter.Linear)*/));
                     if (applyFinalPostProcessing)
                     {
                         var sourceForFinalPass = m_ActiveCameraColorAttachment;
                         finalPostProcessPass.SetupFinalPass(sourceForFinalPass, true, false, false,true);
                         EnqueuePass(finalPostProcessPass);
                     }
-                    BlitPass.BlitColorTransform transformMode = BlitPass.BlitColorTransform.None;
-                    if (sIsGammaCorrectEnable)
+                    // End
+                   else
                     {
-                        transformMode = BlitPass.BlitColorTransform.Line2Gamma;
+                        //走fsr 临时屏蔽 ， line to sRGB 直接在 fsr 中完成。
+                        BlitPass.BlitColorTransform transformMode = BlitPass.BlitColorTransform.None;
+                        if (sIsGammaCorrectEnable)
+                        {
+                            transformMode = BlitPass.BlitColorTransform.Line2Gamma;
+                        }
+                        m_BlitPass.Setup(Screen.width, Screen.height, transformMode);
+                        EnqueuePass(m_BlitPass);
                     }
-                    m_BlitPass.Setup(Screen.width, Screen.height, transformMode);
-                    EnqueuePass(m_BlitPass);
+                    
                 }
                 //*************** CUSTOM ADD END ****************//
                

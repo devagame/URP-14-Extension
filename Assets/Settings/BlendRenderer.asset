@@ -19,8 +19,8 @@ MonoBehaviour:
   - {fileID: 3788401060427799164}
   m_RendererFeatureMap: 7c1a8351b11a9334
   m_UseNativeRenderPass: 0
-  m_sUISplitEnable: 1
-  m_sIsGammaCorrectEnable: 1
+  m_sUISplitEnable: 0
+  m_sIsGammaCorrectEnable: 0
   m_sEnableUICameraUseSwapBuffer: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
@@ -72,7 +72,8 @@ MonoBehaviour:
   m_Name: DepthTextureSaver
   m_EditorClassIdentifier: 
   m_Active: 1
-  save: 0
+  renderType: 0
+  renderObjTex: {fileID: 8400000, guid: 203b10b4ecaaf43499a0ed08e97a0d4c, type: 2}
   type: 450
   mat: {fileID: 2100000, guid: 5d069813f15db79488799c5d4245905f, type: 2}
 --- !u!114 &4273284693896473279

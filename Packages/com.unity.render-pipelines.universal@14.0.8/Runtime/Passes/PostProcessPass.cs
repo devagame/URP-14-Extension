@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine.Experimental.Rendering;
+using UnityEngine.Rendering.Universal.Internal;
 
 namespace UnityEngine.Rendering.Universal
 {
@@ -90,6 +91,8 @@ namespace UnityEngine.Rendering.Universal
         // If there's a final post process pass after this pass.
         // If yes, Film Grain and Dithering are setup in the final pass, otherwise they are setup in this pass.
         bool m_HasFinalPass;
+
+        int m_Width, m_Height;
 
         // Some Android devices do not support sRGB backbuffer
         // We need to do the conversion manually on those
@@ -342,6 +345,7 @@ namespace UnityEngine.Rendering.Universal
             var cmd = renderingData.commandBuffer;
             if (m_IsFinalPass)
             {
+                //final post effect , 
                 using (new ProfilingScope(cmd, m_ProfilingRenderFinalPostProcessing))
                 {
                     RenderFinalPass(cmd, ref renderingData);
@@ -354,6 +358,7 @@ namespace UnityEngine.Rendering.Universal
             }
             else
             {
+                // 后处理效果流程
                 // Regular render path (not on-tile) - we do everything in a single command buffer as it
                 // makes it easier to manage temporary targets' lifetime
                 using (new ProfilingScope(cmd, m_ProfilingRenderPostProcessing))
@@ -1456,13 +1461,13 @@ namespace UnityEngine.Rendering.Universal
                 m_Source = cameraData.renderer.GetCameraColorBackBuffer(cmd);
 
             //************** CUSTOM ADD START ***************//
-            if (m_FinalPassUseRenderColorBuff) // force use ColorBufferSystem
+            /*if (m_FinalPassUseRenderColorBuff) // force use ColorBufferSystem
             {
                 var renderer = renderingData.cameraData.renderer as UniversalRenderer;
                 var colorBuffer = renderer.m_ColorBufferSystem;
-                m_Source = colorBuffer.GetBackBuffer(cmd);
+                m_Source = colorBuffer.GetBackBuffer(cmd); //当前写入的buffer
                 m_Destination = colorBuffer.GetFrontBuffer(cmd);
-            }
+            }*/
             //*************** CUSTOM ADD END ****************//
             
             RTHandle sourceTex = m_Source;
@@ -1518,6 +1523,7 @@ namespace UnityEngine.Rendering.Universal
                         m_Materials.scalingSetup.EnableKeyword(hdrOperations.HasFlag(HDROutputUtils.Operation.ColorEncoding) ? ShaderKeywordStrings.Gamma20AndHDRInput : ShaderKeywordStrings.Gamma20);
                     }
 
+                    //1、TODO 可以使用 swapBuffer 代替 setupTarget
                     RenderingUtils.ReAllocateIfNeeded(ref m_ScalingSetupTarget, tempRtDesc, FilterMode.Point, TextureWrapMode.Clamp, name: "_ScalingSetupTexture");
                     Blitter.BlitCameraTexture(cmd, m_Source, m_ScalingSetupTarget, colorLoadAction, RenderBufferStoreAction.Store, m_Materials.scalingSetup, 0);
 
@@ -1636,17 +1642,60 @@ namespace UnityEngine.Rendering.Universal
             }
             else
             {
-                // Get RTHandle alias to use RTHandle apis
-                RTHandleStaticHelpers.SetRTHandleStaticWrapper(cameraTarget);
-                var cameraTargetHandle = RTHandleStaticHelpers.s_RTHandleWrapper;
-                RenderingUtils.FinalBlit(cmd, ref cameraData, sourceTex, cameraTargetHandle, colorLoadAction, RenderBufferStoreAction.Store, material, 0);
+                //************** CUSTOM ADD START ***************// 
+                if (!m_FinalPassUseRenderColorBuff)
+                //************** CUSTOM ADD End *****************// 
+                {
+                    // Get RTHandle alias to use RTHandle apis
+                    RTHandleStaticHelpers.SetRTHandleStaticWrapper(cameraTarget);
+                    var cameraTargetHandle = RTHandleStaticHelpers.s_RTHandleWrapper;
+                    RenderingUtils.FinalBlit(cmd, ref cameraData, sourceTex, cameraTargetHandle, colorLoadAction, RenderBufferStoreAction.Store, material, 0);
+                }
+                //************** CUSTOM ADD START ***************// 
+                else
+                {//场景相机的colorbuffer
+
+                    m_Width = Screen.width;
+                    m_Height = Screen.height;
+                    
+                    var renderer = renderingData.cameraData.renderer as UniversalRenderer;
+                    var colorBuffer = renderer.m_ColorBufferSystem;
+                    
+                    bool useDrawProceduleBlit = renderingData.cameraData.xr.enabled;
+                    CoreUtils.SetKeyword(cmd, ShaderKeywordStrings.LinearToSRGBConversion,true);
+                    CoreUtils.SetKeyword(cmd, ShaderKeywordStrings.SRGBToLinearConversion,false);
+                    
+                    RTHandle source,target;
+                    source = renderingData.cameraData.renderer.cameraColorTargetHandle;
+                    
+                    bool needChangeSize = RenderTargetBufferSystem.GetDesc().width != m_Width|| RenderTargetBufferSystem.GetDesc().height!= m_Height;
+                    if (needChangeSize)
+                    {
+                        colorBuffer.ReSizeFrontBuffer(cmd,m_Width,m_Height);
+                    }
+                    target = colorBuffer.GetFrontBuffer();
+                    
+                    RenderingUtils.FinalBlitColorTexture(cmd, ref cameraData, sourceTex, target, colorLoadAction, RenderBufferStoreAction.Store, material, 0);
+                    
+                    CoreUtils.SetKeyword(cmd, ShaderKeywordStrings.LinearToSRGBConversion, false);
+                    CoreUtils.SetKeyword(cmd, ShaderKeywordStrings.SRGBToLinearConversion,false);
+                    if (needChangeSize)
+                    {
+                        //只用重置Depth ,multiBuff会自动重置Back
+                        //colorBuffer.ReSizeBackBuffer(cmd);
+                        renderer.ResizeDepth(cmd,m_Width, m_Height,ref renderingData);
+                    }
+                    renderer.SwapColorBuffer(cmd);
+                    
+                }
+                //************** CUSTOM ADD End *****************// 
             }
             
             //************** CUSTOM ADD START ***************// 
-            if (m_FinalPassUseRenderColorBuff)
+            /*if (m_FinalPassUseRenderColorBuff)
             {
                 cameraData.renderer.SwapColorBuffer(cmd);
-            }
+            }*/
             //************** CUSTOM ADD End *****************// 
         }
 

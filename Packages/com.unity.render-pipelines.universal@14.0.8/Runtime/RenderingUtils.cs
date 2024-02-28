@@ -9,7 +9,7 @@ namespace UnityEngine.Rendering.Universal
     /// <summary>
     /// Contains properties and helper functions that you can use when rendering.
     /// </summary>
-    public static class RenderingUtils
+    public static partial class RenderingUtils
     {
         static List<ShaderTagId> m_LegacyShaderPassNames = new List<ShaderTagId>
         {

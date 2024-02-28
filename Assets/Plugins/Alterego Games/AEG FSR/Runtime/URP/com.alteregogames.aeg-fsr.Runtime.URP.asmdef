@@ -1,0 +1,20 @@
+{
+    "name": "com.alteregogames.aeg-fsr.Runtime.URP",
+    "rootNamespace": "AEG.FSR",
+    "references": [
+        "com.alteregogames.aeg-fsr.Runtime",
+        "Unity.RenderPipelines.Core.Runtime",
+        "Unity.RenderPipelines.Universal.Runtime"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "UNITY_URP"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

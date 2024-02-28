@@ -1,0 +1,20 @@
+Assets\Alterego Games\AEG FSR\Runtime\Plugins\LICENSE.txt
+https://github.com/ndepoel/FSR2Unity
+
+FSR 2.2 for Unity
+This project aims to bring FSR2 to Unity, as an alternative to Unity's existing FXAA, SMAA and 
+TAA anti-aliasing solutions. Compared to Unity's TAA implementation, FSR2 offers a sharper and more stable image,
+with a better sub-pixel detail resolve and better performance due to its reliance on upscaling.
+
+Assets\Alterego Games\AEG FSR\Runtime\Plugins\Resources\FSR2\shaders\LICENSE.txt
+https://github.com/GPUOpen-Effects/FidelityFX-FSR2
+
+FidelityFX Super Resolution 2.2 (FSR 2.2)
+AMD FidelityFX Super Resolution 2 (FSR 2) is an open source, high-quality solution for producing high 
+resolution frames from lower resolution inputs.
+
+You can find the binaries for FidelityFX FSR in the release section on GitHub.
+
+FSR 1.02 for Unity
+Assets\Alterego Games\AEG FSR\Runtime\Plugins\Resources\FSR1\LICENSE.txt
+https://github.com/GPUOpen-Effects/FidelityFX-FSR

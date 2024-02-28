@@ -5,10 +5,10 @@ namespace UnityEngine.Rendering.Universal
 {
     public sealed partial class UniversalRenderer
     {
-        public static bool sUISplitEnable = false;
-        public static bool sIsGammaCorrectEnable = true;
+        public  bool sUISplitEnable = false;
+        public  bool sIsGammaCorrectEnable = true;
 
-        public static bool sEnableUICameraUseSwapBuffer = false;
+        public  bool sEnableUICameraUseSwapBuffer = false;
         
         public CopyTransparentPass m_CopyTransparentPass;
         
