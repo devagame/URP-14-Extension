@@ -15,7 +15,7 @@ MonoBehaviour:
   Name: Performance
   MinimumRenderScale: 0.33
   MaximumScalingMode: 0
-  MaximumRenderScale: 0.95
+  MaximumRenderScale: 0.8
   MaximumFixedResolutionHeight: 480
   FramerateSensitity: 1
   EdgeQuality: 1

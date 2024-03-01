@@ -872,12 +872,17 @@ namespace UnityEngine.Rendering.Universal
                     depthDescriptor.depthBufferBits = 0;
                 }
 
-                depthDescriptor.msaaSamples = 1;// Depth-Only pass don't use MSAA
-                RenderingUtils.ReAllocateIfNeeded(ref m_DepthTexture, depthDescriptor, FilterMode.Point, wrapMode: TextureWrapMode.Clamp, name: "_CameraDepthTexture");
-
-                cmd.SetGlobalTexture(m_DepthTexture.name, m_DepthTexture.nameID);
-                context.ExecuteCommandBuffer(cmd);
-                cmd.Clear();
+                if (!cameraData.isUICamera)
+                {
+                    depthDescriptor.msaaSamples = 1;// Depth-Only pass don't use MSAA
+                    RenderingUtils.ReAllocateIfNeeded(ref m_DepthTexture, depthDescriptor, FilterMode.Point, wrapMode: TextureWrapMode.Clamp, name: "_CameraDepthTexture");
+                    
+                    cmd.SetGlobalTexture(m_DepthTexture.name, m_DepthTexture.nameID);
+                    context.ExecuteCommandBuffer(cmd);
+                    cmd.Clear();
+                }
+                
+                
             }
 
             if (requiresRenderingLayer || (renderingModeActual == RenderingMode.Deferred && m_DeferredLights.UseRenderingLayers))
@@ -1221,8 +1226,11 @@ namespace UnityEngine.Rendering.Universal
 
             if (applyPostProcessing)
             {
-                var desc = PostProcessPass.GetCompatibleDescriptor(cameraTargetDescriptor, cameraTargetDescriptor.width, cameraTargetDescriptor.height, cameraTargetDescriptor.graphicsFormat, DepthBits.None);
-                RenderingUtils.ReAllocateIfNeeded(ref m_PostProcessPasses.m_AfterPostProcessColor, desc, FilterMode.Point, TextureWrapMode.Clamp, name: "_AfterPostProcessTexture");
+                //************** CUSTOM ADD START ***************//
+                //用不到可以注释掉
+                //var desc = PostProcessPass.GetCompatibleDescriptor(cameraTargetDescriptor, cameraTargetDescriptor.width, cameraTargetDescriptor.height, cameraTargetDescriptor.graphicsFormat, DepthBits.None);
+                //RenderingUtils.ReAllocateIfNeeded(ref m_PostProcessPasses.m_AfterPostProcessColor, desc, FilterMode.Point, TextureWrapMode.Clamp, name: "_AfterPostProcessTexture");
+                //*************** CUSTOM ADD END ****************//
             }
 
             if (lastCameraInTheStack)

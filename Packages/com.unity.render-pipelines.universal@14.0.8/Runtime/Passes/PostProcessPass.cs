@@ -1523,11 +1523,15 @@ namespace UnityEngine.Rendering.Universal
                         m_Materials.scalingSetup.EnableKeyword(hdrOperations.HasFlag(HDROutputUtils.Operation.ColorEncoding) ? ShaderKeywordStrings.Gamma20AndHDRInput : ShaderKeywordStrings.Gamma20);
                     }
 
-                    //1、TODO 可以使用 swapBuffer 代替 setupTarget
-                    RenderingUtils.ReAllocateIfNeeded(ref m_ScalingSetupTarget, tempRtDesc, FilterMode.Point, TextureWrapMode.Clamp, name: "_ScalingSetupTexture");
-                    Blitter.BlitCameraTexture(cmd, m_Source, m_ScalingSetupTarget, colorLoadAction, RenderBufferStoreAction.Store, m_Materials.scalingSetup, 0);
-
-                    sourceTex = m_ScalingSetupTarget;
+                    //RenderingUtils.ReAllocateIfNeeded(ref m_ScalingSetupTarget, tempRtDesc, FilterMode.Point, TextureWrapMode.Clamp, name: "_ScalingSetupTexture");
+                    //Blitter.BlitCameraTexture(cmd, m_Source, m_ScalingSetupTarget, colorLoadAction, RenderBufferStoreAction.Store, m_Materials.scalingSetup, 0);
+                    
+                    //************** CUSTOM ADD START ***************//
+                    m_Destination = cameraData.renderer.GetCameraColorFrontBuffer(cmd);
+                    Blitter.BlitCameraTexture(cmd, m_Source, m_Destination, colorLoadAction, RenderBufferStoreAction.Store, m_Materials.scalingSetup, 0);
+                    //*************** CUSTOM ADD END ****************//
+                    
+                    sourceTex = m_Destination;
                 }
 
                 switch (cameraData.imageScalingMode)
@@ -1567,9 +1571,9 @@ namespace UnityEngine.Rendering.Universal
                                 var fsrInputSize = new Vector2(cameraData.cameraTargetDescriptor.width, cameraData.cameraTargetDescriptor.height);
                                 var fsrOutputSize = new Vector2(cameraData.pixelWidth, cameraData.pixelHeight);
                                 FSRUtils.SetEasuConstants(cmd, fsrInputSize, fsrInputSize, fsrOutputSize);
-
+                                
                                 Blitter.BlitCameraTexture(cmd, sourceTex, m_UpscaledTarget, colorLoadAction, RenderBufferStoreAction.Store, m_Materials.easu, 0);
-
+                                
                                 // RCAS
                                 // Use the override value if it's available, otherwise use the default.
                                 float sharpness = cameraData.fsrOverrideSharpness ? cameraData.fsrSharpness : FSRUtils.kDefaultSharpnessLinear;
@@ -1661,12 +1665,10 @@ namespace UnityEngine.Rendering.Universal
                     var renderer = renderingData.cameraData.renderer as UniversalRenderer;
                     var colorBuffer = renderer.m_ColorBufferSystem;
                     
-                    bool useDrawProceduleBlit = renderingData.cameraData.xr.enabled;
                     CoreUtils.SetKeyword(cmd, ShaderKeywordStrings.LinearToSRGBConversion,true);
                     CoreUtils.SetKeyword(cmd, ShaderKeywordStrings.SRGBToLinearConversion,false);
                     
-                    RTHandle source,target;
-                    source = renderingData.cameraData.renderer.cameraColorTargetHandle;
+                    RTHandle target;
                     
                     bool needChangeSize = RenderTargetBufferSystem.GetDesc().width != m_Width|| RenderTargetBufferSystem.GetDesc().height!= m_Height;
                     if (needChangeSize)
