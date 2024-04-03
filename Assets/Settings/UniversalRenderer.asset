@@ -30,6 +30,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Active: 1
   IsEnabled: 0
+--- !u!114 &-2592942576620200282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0fb500d22a8bbb4b9bdf1e3c3abca4f, type: 3}
+  m_Name: OverdrawMonitorFeature
+  m_EditorClassIdentifier: 
+  m_Active: 0
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  OverdrawCountComputeShader: {fileID: 0}
 --- !u!114 &-2479627741613725203
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -94,9 +111,10 @@ MonoBehaviour:
   - {fileID: -9182490978679960080}
   - {fileID: 3973892965856734693}
   - {fileID: -3997618516310778053}
-  m_RendererFeatureMap: ede9e8e5b49796dd404ee658e0e3a737f04d8d161b3d9180e56d500d991a26373b9fc5c3239b85c8
+  - {fileID: -2592942576620200282}
+  m_RendererFeatureMap: ede9e8e5b49796dd404ee658e0e3a737f04d8d161b3d9180e56d500d991a26373b9fc5c3239b85c8a61e91ed760404dc
   m_UseNativeRenderPass: 0
-  m_sUISplitEnable: 1
+  m_sUISplitEnable: 0
   m_sIsGammaCorrectEnable: 1
   m_sEnableUICameraUseSwapBuffer: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
