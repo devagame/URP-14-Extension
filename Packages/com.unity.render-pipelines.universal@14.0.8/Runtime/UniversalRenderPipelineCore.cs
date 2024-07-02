@@ -211,7 +211,11 @@ namespace UnityEngine.Rendering.Universal
             m_ProjectionMatrix = projectionMatrix;
             m_JitterMatrix = Matrix4x4.identity;
         }
-
+        internal void SetJitterMatrix( Matrix4x4 jitterMatrix)
+        {
+          
+            m_JitterMatrix = jitterMatrix;
+        }
         internal void SetViewProjectionAndJitterMatrix(Matrix4x4 viewMatrix, Matrix4x4 projectionMatrix, Matrix4x4 jitterMatrix)
         {
             m_ViewMatrix = viewMatrix;
@@ -537,7 +541,7 @@ namespace UnityEngine.Rendering.Universal
             return (antialiasing == AntialiasingMode.TemporalAntiAliasing)                                                            // Enabled
                    && (taaPersistentData != null)                                                                                     // Initialized
                    && (cameraTargetDescriptor.msaaSamples == 1)                                                                       // No MSAA
-                   && !(additionalCameraData?.renderType == CameraRenderType.Overlay || additionalCameraData?.cameraStack.Count > 0)  // No Camera stack
+                   && !(additionalCameraData?.renderType == CameraRenderType.Overlay /*|| additionalCameraData?.cameraStack.Count > 0*/)  // No Camera stack
                    && !camera.allowDynamicResolution                                                                                  // No Dynamic Resolution
                    && postProcessEnabled;                                                                                             // No Postprocessing
         }

@@ -177,6 +177,7 @@ namespace UnityEngine.Rendering.Universal
             }
         }
 
+        //
         static internal Matrix4x4 CalculateJitterMatrix(ref CameraData cameraData)
         {
             Matrix4x4 jitterMat = Matrix4x4.identity;
@@ -340,6 +341,13 @@ namespace UnityEngine.Rendering.Universal
                     Blitter.BlitCameraTexture(cmd, destination, taaHistoryAccumulationTex, RenderBufferLoadAction.DontCare, RenderBufferStoreAction.Store, taaMaterial, kHistoryCopyPass);
                     cameraData.taaPersistentData.SetLastAccumFrameIndex(multipassId, Time.frameCount);
                 }
+                
+                //渲染完毕重置matrix
+                Matrix4x4 viewMatrix = cameraData.GetViewMatrix();
+                Matrix4x4 projectionMatrix = cameraData.GetProjectionMatrixNoJitter(); // Jittered, non-gpu
+                // Set the default view/projection, note: projectionMatrix will be set as a gpu-projection (gfx api adjusted) for rendering.
+                cmd.SetViewProjectionMatrices(viewMatrix, projectionMatrix);
+
             }
         }
 
