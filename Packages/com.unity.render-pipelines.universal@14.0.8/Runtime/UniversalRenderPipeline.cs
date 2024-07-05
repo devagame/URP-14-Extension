@@ -826,7 +826,7 @@ namespace UnityEngine.Rendering.Universal
                     Camera nextCamera = cameraStack[0];
                     if (nextCamera.isActiveAndEnabled)
                     {
-                        if (nextCamera.CompareTag("UICamera"))
+                        if (nextCamera.CompareTag("UICamera"))//TOOD worldUIcamera
                         {
                             baseCameraNextIsUICamera = true;
                         }
@@ -841,7 +841,7 @@ namespace UnityEngine.Rendering.Universal
                             {
                                 continue;
                             }
-                            if (nextCamera.CompareTag("UICamera"))
+                            if (nextCamera.CompareTag("UICamera"))//TOOD worldUIcamera
                             {
                                 baseCameraNextIsUICamera = true;
                             }
@@ -890,7 +890,7 @@ namespace UnityEngine.Rendering.Universal
                             if (nextIndex < cameraStack.Count)
                             {
                                 var nextCamera = cameraStack[nextIndex];
-                                if (nextCamera.CompareTag("UICamera"))
+                                if (nextCamera.CompareTag("UICamera"))//TOOD worldUIcamera
                                 {
                                     nextIsUICamera = true;
                                 }
